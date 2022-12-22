@@ -93,7 +93,7 @@ module.exports = {
         })
     },
     addCategory:(data)=>{
-        data.status='true';
+        data.status=true;
         return new Promise((resolve,reject)=>{
             db.get().collection(collection.CATEGORY_COLLECTION).insertOne(data).then((response)=>{
                 resolve(response)

@@ -11,8 +11,9 @@ const verifyLogin = (req, res, next) => {
 }
 
 /* GET users listing. */
-router.get('/', function (req, res) {
-  res.render('user/index', { user: req.session.user })
+router.get('/',async function (req, res) {
+  let categoryList=await userHelpers.getCategory();
+  res.render('user/index', { user: req.session.user, categoryList })
 });
 
 

@@ -78,5 +78,12 @@ module.exports = {
                 resolve({ status: false, message: "User not exists" })
             }
         })
+    },
+    getCategory:()=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.CATEGORY_COLLECTION).find({status:true}).toArray().then((response) => {
+                resolve(response)
+            })
+        })
     }
 }

@@ -77,10 +77,12 @@
                 </div>
             </div>
             <div class="category-right d-flex align-items-center justify-content-around">
+                {{#each categoryList}}
                 <div class="category p-2">
-                    <img class="category-icon-image" src="/images/category-images/mxw_2048,f_auto.png" alt="">
+                    <img class="category-icon-image" src="{{this.imageUrl}}" alt="">
                 </div>
-                <div class="category">
+                {{/each}}
+                {{!-- <div class="category">
                     <img class="category-icon-image" src="/images/category-images/mxw_2048,f_auto (1).png" alt="">
                 </div>
                 <div class="category">
@@ -97,7 +99,7 @@
                 </div>
                 <div class="category">
                     <img class="category-icon-image" src="/images/category-images/mxw_2048,f_auto(6).png" alt="">
-                </div>
+                </div> --}}
             </div>
         </div>
     </section>
