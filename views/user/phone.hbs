@@ -1,0 +1,54 @@
+<section>
+    <div class="container">
+        <div class="row d-flex justify-content-center align-items-center  h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5 p-4">
+                <div class="card shadow-2-strong mt-5 border-0" style="border-radius: 1rem; background-color: #F2F2F2;">
+                    <div class="card-body p-5 text-center">
+
+                        <form action="/signup-phone" method="post">
+                            <h3 class="mb-3">Enter Phone Number</h3>
+                            {{#if phoneError}}
+                            <div class="alert alert-danger mb-3 p-2" role="alert" style="font-size: 14px;">
+                                {{phoneError}}
+                            </div>
+                            {{else}}
+                            <div class="my-5" role="alert">
+                            </div>
+                            {{/if}}
+                            <div class="form-outline mb-4">
+                                <input type="text" id="phone" placeholder="Phone" minlength="10" maxlength="10" name="phone"
+                                    class="form-control form-control-lg" onkeyup="checkPhone()" required />
+                            </div>
+
+                            <button style="font-size: 15px;" id="submit" class=" mt-2" type="submit">Login</button>
+
+                            <a href="/login" class="text-decoration-none">
+                                <p style="font-size: 13px;" class="mt-4 text-dark">Existing User? Log in
+                                </p>
+                            </a>
+                        </form>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+        const submitBtn = document.getElementById('submit');
+
+    function checkPhone() {
+            if (phone.value.length == 0) {
+                phone.style.borderColor = "red"
+                phone.style.background = "#eee0e0"
+                submitBtn.disabled = true;
+            } else {
+                phone.style.borderColor = "#ced4da"
+                phone.style.background = "#ffffff"
+                submitBtn.disabled = false;
+            }
+        }
+</script>

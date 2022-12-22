@@ -1,0 +1,229 @@
+<section>
+    <div class="container">
+        <div class="row d-flex justify-content-center align-items-center  h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-7 p-4">
+                <div class="card shadow-2-strong border-0" style="border-radius: 1rem; background-color: #F2F2F2;">
+                    <div class="card-body p-5 text-center">
+
+                        <form action="/signup" method="post">
+                            <h3 class="mb-3">Sign up</h3>
+                            {{#if signupError}}
+                            <div class="alert alert-danger mb-3 p-2" role="alert" style="font-size: 14px;">
+                                {{signupError}}
+                            </div>
+                            {{else}}
+                            <div class="my-5" role="alert">
+                            </div>
+                            {{/if}}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-outline mb-4">
+                                        <input type="text" placeholder="First Name" id="first-name" name="fname"
+                                            class="form-control form-control-lg" onkeyup="checkFName()" required />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-outline mb-4">
+                                        <input type="text" placeholder="Last Name" onkeyup="checkLName()" id="last-name"
+                                            name="lname" class="form-control form-control-lg" required />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-outline mb-4">
+                                <input type="email" placeholder="Email" onkeyup="checkEmail()" id="email" name="email"
+                                    class="form-control form-control-lg" required />
+                            </div>
+
+
+                            <p id="password-error" class="text-danger ">Confirm password not match</p>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-outline mb-4">
+                                        <input type="password" placeholder="Password" id="password"
+                                            class="form-control form-control-lg" required />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-outline mb-4">
+                                        <input type="password" onkeyup="validateform()" placeholder="Confirm password"
+                                            name="password" id="confirm-password" class="form-control form-control-lg"
+                                            required />
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <button style="font-size: 15px;" class=" mt-2" id="submit" type="submit">CONTINUE</button>
+
+                            <a href="/login" class="text-decoration-none">
+                                <p style="font-size: 13px;" class="mt-4 text-dark">Existing User? Log in
+                                </p>
+                            </a>
+                        </form>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    const submitBtn = document.getElementById('submit');
+
+    function checkFName() {
+        const fname = document.getElementById('first-name');
+        if (fname.value.length == 0) {
+            fname.style.borderColor = "red"
+            fname.style.background = "#eee0e0"
+            submitBtn.disabled = true;
+
+
+        } else {
+            fname.style.borderColor = "#ced4da"
+            fname.style.background = "#ffffff"
+            submitBtn.disabled = false;
+
+        }
+    }
+
+    function checkLName() {
+        const lname = document.getElementById('last-name');
+        if (lname.value.length == 0) {
+            lname.style.borderColor = "red"
+            lname.style.background = "#eee0e0"
+            submitBtn.disabled = true;
+
+        } else {
+            lname.style.borderColor = "#ced4da"
+            lname.style.background = "#ffffff"
+            submitBtn.disabled = false;
+
+        }
+    }
+
+
+    function checkEmail() {
+        const lname = document.getElementById('last-name');
+        if (email.value.length == 0) {
+            email.style.borderColor = "red"
+            email.style.background = "#eee0e0"
+            submitBtn.disabled = true;
+        } else {
+            email.style.borderColor = "#ced4da"
+            email.style.background = "#ffffff"
+            submitBtn.disabled = false;
+        }
+    }
+
+    function checkPhone() {
+        if (phone.value.length == 0) {
+            phone.style.borderColor = "red"
+            phone.style.background = "#eee0e0"
+            submitBtn.disabled = true;
+        } else {
+            phone.style.borderColor = "#ced4da"
+            phone.style.background = "#ffffff"
+            submitBtn.disabled = false;
+        }
+    }
+</script>
+
+
+<script>
+    function validateform() {
+        const fname = document.getElementById('first-name');
+        const lname = document.getElementById('last-name');
+        const email = document.getElementById('email');
+        const phone = document.getElementById('phone');
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirm-password');
+
+        const submitBtn = document.getElementById('submit');
+
+
+        if (fname.value.length == 0) {
+            fname.style.borderColor = "red"
+            fname.style.background = "#eee0e0"
+            submitBtn.disabled = true;
+
+        } else {
+            fname.style.borderColor = "#ced4da"
+            fname.style.background = "#ffffff"
+            submitBtn.disabled = false;
+
+        }
+
+
+        if (lname.value.length == 0) {
+            lname.style.borderColor = "red"
+            lname.style.background = "#eee0e0"
+            submitBtn.disabled = true;
+
+        } else {
+            lname.style.borderColor = "#ced4da"
+            lname.style.background = "#ffffff"
+            submitBtn.disabled = false;
+
+        }
+
+
+        if (email.value.length == 0) {
+            email.style.borderColor = "red"
+            email.style.background = "#eee0e0"
+            submitBtn.disabled = true;
+
+        } else {
+            email.style.borderColor = "#ced4da"
+            email.style.background = "#ffffff"
+            submitBtn.disabled = false;
+
+        }
+
+        if (password.value.length != 0 && password.value.length >= 4) {
+
+            if (password.value === confirmPassword.value) {
+                confirmPassword.style.borderColor = "#ced4da"
+                confirmPassword.style.background = "#ffffff"
+                submitBtn.disabled = false;
+                document.getElementById('password-error').style.display = "none"
+                console.log("uyes")
+
+
+
+            } else {
+                confirmPassword.style.borderColor = "red"
+                confirmPassword.style.background = "#eee0e0"
+                submitBtn.disabled = true;
+                document.getElementById('password-error').style.display = "block "
+                console.log("Error")
+
+            }
+
+        } else {
+            password.style.borderColor = "red"
+            password.style.background = "#eee0e0"
+            submitBtn.disabled = false;
+
+        }
+
+
+    } 
+</script>
+<style>
+    #password-error {
+        display: none;
+    }
+
+    @media screen and (max-width:768px) {
+        body {
+            margin-top: -23px;
+        }
+    }
+</style>

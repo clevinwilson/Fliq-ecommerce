@@ -1,0 +1,134 @@
+<!-- Custom styles for this page -->
+<link href="/admin/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/admin/vendor/datatables/dataTables.bootstrap4.css">
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    {{>admin-header}}
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <h1 class="h3 mb-2 text-gray-800">Users List</h1>
+
+                <!-- DataTales Example -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Details</h6>
+                    </div>
+
+                    <div class="card-body">
+                        {{#if categoryUpdate}}
+                        <div class="alert alert-success" role="alert">
+                            {{categoryUpdate}}
+                        </div>
+                        {{/if}}
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Image</th>
+                                        <th> Name</th>
+                                        <th>Description</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>Image</th>
+                                        <th> Name</th>
+                                        <th>Description</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    {{#each categoryList}}
+                                    <tr>
+                                        <td>
+                                            <img style="    height: 60px;width: 60px;object-fit: cover;" src="{{this.imageUrl}}" alt="">
+                                        </td>
+                                        <td>{{this.name}}</td>
+                                        <td>{{this.description}}</td>
+                                        {{#if this.status}}
+                                        <td class="text-success">{{this.status}}</td>
+                                        {{else}}
+                                        <td class="text-danger">{{this.status}}</td>
+                                        {{/if}}
+                                        <td class="d-flex">
+                                            <a title="Delete" class="table-btn btn btn-danger p-2"
+                                                href="/admin/delete-category/{{this._id}}"><i
+                                                    class="fa-solid fa-trash"></i></a>
+                                            <a title="Edit" href="/admin/edit-category/{{this._id}}"
+                                                class="table-btn ml-2 text-white btn btn-warning p-2"><i
+                                                    class="fa-solid fa-pen"></i></a>
+
+                                            {{#if this.status}}
+                                            <a title="Block" href="/admin/block-category/{{this._id}}"
+                                                class="table-btn ml-2 text-white btn btn-black p-2"><i
+                                                    class="fa-solid fa-ban"></i></a>
+                                            {{else}}
+                                            <a title="Unblock" href="/admin/unblock-category/{{this._id}}"
+                                                class="table-btn ml-2 text-white btn btn-success p-2"><i
+                                                    class="fa-solid fa-check"></i></a>
+                                            {{/if}}
+
+                                        </td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; Fliq 2022</span>
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<style>
+    .table-btn {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+    }
+</style>

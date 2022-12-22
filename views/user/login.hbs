@@ -1,0 +1,43 @@
+<section>
+    <div class="container">
+        <div class="row d-flex justify-content-center align-items-center  h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5 p-4">
+                <div class="card shadow-2-strong mt-5 border-0" style="border-radius: 1rem; background-color: #F2F2F2;">
+                    <div class="card-body p-5 text-center">
+
+                        <form action="/login" method="post">
+                            <h3 class="mb-3">Log in</h3>
+                                {{#if LoginError}}
+                                <div class="alert alert-danger mb-3 p-2" role="alert" style="font-size: 14px;">
+                                    {{LoginError}}
+                                </div>
+                                {{else}}
+                                <div class="my-5" role="alert">
+                                </div>
+                                {{/if}}
+                            <div class="form-outline mb-4">
+                                <input type="email" placeholder="Email" 
+                                    name="email" class="form-control form-control-lg" required />
+                            </div>
+
+                            <div class="form-outline mb-4">
+                                <input type="password" placeholder="Password" 
+                                  name="password"  class="form-control form-control-lg" required />
+                            </div>
+
+
+                            <button style="font-size: 15px;" class=" mt-2" type="submit">Login</button>
+
+                            <a href="/signup-phone" class="text-decoration-none">
+                                <p style="font-size: 13px;" class="mt-4 text-dark">New to Fliq ? Create an account</p>
+                            </a>
+                        </form>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

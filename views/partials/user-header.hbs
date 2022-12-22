@@ -1,0 +1,62 @@
+<header>
+    <nav class="user-header ">
+        <div class="left-section">
+            <div id="menu-icon-wrap" class="menu-icon-wrap p-2 " onclick="openNav()">
+                <i id="close-btn" style="width: 14px; padding-left:1px" class="fa-solid fa-x  ms-1 me-1 "></i>
+                <i id="open-btn" class="fa-solid fa-bars  ms-1 me-1 "></i>
+                <span class="me-2 ms-3 d-none d-md-block d-lg-block">Menu</span>
+            </div>
+            <div class="search-wrap p-2">
+                <i class="fa-solid fa-magnifying-glass "></i>
+                <span class="ms-5 me-2 d-none d-md-block d-lg-block">Search</span>
+            </div>
+        </div>
+        <div class="middle-section">
+            <img style="width: 90px;" src="./images/logo.png" alt="">
+        </div>
+        <div class="right-section">
+
+            {{#if user}}
+            <div class="wishlist-wrap">
+                <i class="bi bi-heart d-none d-md-block d-lg-block "></i>
+            </div>
+            <div class=" d-none d-md-block cart-wrap">
+                <i class="bi bi-cart2 "></i>
+            </div>
+            <button class="user-wrap   position-relative">
+                <span class="text-decoration-none text-dark d-flex"><i
+                        class="bi bi-person text-dark d-lg-block"></i><span class="ms-2 mt-1"
+                        style="font-size: 13px;">{{user.fname}}</span></span>
+                
+            </button>
+            <div class=" user-header-dorpdown-menu">
+                <a class="dropdown-item" href="#">Account</a>
+                <div class="dropdown-divider m-1"></div>
+                <a class="logout-btn dropdown-item" href="/logout">Logout</a>
+            </div>
+            {{else}}
+            <div class="user-wrap user-wrap-hover ">
+                <a href="/login" class="text-decoration-none text-dark d-flex"><i
+                        class="bi bi-person text-dark d-lg-block"></i><span class="ms-2 mt-1"
+                        style="font-size: 13px;">Login/Sign up</span></a>
+            </div>
+            {{/if}}
+        </div>
+    </nav>
+
+
+    {{!-- side bar --}}
+    <div id="mySidenav" class="sidenav">
+        <a href="#">About</a>
+        <a href="#">Services</a>
+        <a href="#">Clients</a>
+        <a href="#">Contact</a>
+    </div>
+
+
+
+
+
+
+
+</header>

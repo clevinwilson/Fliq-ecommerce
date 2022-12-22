@@ -1,0 +1,93 @@
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    {{>admin-header}}
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <h1 class="h3 mb-4 text-gray-800">Category </h1>
+
+                <div class="row">
+
+                    <div class="col-lg-11">
+
+                        <!-- Circle Buttons -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Details</h6>
+                            </div>
+                            <form action="/admin/add-category" method="post" class="p-5" enctype="multipart/form-data">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group mt-3 ">
+                                                <label for="">Category Name</label>
+                                                <input style="border-color:#b4e3eb;" value="" type="text"
+                                                    class="form-control col-md-12 mt-2" id="name" name="name" required>
+                                            </div>
+                                            <div class="form-group mt-3 ">
+                                                <label for="category-image">Category Image</label>
+                                                <input style="border-color:#b4e3eb;" value="" type="file"
+                                                    class="form-control col-md-12 mt-2" onchange="viewImage(event)"
+                                                    id="" name="image" required>
+                                            </div>
+                                            <div class="form-group mt-3 ">
+                                                <label for="category-des">Category Description</label>
+                                                <textarea class="form-control" name="description" rows="3"
+                                                    required></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 position-relative">
+                                            <div class="form-group mt-5">
+                                                <div class="mt-3 mb-3 d-flex justify-content-center align-items-center">
+                                                    <img id="category-image"
+                                                        src="/images/category-images/mxw_2048,f_auto (1).png"
+                                                        class="img-fluid" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 position-absolute bottom-0 mb-4">
+                                                <center class="mt-4">
+                                                    <a href="/admin/users-list"
+                                                        class="btn btn-black  mt-3 mr-4 ">Back</a>
+                                                    <button type="submit" id="submit"
+                                                        class="btn btn-success  mt-3">Submit</button>
+
+                                                </center>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function viewImage(event) {
+        document.getElementById('category-image').style = 'display:block'
+        document.getElementById('category-image').src = URL.createObjectURL(event.target.files[0])
+    }
+</script>
+
+<style>
+    #category-image {
+        object-fit: cover;
+        display: none;
+        height: 160px;
+        width: 160px;
+        object-fit: cover;
+    }
+</style>
