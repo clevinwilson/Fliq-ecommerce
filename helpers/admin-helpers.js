@@ -131,6 +131,20 @@ module.exports = {
             })
         })
     },
+    editCategoryWithImage: (data) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.CATEGORY_COLLECTION).updateOne({ _id: ObjectId(data.categoryId) },
+                {
+                    $set: {
+                        name: data.name,
+                        description: data.description,
+                        imageUrl: data.imageUrl
+                    }
+                }).then((response) => {
+                    resolve(true)
+                })
+        })
+    },
     deleteCategory:(categoryId)=>{
         return new Promise((resolve,reject)=>{
             db.get().collection(collection.CATEGORY_COLLECTION).deleteOne({_id:ObjectId(categoryId)}).then((response)=>{

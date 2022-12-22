@@ -160,10 +160,24 @@ router.get('/edit-category/:categoryId',verifyLogin,(req,res)=>{
 })
 
 router.post('/edit-category', verifyLogin,(req,res)=>{
-    adminHelpers.editCategory(req.body).then((response)=>{
-        req.session.categoryUpdate ="Cateogry updated"
-        res.redirect('/admin/view-category');
-    })
+    if(req.files!=null){
+        const image = req.files.image
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9) + image.name;
+        image.mv(`./public/images/category-images/${uniqueSuffix}`, (err, done) => {
+            req.body.imageUrl = `${baseUrl}/images/category-images/${uniqueSuffix}`;
+
+            adminHelpers.editCategoryWithImage(req.body).then((response) => {
+                req.session.categoryUpdate = "Cateogry updated"
+                res.redirect('/admin/view-category');
+            })
+        })
+    }else{
+        adminHelpers.editCategory(req.body).then((response) => {
+            req.session.categoryUpdate = "Cateogry updated"
+            res.redirect('/admin/view-category');
+        })
+    }
+ 
 })
 
 router.get('/delete-category/:categoryId',(req,res)=>{
