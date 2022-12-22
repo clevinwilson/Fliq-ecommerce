@@ -43,7 +43,6 @@
                                         <th>Email</th>
                                         <th>Phone</th>
                                         <th>Status</th>
-                                        <th>Address</th>
                                         <th>Action</th>
 
                                     </tr>
@@ -55,7 +54,6 @@
                                         <th>Email</th>
                                         <th>Phone</th>
                                         <th>Status</th>
-                                        <th>Address</th>
                                         <th>Action</th>
                                     </tr>
                                 </tfoot>
@@ -71,8 +69,6 @@
                                         {{else}}
                                         <td class="text-danger">{{this.status}}</td>
                                         {{/if}}
-
-                                        <td>{{this.address}}</td>
                                         <td class="d-flex">
                                             <a title="Delete" class="table-btn d-none btn btn-danger p-2"
                                                 href="/admin/delete-user/{{this._id}}"><i

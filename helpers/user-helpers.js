@@ -61,17 +61,19 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             let user = await db.get().collection(collection.USER_COLLECTION).findOne({ email: data.email });
             if (user) {
-                if(user.status==true){
+               
                     bcrypt.compare(data.password, user.password).then(function (result) {
                         if (result) {
+                            if (user.status == true) {
                             resolve({ user, status: true })
+                            } else {
+                                resolve({ status: 'blocked' })
+                            }
                         } else {
                             resolve({ status: false, message: "Incorrect username or password" })
                         }
                     });
-                }else{
-                    resolve({ status:'blocked'})
-                }
+                
             } else {
                 resolve({ status: false, message: "User not exists" })
             }

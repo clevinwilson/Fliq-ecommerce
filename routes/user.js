@@ -100,11 +100,12 @@ router.get('/login', (req, res) => {
 
 router.post('/login', (req, res) => {
   userHelpers.doLogin(req.body).then((response) => {
-    if (response.status==true) {
+    console.log(response);
+    if (response.status===true) {
       req.session.loggedIn = true;
       req.session.user = response.user;
       res.redirect('/')
-    } else if (response.status =="blocked"){
+    } else if (response.status ==="blocked"){
       res.render('user/account-suspended')
     } else {
       req.session.LoginError = response.message;
