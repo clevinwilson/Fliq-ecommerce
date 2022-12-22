@@ -100,10 +100,12 @@ router.get('/login', (req, res) => {
 
 router.post('/login', (req, res) => {
   userHelpers.doLogin(req.body).then((response) => {
-    if (response.status) {
+    if (response.status==true) {
       req.session.loggedIn = true;
       req.session.user = response.user;
       res.redirect('/')
+    } else if (response.status =="blocked"){
+      res.render('user/account-suspended')
     } else {
       req.session.LoginError = response.message;
       res.redirect('/login')
@@ -115,6 +117,10 @@ router.post('/login', (req, res) => {
 router.get('/logout', (req, res) => {
   req.session.destroy();
   res.redirect('/');
+})
+
+router.get('/account-suspended',(req,res)=>{
+  res.render('user/account-suspended')
 })
 
 module.exports = router;
