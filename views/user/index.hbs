@@ -5,6 +5,7 @@
     <section>
         <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
+                
                 <div class="carousel-item active" data-bs-interval="1000">
                     <div class="carousel-cards row">
                         <div class="col-md-6 d-flex justify-content-center align-items-center ">
@@ -21,38 +22,24 @@
                         </div>
                     </div>
                 </div>
+                {{#each banner}}
                 <div class="carousel-item" data-bs-interval="2000">
-                    <div class="carousel-cards row " style="background-color: #e9e8b8;">
+                    <div class="carousel-cards row " style="background-color:{{this.color}}">
                         <div class="col-md-6 d-flex justify-content-center align-items-center ">
                             <div class="carousel-left-section ms-3">
-                                <h1 class="carousel-title">Are You ready to</h1>
-                                <h1 class="carousel-title-tail mt-3">lead the way</h1>
-                                <span class="carouse-product-info d-block mt-3">Apple MacBook Pro 2020 ( macOS
-                                    Monterey, Silver)</span>
+                                <h1 class="carousel-title">{{this.title}}</h1>
+                                <h1 class="carousel-title-tail mt-3">{{this.subtitle}}</h1>
+                                <span class="carouse-product-info d-block mt-3">{{this.text}}</span>
                                 <button class="mt-4">Discover <i class="ms-2 bi bi-arrow-right"></i></button>
                             </div>
                         </div>
                         <div class="col-md-6 m-auto">
-                            <img class="carousel-image" src="/images/banner/mxw_1920,f_auto.png" alt="">
+                            <img class="carousel-image" src="{{this.imageUrl}}" alt="">
                         </div>
                     </div>
                 </div>
-                <div class="carousel-item">
-                    <div class="carousel-cards row " style="background-color: #c3d4de;">
-                        <div class="col-md-6 d-flex justify-content-center align-items-center ">
-                            <div class="carousel-left-section ms-3">
-                                <h1 class="carousel-title">Immerse yourself </h1>
-                                <h1 class="carousel-title-tail mt-3">in pure blacks</h1>
-                                <span class="carouse-product-info d-block mt-3">A80K | BRAVIA XR | OLED | 4K ULTRA
-                                    HD</span>
-                                <button class="mt-4">Discover <i class="ms-2 bi bi-arrow-right"></i></button>
-                            </div>
-                        </div>
-                        <div class="col-md-6 m-auto">
-                            <img class="carousel-image" src="/images/banner/sony.png" alt="">
-                        </div>
-                    </div>
-                </div>
+                {{/each}}
+                
             </div>
             <button class="carousel-control-prev carousel-control" type="button"
                 data-bs-target="#carouselExampleInterval" data-bs-slide="prev">

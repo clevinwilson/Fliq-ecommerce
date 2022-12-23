@@ -199,7 +199,8 @@ module.exports = {
                 $set:{
                     title:data.title,
                     subtitle:data.subtitle,
-                    text:data.text
+                    text:data.text,
+                    color:data.color
                 }
             }).then((response)=>{
                 resolve(response)

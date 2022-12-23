@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const userHelpers = require('../helpers/user-helpers');
+const adminHelpers = require('../helpers/admin-helpers');
 
 const verifyLogin = (req, res, next) => {
   if (req.session.loggedIn) {
@@ -13,7 +14,8 @@ const verifyLogin = (req, res, next) => {
 /* GET users listing. */
 router.get('/',async function (req, res) {
   let categoryList=await userHelpers.getCategory();
-  res.render('user/index', { user: req.session.user, categoryList })
+  let banner=await adminHelpers.getBanner();
+  res.render('user/index', { user: req.session.user, categoryList, banner })
 });
 
 
