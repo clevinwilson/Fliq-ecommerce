@@ -180,22 +180,49 @@ router.post('/edit-category', verifyLogin,(req,res)=>{
  
 })
 
-router.get('/delete-category/:categoryId',(req,res)=>{
+router.get('/delete-category/:categoryId',verifyLogin,(req,res)=>{
     adminHelpers.deleteCategory(req.params.categoryId).then((response)=>{
         res.redirect('/admin/view-category');
     })
 })
 
-router.get('/block-category/:categoryId',(req,res)=>{
+router.get('/block-category/:categoryId',verifyLogin,(req,res)=>{
     adminHelpers.changeStatus(req.params.categoryId,false).then((response)=>{
         res.redirect('/admin/view-category')
     })
 })
 
-router.get('/unblock-category/:categoryId',(req,res)=>{
+router.get('/unblock-category/:categoryId',verifyLogin,(req,res)=>{
     adminHelpers.changeStatus(req.params.categoryId,true).then((response)=>{
         res.redirect('/admin/view-category')
     })
 })
+
+//banner
+router.get('/add-banner',verifyLogin,(req,res)=>{
+    res.render('admin/add-banner', {admin: req.session.adminLogin })
+})
+
+router.post('/add-banner',verifyLogin,(req,res)=>{
+    const image = req.files.image
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9) + image.name;
+    image.mv(`./public/images/banner/${uniqueSuffix}`, (err, done) => {
+        req.body.imageUrl = `${baseUrl}images/banner/${uniqueSuffix}`;
+        adminHelpers.addBanner(req.body)
+    })
+    res.redirect('/admin/view-banner')
+})
+
+router.get('/view-banner',verifyLogin, async(req,res)=>{
+    let bannerList=await adminHelpers.getBanner();
+    res.render('admin/view-banner', { bannerList, admin: req.session.adminLogin })
+})
+
+router.get('/delete-banner/:bannerId',verifyLogin,(req,res)=>{
+    adminHelpers.deleteBanner(req.params.bannerId).then((response)=>{
+        res.redirect('/admin/view-banner')
+    })
+})
+
 
 module.exports = router;

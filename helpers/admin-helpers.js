@@ -163,6 +163,27 @@ module.exports = {
                     resolve(response);
                 })
         })
+    },
+    addBanner:(data)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.BANNER_COLLECTION).insertOne(data).then((response)=>{
+                resolve(response)
+            })
+        })
+    },
+    getBanner:()=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.BANNER_COLLECTION).find().toArray().then((bannerList)=>{
+                resolve(bannerList)
+            })
+        })
+    },
+    deleteBanner: (bannerId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.BANNER_COLLECTION).deleteOne({_id:ObjectId(bannerId)}).then((response)=>{
+                resolve(response)
+            })
+        })
     }
   
 }
