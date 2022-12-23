@@ -42,9 +42,13 @@ router.post('/signup-phone', (req, res) => {
 
 //phone and otp
 router.get('/otp-verification', (req, res) => {
-  console.log(req.session.otpError);
-  res.render('user/otp-verification', { otpError: req.session.otpError });
-  req.session.otpError = false;
+  if (req.session.otp){
+    res.redirect('/signup');
+  }else{
+    res.render('user/otp-verification', { otpError: req.session.otpError });
+    req.session.otpError = false;
+  }
+  
 })
 
 
@@ -54,7 +58,8 @@ router.post('/otp-verification', (req, res) => {
   } else {
     userHelpers.verifyOtp(req.body.otp, req.session.userPhone).then((response) => {
       if (response) {
-        res.render('user/signup', { signupError: req.session.signupError });
+        req.session.otp=true;
+        res.redirect('/signup');
         req.session.signupError = false;
       } else {
         req.session.otpError = "OTP Not Match";
@@ -65,16 +70,16 @@ router.post('/otp-verification', (req, res) => {
 })
 
 
+//signup
 
-
-// router.get('/signup', (req, res) => {
-//   if (req.session.loggedIn) {
-//     res.redirect('/')
-//   } else {
-//     res.render('user/signup', { signupError: req.session.signupError })
-//     req.session.signupError = false
-//   }
-// })
+router.get('/signup', (req, res) => {
+  if (req.session.loggedIn) {
+    res.redirect('/')
+  } else {
+    res.render('user/signup', { signupError: req.session.signupError })
+    req.session.signupError = false
+  }
+})
 
 router.post('/signup', (req, res) => {
   req.body.phone = req.session.userPhone.phone;
@@ -82,7 +87,7 @@ router.post('/signup', (req, res) => {
     if (response) {
       res.redirect('/login');
     } else {
-      req.session.signupError = "User already exists ";
+      req.session.signupError = "Email already exists ";
       res.redirect('/signup')
     }
   })
@@ -121,6 +126,7 @@ router.get('/logout', (req, res) => {
   res.redirect('/');
 })
 
+//account-suspended
 router.get('/account-suspended',(req,res)=>{
   res.render('user/account-suspended')
 })
