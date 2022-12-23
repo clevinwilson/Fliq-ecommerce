@@ -220,9 +220,21 @@ router.get('/view-banner',verifyLogin, async(req,res)=>{
 
 router.get('/delete-banner/:bannerId',verifyLogin,(req,res)=>{
     adminHelpers.deleteBanner(req.params.bannerId).then((response)=>{
-        res.redirect('/admin/view-banner')
+        res.redirect('/admin/view-banner');
     })
 })
 
+router.get('/edit-banner/:bannerId',verifyLogin,(req,res)=>{
+    adminHelpers.getBannerDetails(req.params.bannerId).then((bannerDetails)=>{
+        res.render('admin/edit-banner', { bannerDetails, admin: req.session.adminLogin });
+
+    })
+})
+
+router.post('/edit-banner',(req,res)=>{
+    adminHelpers.editBanner(req.body).then((response)=>{
+        res.redirect('/admin/view-banner');
+    })
+})
 
 module.exports = router;

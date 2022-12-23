@@ -184,6 +184,27 @@ module.exports = {
                 resolve(response)
             })
         })
+    },
+    getBannerDetails:(bannerId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.BANNER_COLLECTION).findOne({_id:ObjectId(bannerId)}).then((response)=>{
+                resolve(response)
+            })
+        })
+    },
+    editBanner:(data)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.BANNER_COLLECTION).updateOne({ _id: ObjectId(data.bannerId)},
+            {
+                $set:{
+                    title:data.title,
+                    subtitle:data.subtitle,
+                    text:data.text
+                }
+            }).then((response)=>{
+                resolve(response)
+            })
+        })
     }
   
 }
