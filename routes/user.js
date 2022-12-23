@@ -88,6 +88,7 @@ router.post('/signup', (req, res) => {
   userHelpers.doSignup(req.body).then((response) => {
     if (response) {
       res.redirect('/login');
+      req.session.otp=false;
     } else {
       req.session.signupError = "Email already exists ";
       res.redirect('/signup')
