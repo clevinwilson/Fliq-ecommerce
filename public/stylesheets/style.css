@@ -279,14 +279,19 @@ body {
     border-radius: 0px;
     display: grid !important;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-gap: 12px;
     padding: 13px;
     overflow-x: hidden;
 
   }
 
   .category-icon-image {
-    width: 5rem;
+    width: 6rem;
+  }
+}
+
+@media screen and (max-width:600px) {
+  .category-icon-image {
+    width: 71px;
   }
 }
 
@@ -300,6 +305,15 @@ body {
   border-radius: 16px;
   position: relative;
 }
+
+@media screen and (max-width:600px) {
+  .product-box-wrap {
+    width: 164px;
+    height: 241px;
+  }
+}
+
+
 
 .product-box-wrap>i {
   position: absolute;
