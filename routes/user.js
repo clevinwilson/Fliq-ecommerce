@@ -134,4 +134,9 @@ router.get('/account-suspended',(req,res)=>{
   res.render('user/account-suspended')
 })
 
+//account page
+router.get('/account',(req,res)=>{
+  res.render('user/account',{user:req.session.user});
+})
+
 module.exports = router;

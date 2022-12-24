@@ -479,3 +479,32 @@ form>p {
     font-size: 18px;
   }
 }
+
+/* page header */
+
+.page-header {
+  background-color: #f7f7f7;
+}
+
+.page-loc-wrapper {
+  font-size: 14px;
+  text-decoration: none;
+  color: black;
+}
+
+.accout-card {
+  border-radius: 10px;
+  border: 2px solid #dfdfdf;
+  background-color: #f9f9f9;
+  transition: all .34s;
+
+}
+
+.accout-card-title {
+  color: #0088d9;
+}
+
+.accout-card:hover {
+  border: 2px solid #0088d9;
+
+}
