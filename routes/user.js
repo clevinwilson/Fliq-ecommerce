@@ -139,4 +139,9 @@ router.get('/account',(req,res)=>{
   res.render('user/account',{user:req.session.user});
 })
 
+
+//product details page
+router.get('/product-details',(req,res)=>{
+  res.render('user/product-details',{user:true})
+})
 module.exports = router;
