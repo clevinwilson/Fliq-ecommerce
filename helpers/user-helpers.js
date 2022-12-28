@@ -2,7 +2,8 @@ const { response } = require('express');
 const collection = require('../config/collection');
 const db = require('../config/connection');
 const bcrypt = require('bcrypt');
-const verify = require('../controller/otp_verification')
+const verify = require('../controller/otp_verification');
+const { ObjectId } = require('mongodb');
 
 
 
@@ -84,6 +85,24 @@ module.exports = {
             db.get().collection(collection.CATEGORY_COLLECTION).find({status:true}).toArray().then((response) => {
                 resolve(response)
             })
+        })
+    },
+    addToCart:(productId,userId)=>{
+        console.log(userId);
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.USER_COLLECTION).updateOne({_id:ObjectId(userId)},{
+                $push:{cart:ObjectId(productId)}
+            }).then((response)=>{
+                resolve();
+            })
+        })
+    },
+    getCartCount:(userId)=>{
+        return new Promise(async(resolve,reject)=>{
+            let user=await db.get().collection(collection.USER_COLLECTION).findOne({_id:ObjectId(userId)});
+            if(user){
+                resolve(user.cart.length)
+            }
         })
     }
 }

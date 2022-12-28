@@ -93,7 +93,7 @@
 
                                     <div class="product-details-action">
                                         <a href="#" class="btn-buynow me-3"><span>Buy Now</span></a>
-                                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                        <a onclick="addToCart('{{product._id}}')" class="btn-product btn-cart"><span>add to cart</span></a>
 
                                         <div class="details-action-wrapper mt-0  d-none d-md-block  ">
                                             <a style="font-size: 24px;" href="#"
@@ -102,7 +102,21 @@
 
                                         </div><!-- End .details-action-wrapper -->
                                     </div><!-- End .product-details-action -->
-
+    <script>
+        function addToCart(productId) {
+            $.ajax({
+                url:'/add-to-cat/'+productId,
+                method:'get',
+                success:(response)=>{
+                    if(response.status){
+                        let count=$('#cartCount').html()
+                        count=parseInt(count)+1;
+                        $('#cartCount').html(count)
+                    }
+                }
+            })
+        }
+    </script>
                                     <div class="product-details-footer">
                                         {{!-- <div class="product-cat">
                                             <span>Category:</span>
@@ -518,12 +532,12 @@
             <div class="row">
                 <div class="col-6">
                     <figure class="product-media">
-                        <a href="product.html">
-                            <img src="/images/product-images/macbook-air-spacegray-gallery1-20220606.jpeg"
+                        <a style="background-color: white;" href="">
+                            <img src="/images/product-images/{{product.images.[0].filename}}"
                                 alt="Product image">
                         </a>
                     </figure><!-- End .product-media -->
-                    <h4 class="product-title"><a href="product.html">{{product.name}} ({{product.color}})</a></h4>
+                    <h4 class="product-title"><a href="">{{product.name}} ({{product.color}})</a></h4>
                     <!-- End .product-title -->
                 </div><!-- End .col-6 -->
 
@@ -537,7 +551,7 @@
                     </div><!-- End .product-details-quantity -->
 
                     <div class="product-details-action">
-                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                        <a onclick="addToCart('{{product._id}}')" class="btn-product btn-cart"><span>add to cart</span></a>
                         <a style="font-size: 24px;" href="#" class="wishlist btn-product btn-wishlist text-dark"
                             title="Wishlist"></a>
 
@@ -546,6 +560,7 @@
             </div><!-- End .row -->
         </div><!-- End .container -->
     </div><!-- End .sticky-bar -->
+
 
     <!-- Mobile Menu -->
     <div class="mobile-menu-overlay"></div><!-- End .mobil-menu-overlay -->

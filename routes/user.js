@@ -15,10 +15,14 @@ const verifyLogin = (req, res, next) => {
 
 /* GET users listing. */
 router.get('/',async function (req, res) {
+  let cartCount=false;
   let categoryList=await userHelpers.getCategory();
   let banner=await adminHelpers.getBanner();
+  if(req.session.user){
+     cartCount = await userHelpers.getCartCount(req.session.user._id)
+  }
   const products=await productHelpers.getProducts();
-  res.render('user/index', { user: req.session.user, categoryList, banner, products })
+  res.render('user/index', { user: req.session.user, cartCount, categoryList, banner, products })
 });
 
 
@@ -144,9 +148,22 @@ router.get('/account',(req,res)=>{
 
 
 //product details page
-router.get('/product-details/:productId',(req,res)=>{
+router.get('/product-details/:productId',async(req,res)=>{
+  let cartCount=false;
+  if (req.session.user) {
+    cartCount = await userHelpers.getCartCount(req.session.user._id)
+  }
   productHelpers.getProductDetails(req.params.productId).then((product)=>{
-    res.render('user/product-details', { product })
+    res.render('user/product-details', { product, user: req.session.user, cartCount })
+  })
+})
+
+
+//cart
+
+router.get('/add-to-cat/:productId',(req,res)=>{
+  userHelpers.addToCart(req.params.productId,req.session.user._id).then((response)=>{
+    res.json({status:true})
   })
 })
 module.exports = router;
