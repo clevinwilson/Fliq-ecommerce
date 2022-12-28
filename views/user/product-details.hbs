@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="/stylesheets/assets/css/style.css">
 <link rel="stylesheet" href="/stylesheets/assets/css/plugins/nouislider/nouislider.css">
 
+
 <body>
     {{>user-header}}
     <div class="page-wrapper">
@@ -31,7 +32,7 @@
                                         </figure><!-- End .product-main-image -->
 
                                         <div id="product-zoom-gallery" class="product-image-gallery">
-                                           {{#each product.images}}
+                                            {{#each product.images}}
                                             <a class="product-gallery-item " href="#"
                                                 data-image="/images/product-images/{{this.filename}}"
                                                 data-zoom-image="/images/product-images/{{this.filename}}">
@@ -45,7 +46,7 @@
 
                             <div class="col-md-6">
                                 <div class="product-details">
-                                    <h1 class="product-title">{{product.name}}({{product.storage}}GB, {{product.color}})</h1>
+                                    <h1 class="product-title">{{product.name}}</h1>
                                     <!-- End .product-title -->
 
                                     <div class="ratings-container">
@@ -64,19 +65,12 @@
                                         <p>Super Savings (2 OFFERS)
                                         </p>
                                     </div><!-- End .product-content -->
-
+                                    <p class="my-4">Storage: {{product.storage}} GB</p>
                                     <div class="details-filter-row details-row-size">
                                         <label>Color:</label>
 
                                         <div class="product-nav product-nav-thumbs">
-                                            <a href="#" class="active">
-                                                <img src="/images/product-images/macbook-air-midnight-select-20220606_SW_COLOR.jpeg"
-                                                    alt="product desc">
-                                            </a>
-                                            <a href="#">
-                                                <img src="/images/product-images/macbook-air-silver-select-20220606_SW_COLOR.jpeg"
-                                                    alt="product desc">
-                                            </a>
+                                           <p>{{product.color}}</p>
                                         </div><!-- End .product-nav -->
                                     </div><!-- End .details-filter-row -->
 
@@ -162,9 +156,9 @@
                                 aria-labelledby="product-desc-link">
                                 <div class="product-desc-content">
                                     <h3>Specification</h3>
-                                      {{#each product.specification}}
-                                      <li>{{this}}</li>
-                                      {{/each}}
+                                    {{#each product.specification}}
+                                    <li>{{this}}</li>
+                                    {{/each}}
                                     </ul>
 
                                     <p>{{product.overview}}</p>
@@ -176,7 +170,7 @@
                                     <h3>Information</h3>
                                     <p>{{product.overview}} </p>
 
-                                    
+
                                 </div><!-- End .product-desc-content -->
                             </div><!-- .End .tab-pane -->
                             <div class="tab-pane fade" id="product-shipping-tab" role="tabpanel"
@@ -529,14 +523,13 @@
                                 alt="Product image">
                         </a>
                     </figure><!-- End .product-media -->
-                    <h4 class="product-title"><a href="product.html">Apple MacBook Air 2022 (M2, 13.6 inch, 8GB, 512GB,
-                            macOS, Midnight)</a></h4>
+                    <h4 class="product-title"><a href="product.html">{{product.name}} ({{product.color}})</a></h4>
                     <!-- End .product-title -->
                 </div><!-- End .col-6 -->
 
                 <div class="col-6 justify-content-end">
                     <div class="product-price">
-                        <i class="fa-solid fa-indian-rupee-sign me-2"></i> 136,490
+                        <i class="fa-solid fa-indian-rupee-sign me-2"></i> {{product.price}}
                     </div><!-- End .product-price -->
                     <div class="product-details-quantity">
                         <input type="number" id="sticky-cart-qty" class="form-control" value="1" min="1" max="10"
@@ -856,6 +849,22 @@
     </div><!-- End .modal -->
 
     {{>user-footer}}
+
+
+    <style>
+        .user-wrap {
+            background-color: #e7e9eb;
+            padding: 0px 14px 0px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            border: none;
+            transition: all .221s;
+        }
+
+        .user-login-text {
+            margin-top: 6px !important;
+        }
+    </style>
 
     <!-- Plugins JS File -->
     <script src="/stylesheets/assets/js/jquery.min.js"></script>

@@ -5,6 +5,7 @@ const baseUrl=require('../controller/url');
 const upload=require('../controller/image-upload');
 const productHelpers=require('../helpers/product-helpers');
 const deleteFile=require('../controller/delete-file');
+const { response } = require('express');
 
 
 
@@ -251,14 +252,26 @@ router.get('/view-products',verifyLogin, async(req,res)=>{
 
 router.get('/delete-product/:productId',verifyLogin, async(req,res)=>{
     let productDetails = await productHelpers.getProductDetails(req.params.productId)
-    console.log(productDetails);
     productHelpers.deleteProduct(req.params.productId).then((response)=>{
         res.redirect('/admin/view-products');
         productDetails.images.forEach(obj => {
             deleteFile(obj.path);
         });
     })
-
-
 })
+
+router.get('/edit-product/:productId',async(req,res)=>{
+    let productDetails = await productHelpers.getProductDetails(req.params.productId);
+    let categoryList = await adminHelpers.getCategoryList();
+
+    res.render('admin/edit-product', { categoryList, productDetails, admin: req.session.adminLogin });
+})
+
+router.post('/edit-product/',(req,res)=>{
+    productHelpers.editProduct(req.body).then((response)=>{
+        res.redirect('/admin/view-products')
+    })
+})
+
+
 module.exports = router;
