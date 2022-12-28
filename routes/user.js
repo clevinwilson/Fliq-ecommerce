@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 const userHelpers = require('../helpers/user-helpers');
 const adminHelpers = require('../helpers/admin-helpers');
+const productHelpers=require('../helpers/product-helpers');
+const { response } = require('express');
 
 const verifyLogin = (req, res, next) => {
   if (req.session.loggedIn) {
@@ -15,7 +17,8 @@ const verifyLogin = (req, res, next) => {
 router.get('/',async function (req, res) {
   let categoryList=await userHelpers.getCategory();
   let banner=await adminHelpers.getBanner();
-  res.render('user/index', { user: req.session.user, categoryList, banner })
+  const products=await productHelpers.getProducts();
+  res.render('user/index', { user: req.session.user, categoryList, banner, products })
 });
 
 
@@ -141,7 +144,9 @@ router.get('/account',(req,res)=>{
 
 
 //product details page
-router.get('/product-details',(req,res)=>{
-  res.render('user/product-details',{user:true})
+router.get('/product-details/:productId',(req,res)=>{
+  productHelpers.getProductDetails(req.params.productId).then((product)=>{
+    res.render('user/product-details', { product })
+  })
 })
 module.exports = router;

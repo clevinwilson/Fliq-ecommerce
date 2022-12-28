@@ -300,7 +300,7 @@ body {
 /* product list box */
 .product-box-wrap {
   background-color: #F2F3F3;
-  width: 200px;
+  max-width: 200px;
   padding: 20px;
   border-radius: 16px;
   position: relative;
@@ -308,7 +308,7 @@ body {
 
 @media screen and (max-width:600px) {
   .product-box-wrap {
-    width: 164px;
+    width: 180px;
     height: 241px;
   }
 }
@@ -508,3 +508,7 @@ form>p {
   border: 2px solid #0088d9;
 
 }
+
+
+
+

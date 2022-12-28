@@ -75,63 +75,27 @@
 
     <!-- product listing -->
     <section>
-        <div class="container  mt-5">
+        <div class="container-fluid   mt-5">
             <h2 class="section-tilte">Products</h2>
-            <div class="row mt-3">
+            <div class="row mt-3 product-listing">
+                {{#each products}}
                 <div class="col-md-3 col-lg-2 col-6  mt-4 d-flex justify-content-center align-items-center">
-                    <div class="product-box-wrap">
-                        <div class="proudct-image-wrap d-flex justify-content-center align-items-center">
-                            <img class="product-image" src="/images/product-images/iphone.png" alt="">
+                    <a class="text-decoration-none text-dark" href="product-details/{{this._id}}">
+                        <div style="    height: 266px;" class="product-box-wrap">
+                            <div class="proudct-image-wrap d-flex justify-content-center align-items-center">
+                                <img class="product-image" src="/images/product-images/{{this.images.[0].filename}}" alt="">
+                            </div>
+                            <p class="product-name mt-3">{{this.name}}</p>
+                            <span class="product-price">₹ {{this.price}}</span>
+                            <i class="bi bi-heart"></i>
                         </div>
-                        <p class="product-name mt-3">Apple iPhone 13</p>
-                        <span class="product-price">₹67,990</span>
-                        <i class="bi bi-heart"></i>
-                    </div>
+                    </a>
                 </div>
-                <div class="col-md-3 col-lg-2  col-6  mt-4 d-flex justify-content-center align-items-center">
-                    <div class="product-box-wrap">
-                        <div class="proudct-image-wrap d-flex justify-content-center align-items-center">
-                            <img class="product-image" src="/images/product-images/macm1.png" alt="">
-                        </div>
-                        <p class="product-name mt-3">Apple iPhone 13</p>
-                        <span class="product-price">₹67,990</span>
-                        <i class="bi bi-heart"></i>
-                    </div>
-                </div>
-                <div class="col-md-3 col-lg-2  col-6  mt-4 d-flex justify-content-center align-items-center">
-                    <div class="product-box-wrap">
-                        <div class="proudct-image-wrap d-flex justify-content-center align-items-center">
-                            <img class="product-image" src="/images/product-images/macm2.png" alt="">
-                        </div>
-                        <p class="product-name mt-3">Apple iPhone 13</p>
-                        <span class="product-price">₹67,990</span>
-                        <i class="bi bi-heart"></i>
-                    </div>
-                </div>
+                {{/each}}
                 <div class="col-md-3 col-lg-2  col-6  mt-4 d-flex justify-content-center align-items-center">
                     <div class="product-box-wrap">
                         <div class="proudct-image-wrap d-flex justify-content-center align-items-center">
                             <img class="product-image" src="/images/product-images/macpro.png" alt="">
-                        </div>
-                        <p class="product-name mt-3">Apple iPhone 13</p>
-                        <span class="product-price">₹67,990</span>
-                        <i class="bi bi-heart"></i>
-                    </div>
-                </div>
-                <div class="col-md-3 col-lg-2 col-6  mt-4 d-flex justify-content-center align-items-center">
-                    <div class="product-box-wrap">
-                        <div class="proudct-image-wrap d-flex justify-content-center align-items-center">
-                            <img class="product-image" src="/images/product-images/iphone.png" alt="">
-                        </div>
-                        <p class="product-name mt-3">Apple iPhone 13</p>
-                        <span class="product-price">₹67,990</span>
-                        <i class="bi bi-heart"></i>
-                    </div>
-                </div>
-                <div class="col-md-3 col-lg-2  col-6  mt-4 d-flex justify-content-center align-items-center">
-                    <div class="product-box-wrap">
-                        <div class="proudct-image-wrap d-flex justify-content-center align-items-center">
-                            <img class="product-image" src="/images/product-images/macm1.png" alt="">
                         </div>
                         <p class="product-name mt-3">Apple iPhone 13</p>
                         <span class="product-price">₹67,990</span>

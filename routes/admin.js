@@ -249,7 +249,7 @@ router.get('/view-products',verifyLogin, async(req,res)=>{
     })
 })
 
-router.get('/delete-product/:productId',async(req,res)=>{
+router.get('/delete-product/:productId',verifyLogin, async(req,res)=>{
     let productDetails = await productHelpers.getProductDetails(req.params.productId)
     console.log(productDetails);
     productHelpers.deleteProduct(req.params.productId).then((response)=>{
