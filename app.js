@@ -6,7 +6,7 @@ var logger = require('morgan');
 var hbs = require('express-handlebars');
 const db=require('./config/connection');
 var session = require('express-session');
-const fileUpload = require('express-fileupload');
+// const fileUpload = require('express-fileupload');
 require('dotenv').config();
 
 
@@ -25,8 +25,10 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(fileUpload());
+// app.use(fileUpload());
 app.use(express.static(path.join(__dirname, 'public')));
+
+
 app.engine('hbs', hbs.engine({ extname: 'hbs', defaultLayout: 'layout', layoutsDir: __dirname + '/views/layout/', partialsDir: __dirname + '/views/partials/' }))
 app.use(session({
   secret: 'fliqkey539',

@@ -1,20 +1,10 @@
-const { response } = require('express');
 const express = require('express');
 const router = express.Router();
 const adminHelpers = require('../helpers/admin-helpers');
 const baseUrl=require('../controller/url');
-
-// const categoryStorage = multer.diskStorage({
-//     destination: function (req, file, cb) {
-//         cb(null, './public/images/category-images')
-//     },
-//     filename: function (req, file, cb) {
-//         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-//         cb(null, file.fieldname + '-' + uniqueSuffix+ '-' + ".jpg")
-//     }
-// })
-
-// const upload = multer({ dest: '/images/category-images/',storage: categoryStorage });
+const upload=require('../controller/image-upload');
+const productHelpers=require('../helpers/product-helpers');
+const deleteFile=require('../controller/delete-file');
 
 
 
@@ -231,10 +221,44 @@ router.get('/edit-banner/:bannerId',verifyLogin,(req,res)=>{
     })
 })
 
-router.post('/edit-banner',(req,res)=>{
+router.post('/edit-banner',verifyLogin,(req,res)=>{
     adminHelpers.editBanner(req.body).then((response)=>{
         res.redirect('/admin/view-banner');
     })
 })
 
+
+// product section
+
+router.get('/add-product',verifyLogin, async(req,res)=>{
+    let categoryList = await adminHelpers.getCategoryList();
+
+    res.render('admin/add-product', { admin: req.session.adminLogin, categoryList })
+})
+
+router.post('/add-product', verifyLogin, upload.array('image'),async (req, res) => {
+    req.body.images=req.files;
+    productHelpers.addProduct(req.body).then((response)=>{
+        res.redirect('/admin/view-products')
+    })
+})
+
+router.get('/view-products',verifyLogin, async(req,res)=>{
+    productHelpers.getProducts().then((response)=>{
+        res.render('admin/view-products', { admin: req.session.adminLogin, products:response});
+    })
+})
+
+router.get('/delete-product/:productId',async(req,res)=>{
+    let productDetails = await productHelpers.getProductDetails(req.params.productId)
+    console.log(productDetails);
+    productHelpers.deleteProduct(req.params.productId).then((response)=>{
+        res.redirect('/admin/view-products');
+        productDetails.images.forEach(obj => {
+            deleteFile(obj.path);
+        });
+    })
+
+
+})
 module.exports = router;
