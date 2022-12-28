@@ -11809,7 +11809,7 @@ button:focus {
 
 .btn-product-gallery:hover, .btn-product-gallery:focus {
     color: #fff;
-    background-color: #c96
+    background-color: #000
 }
 
 .product-image-gallery {

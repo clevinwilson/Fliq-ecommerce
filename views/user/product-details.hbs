@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="/stylesheets/assets/css/plugins/nouislider/nouislider.css">
 
 <body>
+    {{>user-header}}
     <div class="page-wrapper">
 
 
@@ -131,12 +132,12 @@
                                     </div><!-- End .product-details-action -->
 
                                     <div class="product-details-footer">
-                                        <div class="product-cat">
+                                        {{!-- <div class="product-cat">
                                             <span>Category:</span>
                                             <a href="#">Women</a>,
                                             <a href="#">Dresses</a>,
                                             <a href="#">Yellow</a>
-                                        </div><!-- End .product-cat -->
+                                        </div><!-- End .product-cat --> --}}
 
                                         <div class="social-icons social-icons-sm">
                                             <span class="social-label">Share:</span>
@@ -306,7 +307,7 @@
                         </div><!-- End .tab-content -->
                     </div><!-- End .product-details-tab -->
 
-                    <h2 class="title text-center mb-4">You May Also Like</h2><!-- End .title text-center -->
+                    {{!-- <h2 class="title text-center mb-4">You May Also Like</h2><!-- End .title text-center -->
 
                     <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl"
                         data-owl-options='{
@@ -557,7 +558,7 @@
                                 </div><!-- End .rating-container -->
                             </div><!-- End .product-body -->
                         </div><!-- End .product -->
-                    </div><!-- End .owl-carousel -->
+                    </div><!-- End .owl-carousel --> --}}
                 </div><!-- End .container -->
             </div><!-- End .page-content -->
         </main><!-- End .main -->
@@ -901,6 +902,8 @@
             </div><!-- End .modal-content -->
         </div><!-- End .modal-dialog -->
     </div><!-- End .modal -->
+
+    {{>user-footer}}
 
     <!-- Plugins JS File -->
     <script src="/stylesheets/assets/js/jquery.min.js"></script>
