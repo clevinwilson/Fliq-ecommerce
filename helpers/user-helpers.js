@@ -119,5 +119,33 @@ module.exports = {
                 resolve(user.cart.length ?? 0)
             }
         })
+    },
+    getCartProducts:(userId)=>{
+        return new Promise(async(resolve,reject)=>{
+            let cart=await db.get().collection(collection.USER_COLLECTION).aggregate([
+                {
+                    $match:{_id:ObjectId(userId)}
+                },
+                {
+                    $unwind:'$cart'
+                },
+                {
+                    $project:{
+                        item:'$cart.product',
+                        quantity:'$cart.quantity'
+                    }
+                },
+                {
+                    $lookup:{
+                        from:collection.PRODUCT_COLLECTION,
+                        localField:'item',
+                        foreignField:'_id',
+                        as:'product'
+                    }
+                }
+            ]).toArray()
+
+            resolve(cart)
+        })
     }
 }

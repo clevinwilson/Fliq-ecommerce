@@ -168,4 +168,11 @@ router.get('/add-to-cat/:productId',(req,res)=>{
     res.json({status:true,cartCount})
   })
 })
+
+router.get('/cart',(req,res)=>{
+  userHelpers.getCartProducts(req.session.user._id).then((response)=>{
+    console.log(response);
+    res.render('user/cart',{cartItems:response})
+  })
+})
 module.exports = router;
