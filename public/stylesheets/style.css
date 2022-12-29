@@ -107,6 +107,15 @@ body {
 }
 
 
+#cartCount {
+  border-radius: 50%;
+  top: 0px;
+  right: -7px;
+  font-size: 8px;
+  padding-top: 4px;
+}
+
+
 /* carousel */
 
 .carousel-cards {
@@ -508,7 +517,3 @@ form>p {
   border: 2px solid #0088d9;
 
 }
-
-
-
-

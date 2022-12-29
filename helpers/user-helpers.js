@@ -1,4 +1,3 @@
-const { response } = require('express');
 const collection = require('../config/collection');
 const db = require('../config/connection');
 const bcrypt = require('bcrypt');
@@ -11,12 +10,12 @@ module.exports = {
 
     doSignup: function (userData) {
         return new Promise(async (resolve, reject) => {
-            userData.joined_date=new Date();
-            userData.address=[];
-            userData.status=true;
-            userData.wishlist=[];
-            userData.orders=[];
-            userData.cart=[];
+            userData.joined_date = new Date();
+            userData.address = [];
+            userData.status = true;
+            userData.wishlist = [];
+            userData.orders = [];
+            userData.cart = [];
 
             const user = await db.get().collection(collection.USER_COLLECTION).findOne({ email: userData.email })
             if (user) {
@@ -62,46 +61,62 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             let user = await db.get().collection(collection.USER_COLLECTION).findOne({ email: data.email });
             if (user) {
-               
-                    bcrypt.compare(data.password, user.password).then(function (result) {
-                        if (result) {
-                            if (user.status == true) {
+
+                bcrypt.compare(data.password, user.password).then(function (result) {
+                    if (result) {
+                        if (user.status == true) {
                             resolve({ user, status: true })
-                            } else {
-                                resolve({ status: 'blocked' })
-                            }
                         } else {
-                            resolve({ status: false, message: "Incorrect username or password" })
+                            resolve({ status: 'blocked' })
                         }
-                    });
-                
+                    } else {
+                        resolve({ status: false, message: "Incorrect username or password" })
+                    }
+                });
+
             } else {
                 resolve({ status: false, message: "User not exists" })
             }
         })
     },
-    getCategory:()=>{
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collection.CATEGORY_COLLECTION).find({status:true}).toArray().then((response) => {
+    getCategory: () => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.CATEGORY_COLLECTION).find({ status: true }).toArray().then((response) => {
                 resolve(response)
             })
         })
     },
-    addToCart:(productId,userId)=>{
-        console.log(userId);
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collection.USER_COLLECTION).updateOne({_id:ObjectId(userId)},{
-                $push:{cart:ObjectId(productId)}
-            }).then((response)=>{
-                resolve();
-            })
+    addToCart: (productId, userId) => {
+        const productObject = {
+            product: ObjectId(productId),
+            quantity: 1
+        }
+        return new Promise(async (resolve, reject) => {
+            const user = await db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(userId) });
+            const productExists = user.cart.findIndex(products => products.product == productId);
+            if (productExists != -1) {
+                db.get().collection(collection.USER_COLLECTION).updateOne({ 'cart.product': ObjectId(productId) },
+                    {
+                        $inc: { 'cart.$.quantity': 1 }
+                    }).then((response) => {
+                        resolve();
+                    })
+            }
+            else {
+                db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) }, {
+                    $push: { cart: productObject }
+                }).then((response) => {
+                    resolve();
+                })
+            }
+
         })
     },
-    getCartCount:(userId)=>{
-        return new Promise(async(resolve,reject)=>{
-            let user=await db.get().collection(collection.USER_COLLECTION).findOne({_id:ObjectId(userId)});
-            if(user){
-                resolve(user.cart.length)
+    getCartCount: (userId) => {
+        return new Promise(async (resolve, reject) => {
+            let user = await db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(userId) });
+            if (user) {
+                resolve(user.cart.length ?? 0)
             }
         })
     }

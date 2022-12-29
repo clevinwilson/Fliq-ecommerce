@@ -162,8 +162,10 @@ router.get('/product-details/:productId',async(req,res)=>{
 //cart
 
 router.get('/add-to-cat/:productId',(req,res)=>{
-  userHelpers.addToCart(req.params.productId,req.session.user._id).then((response)=>{
-    res.json({status:true})
+  userHelpers.addToCart(req.params.productId,req.session.user._id).then(async(response)=>{
+    let cartCount=await userHelpers.getCartCount(req.session.user._id)
+    console.log(cartCount);
+    res.json({status:true,cartCount})
   })
 })
 module.exports = router;
