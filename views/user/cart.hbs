@@ -1,1 +1,235 @@
-cart
+<!-- Plugins CSS File -->
+<link rel="stylesheet" href="/stylesheets/assets/css/plugins/owl-carousel/owl.carousel.css">
+<link rel="stylesheet" href="/stylesheets/assets/css/plugins/magnific-popup/magnific-popup.css">
+<!-- Main CSS File -->
+<link rel="stylesheet" href="/stylesheets/assets/css/style.css">
+<link rel="stylesheet" href="/stylesheets/assets/css/plugins/nouislider/nouislider.css">
+
+
+<body>
+    {{>user-header}}
+    {{!-- <div class="page-wrapper">
+
+        <main class="main">
+            <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
+                <div class="container">
+                    <h1 class="page-title">Shopping Cart<span>Shop</span></h1>
+                </div><!-- End .container -->
+            </div><!-- End .page-header -->
+            <nav aria-label="breadcrumb" class="breadcrumb-nav">
+                <div class="container">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                        <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
+                    </ol>
+                </div><!-- End .container -->
+            </nav><!-- End .breadcrumb-nav -->
+
+            <div class="page-content">
+                <div class="cart">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-9">
+                                <table class="table table-cart table-mobile">
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Price</th>
+                                            <th>Quantity</th>
+                                            <th>Total</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr>
+                                            <td class="product-col">
+                                                <div class="product">
+                                                    <figure class="product-media">
+                                                        <a href="#">
+                                                            <img src="assets/images/products/table/product-1.jpg"
+                                                                alt="Product image">
+                                                        </a>
+                                                    </figure>
+
+                                                    <h3 class="product-title">
+                                                        <a href="#">Beige knitted elastic runner shoes</a>
+                                                    </h3><!-- End .product-title -->
+                                                </div><!-- End .product -->
+                                            </td>
+                                            <td class="price-col">$84.00</td>
+                                            <td class="quantity-col">
+                                                <div class="cart-product-quantity">
+                                                    <input type="number" class="form-control" value="1" min="1" max="10"
+                                                        step="1" data-decimals="0" required>
+                                                </div><!-- End .cart-product-quantity -->
+                                            </td>
+                                            <td class="total-col">$84.00</td>
+                                            <td class="remove-col"><button class="btn-remove"><i
+                                                        class="icon-close"></i></button></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="product-col">
+                                                <div class="product">
+                                                    <figure class="product-media">
+                                                        <a href="#">
+                                                            <img src="assets/images/products/table/product-2.jpg"
+                                                                alt="Product image">
+                                                        </a>
+                                                    </figure>
+
+                                                    <h3 class="product-title">
+                                                        <a href="#">Blue utility pinafore denim dress</a>
+                                                    </h3><!-- End .product-title -->
+                                                </div><!-- End .product -->
+                                            </td>
+                                            <td class="price-col">$76.00</td>
+                                            <td class="quantity-col">
+                                                <div class="cart-product-quantity">
+                                                    <input type="number" class="form-control" value="1" min="1" max="10"
+                                                        step="1" data-decimals="0" required>
+                                                </div><!-- End .cart-product-quantity -->
+                                            </td>
+                                            <td class="total-col">$76.00</td>
+                                            <td class="remove-col"><button class="btn-remove"><i
+                                                        class="icon-close"></i></button></td>
+                                        </tr>
+                                    </tbody>
+                                </table><!-- End .table table-wishlist -->
+
+                                <div class="cart-bottom">
+                                    <div class="cart-discount">
+                                        <form action="#">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" required
+                                                    placeholder="coupon code">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-outline-primary-2" type="submit"><i
+                                                            class="icon-long-arrow-right"></i></button>
+                                                </div><!-- .End .input-group-append -->
+                                            </div><!-- End .input-group -->
+                                        </form>
+                                    </div><!-- End .cart-discount -->
+
+                                    <a href="#" class="btn btn-outline-dark-2"><span>UPDATE CART</span><i
+                                            class="icon-refresh"></i></a>
+                                </div><!-- End .cart-bottom -->
+                            </div><!-- End .col-lg-9 -->
+                        </div><!-- End .row -->
+                    </div><!-- End .container -->
+                </div><!-- End .cart -->
+            </div><!-- End .page-content -->
+        </main><!-- End .main -->
+
+    </div><!-- End .page-wrapper -->
+    <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
+
+    --}}
+
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 p-md-2">
+                    <div class="row">
+                        <div class="col-md-12 mt-2">
+                            <div class="card-box d-flex">
+                                <div class="left-section card-box-img-wrap d-flex flex-column m-3">
+                                    <img src="/images/product-images/image-1672219543909-659345118-.jpg" alt="">
+                                    <div class="qty-wrap mt-4">
+                                        <div class="cart-product-quantity">
+                                            <input type="number" class="form-control rounded" value="1" min="1" max="10"
+                                                step="1" data-decimals="0" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="right-section flex-column p-3 align-items-start justify-content-start">
+                                    <div class="card-info-wrap ms-md-3">
+                                        <h3 style="font-size: 24px;" class="mt-2 ">Apple iPhone 13</h3>
+                                        <h5 class="mt-2">₹ 54,990.00</h5>
+                                        <p style="font-size: 11px;">(incl. all Taxes)</p>
+                                        <h6 style="font-size: 13px;" class="mt-2">Standard Delivery by Wed, 4th Jan</h6>
+
+                                    </div>
+                                    <div class="mt-2 d-lg-flex box-card-btn-wrap">
+                                        <a href="" class="w-100 m-3 btn btn-outline-dark rounded border-dark ">Move to
+                                            Wishlist</a>
+                                        <a href="" class="w-100 m-3 btn btn-outline-dark rounded border-dark">Remove</a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       
+
+
+                    </div>
+                </div>
+                <div class="col-md-4 p-3 order-right-section">
+                    <div class="delivery-address-box mt-2">
+                        <p>Delivery options for 670142</p>
+                        <span><span class="me-2"><i class="bi bi-archive"></i></span> Standard Delivery by Wed, 4th
+                            Jan</span>
+                    </div>
+
+                    <div class="order-summary-wrap mt-2">
+                        <h6>Order Summary (item 1)</h6>
+                        <div class="original-price-wrap d-flex justify-content-between">
+                            <p>Original Price</p>
+                            <span>₹ 54,990.00</span>
+                        </div>
+                        <div class="delivery-price-wrap mt-2 d-flex justify-content-between">
+                            <p>Delivery</p>
+                            <span>Free</span>
+                        </div>
+                        <div class="total-wrap d-flex mt-2 justify-content-between">
+                            <p>Total</p>
+                            <span>₹ 54,990.00</span>
+                        </div>
+                        <div class="mt-3 order-btn-wrap d-flex justify-content-center">
+                            <button type="button" class="btn btn-primary rounded">CHECKOUT</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    {{>user-footer}}
+
+
+    <style>
+        .user-wrap {
+            background-color: #e7e9eb;
+            padding: 0px 14px 0px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            border: none;
+            transition: all .221s;
+        }
+
+        .user-login-text {
+            margin-top: 6px !important;
+        }
+    </style>
+
+    <!-- Plugins JS File -->
+    <script src="/stylesheets/assets/js/jquery.min.js"></script>
+    <script src="/stylesheets/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/stylesheets/assets/js/jquery.hoverIntent.min.js"></script>
+    <script src="/stylesheets/assets/js/jquery.waypoints.min.js"></script>
+    <script src="/stylesheets/assets/js/superfish.min.js"></script>
+    <script src="/stylesheets/assets/js/owl.carousel.min.js"></script>
+    <script src="/stylesheets/assets/js/bootstrap-input-spinner.js"></script>
+    <script src="/stylesheets/assets/js/jquery.elevateZoom.min.js"></script>
+    <script src="/stylesheets/assets/js/bootstrap-input-spinner.js"></script>
+    <script src="/stylesheets/assets/js/jquery.magnific-popup.min.js"></script>
+    <!-- Main JS File -->
+    <script src="/stylesheets/assets/js/main.js"></script>
+</body>
+
+
+<!-- molla/cart.html  22 Nov 2019 09:55:06 GMT -->
+
+</html>

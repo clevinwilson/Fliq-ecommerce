@@ -102,20 +102,7 @@
 
                                         </div><!-- End .details-action-wrapper -->
                                     </div><!-- End .product-details-action -->
-    <script>
-        function addToCart(productId) {
-            $.ajax({
-                url:'/add-to-cat/'+productId,
-                method:'get',
-                success:(response)=>{
-                    if(response.status){
-                        let count=$('#cartCount').html()
-                        $('#cartCount').html(response.cartCount)
-                    }
-                }
-            })
-        }
-    </script>
+
                                     <div class="product-details-footer">
                                         {{!-- <div class="product-cat">
                                             <span>Category:</span>
@@ -896,6 +883,17 @@
 </body>
 
 
-<!-- molla/product.html  22 Nov 2019 09:55:05 GMT -->
-
-</html>
+    <script>
+        function addToCart(productId) {
+            $.ajax({
+                url: '/add-to-cat/' + productId,
+                method: 'get',
+                success: (response) => {
+                    if (response.status) {
+                        let count = $('#cartCount').html()
+                        $('#cartCount').html(response.cartCount)
+                    }
+                }
+            })
+        }
+    </script>
