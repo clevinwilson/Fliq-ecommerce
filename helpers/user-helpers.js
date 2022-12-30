@@ -3,6 +3,7 @@ const db = require('../config/connection');
 const bcrypt = require('bcrypt');
 const verify = require('../controller/otp_verification');
 const { ObjectId } = require('mongodb');
+const { response } = require('express');
 
 
 
@@ -164,6 +165,15 @@ module.exports = {
                 }).catch((err)=>{
                     reject();
                 })
+        })
+    },
+    deleteProduct:(productId,userId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.USER_COLLECTION).updateOne({_id:ObjectId(userId)},{
+                $pull:{cart:{product:ObjectId(productId)}}
+            }).then((response)=>{
+                resolve()
+            })
         })
     }
 }

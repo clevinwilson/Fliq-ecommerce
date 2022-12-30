@@ -184,5 +184,12 @@ router.post('/change-product-quantity',verifyLogin,(req,res)=>{
 })
 
 
+router.get('/remove-product/:productId',(req,res)=>{
+  userHelpers.deleteProduct(req.params.productId,req.session.user._id).then((response)=>{
+    res.redirect('/cart')
+  })
+})
+
+
 
 module.exports = router;

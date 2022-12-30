@@ -7,7 +7,7 @@
                 <div class="row">
                     {{#each cartItems}}
 
-                    <div class="col-md-12 mt-2">
+                    <div class="col-md-12 mt-3">
                         <div class="card-box d-flex">
                             <div class="left-section card-box-img-wrap d-flex flex-column m-3">
                                 <img src="/images/product-images/{{this.product.images.[0].filename}}" alt="">
@@ -35,7 +35,7 @@
                                 <div class="mt-2 d-lg-flex box-card-btn-wrap">
                                     <a href="" class="w-100 m-3 btn btn-outline-dark rounded border-dark ">Move to
                                         Wishlist</a>
-                                    <a href="" class="w-100 m-3 btn btn-outline-dark rounded border-dark">Remove</a>
+                                    <a href="/remove-product/{{this.product._id}}" class="w-100 m-3 btn btn-outline-dark rounded border-dark">Remove</a>
 
                                 </div>
                             </div>
@@ -55,7 +55,7 @@
                         Jan</span>
                 </div>
 
-                <div class="order-summary-wrap mt-2">
+                <div class="order-summary-wrap mt-3">
                     <h6>Order Summary (item 1)</h6>
                     <div class="original-price-wrap d-flex justify-content-between">
                         <p>Original Price</p>
