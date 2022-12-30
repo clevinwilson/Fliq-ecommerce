@@ -607,6 +607,13 @@ span {
   transition: all 0.3s;
 }
 
+@media screen and (max-width:768px) {
+  .box-card-btn-wrap>a {
+    min-width: 100%;
+  }
+
+}
+
 /* cart :increment */
 /* Google fonts import link */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');

@@ -1,9 +1,9 @@
 {{>user-header}}
 
 <section>
-    <div class="container">
+    <div class="container p-3">
         <div class="row">
-            <div class="col-md-8 p-md-2">
+            <div class="col-lg-8 col-md-12 p-md-2">
                 <div class="row">
                     {{#each cartItems}}
 
@@ -24,7 +24,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="right-section flex-column p-3 align-items-start justify-content-start">
+                            <div class="right-section  flex-column p-3 align-items-md-start justify-content-start">
                                 <div class="card-info-wrap ms-md-3">
                                     <h3 style="font-size: 24px;" class="mt-2 ">{{this.product.name}}</h3>
                                     <h5 class="mt-2">₹ {{this.product.price}}</h5>
@@ -33,9 +33,9 @@
 
                                 </div>
                                 <div class="mt-2 d-lg-flex box-card-btn-wrap">
-                                    <a href="" class="w-100 m-3 btn btn-outline-dark rounded border-dark ">Move to
+                                    <a href="" class="w-100  btn btn-outline-dark m-2 rounded border-dark ">Move to
                                         Wishlist</a>
-                                    <a href="/remove-product/{{this.product._id}}" class="w-100 m-3 btn btn-outline-dark rounded border-dark">Remove</a>
+                                    <a href="/remove-product/{{this.product._id}}" class="w-100 m-2 btn btn-outline-dark rounded border-dark">Remove</a>
 
                                 </div>
                             </div>
@@ -48,7 +48,7 @@
 
                 </div>
             </div>
-            <div class="col-md-4 p-3 order-right-section">
+            <div class="col-lg-4 col-md-12 p-3 order-right-section">
                 <div class="delivery-address-box mt-2">
                     <p>Delivery options for 670142</p>
                     <span><span class="me-2"><i class="bi bi-archive"></i></span> Standard Delivery by Wed, 4th
@@ -69,8 +69,8 @@
                         <p>Total</p>
                         <span>₹ 54,990.00</span>
                     </div>
-                    <div class="mt-3 order-btn-wrap d-flex justify-content-center">
-                        <button type="button" class="btn btn-primary rounded">CHECKOUT</button>
+                    <div class="mt-4 order-btn-wrap d-flex justify-content-center">
+                        <button style="padding: 4px 50px;" type="button" class="btn btn-primary rounded">CHECKOUT</button>
                     </div>
                 </div>
             </div>
