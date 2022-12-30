@@ -142,10 +142,28 @@ module.exports = {
                         foreignField:'_id',
                         as:'product'
                     }
+                },
+                {
+                    $project:{
+                        item:1,quantity:1,product:{$arrayElemAt:['$product',0]}
+                    }
                 }
             ]).toArray()
 
             resolve(cart)
+        })
+    },
+    updateProductCount:(data,userId)=>{
+        return new Promise(async(resolve,reject)=>{
+            console.log(data.quantity,data.productId,userId);
+            let response = await db.get().collection(collection.USER_COLLECTION).updateOne({_id:ObjectId(userId) ,'cart.product': ObjectId(data.productId) },
+                {
+                    $inc: { 'cart.$.quantity': parseInt(data.quantity) }
+                }).then((response) => {
+                     resolve();
+                }).catch((err)=>{
+                    reject();
+                })
         })
     }
 }

@@ -161,18 +161,28 @@ router.get('/product-details/:productId',async(req,res)=>{
 
 //cart
 
-router.get('/add-to-cat/:productId',(req,res)=>{
+router.get('/add-to-cat/:productId',verifyLogin,(req,res)=>{
   userHelpers.addToCart(req.params.productId,req.session.user._id).then(async(response)=>{
     let cartCount=await userHelpers.getCartCount(req.session.user._id)
-    console.log(cartCount);
     res.json({status:true,cartCount})
   })
 })
 
-router.get('/cart',(req,res)=>{
+router.get('/cart',verifyLogin,async(req,res)=>{
+  let cartCount = await userHelpers.getCartCount(req.session.user._id);
   userHelpers.getCartProducts(req.session.user._id).then((response)=>{
-    console.log(response);
-    res.render('user/cart',{cartItems:response})
+    res.render('user/cart', { cartItems: response, user: req.session.user, cartCount })
   })
 })
+
+router.post('/change-product-quantity',verifyLogin,(req,res)=>{
+  userHelpers.updateProductCount(req.body,req.session.user._id).then(async(response)=>{
+    res.json({ status: true})
+  }).catch((erro)=>{
+    res.json({status:false})
+  })
+})
+
+
+
 module.exports = router;
