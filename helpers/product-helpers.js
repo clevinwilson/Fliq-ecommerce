@@ -7,6 +7,7 @@ const { response } = require('express');
 module.exports={
     addProduct:(data)=>{
         data.categoryId=ObjectId(data.categoryId)
+        data.price=parseInt(data.price);
         return new Promise((resolve,reject)=>{
             db.get().collection(collection.PRODUCT_COLLECTION).insertOne(data).then((response)=>{
                 console.log(response);
@@ -64,7 +65,7 @@ module.exports={
                     modelnumber: data.modelnumber,
                     color: data.color,
                     category: data.category,
-                    price: data.price,
+                    price: parseInt(data.price),
                     quantity: data.quantity,
                     storage: data.storage,
                     specification: data.specification,

@@ -59,7 +59,7 @@
                     <h6>Order Summary (item 1)</h6>
                     <div class="original-price-wrap d-flex justify-content-between">
                         <p>Original Price</p>
-                        <span>₹ 54,990.00</span>
+                        <span >₹ <span class="cart-total-price1">{{cartTotal}}</span></span>
                     </div>
                     <div class="delivery-price-wrap mt-2 d-flex justify-content-between">
                         <p>Delivery</p>
@@ -67,7 +67,7 @@
                     </div>
                     <div class="total-wrap d-flex mt-2 justify-content-between">
                         <p>Total</p>
-                        <span>₹ 54,990.00</span>
+                        <span >₹ <span class="cart-total-price2">{{cartTotal}}</span></span>
                     </div>
                     <div class="mt-4 order-btn-wrap d-flex justify-content-center">
                         <button style="padding: 4px 50px;" type="button" class="btn btn-primary rounded">CHECKOUT</button>
@@ -92,18 +92,21 @@
         const productCount = parseInt(document.getElementById(productId).innerText);
         const minus = document.getElementById(productId + "minus");
         const plus = document.getElementById(productId + "plus");
-
       
                 $.ajax({
                     url: '/change-product-quantity',
                     data: {
-                        quantity: count,
-                        productId
+                        count: count,
+                        productId,
+                        quantity:productCount
                     },
                     method: 'post',
                     success: (response) => {
                         if (response.status) {
                             num.innerText = productCount + count;
+                            document.querySelector('.cart-total-price1').innerText=response.cartTotal;
+                            document.querySelector('.cart-total-price2').innerText = response.cartTotal;
+
                         } else {
                             location.reload();
                         }
