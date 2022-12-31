@@ -2,6 +2,7 @@
 
 <section>
     <div class="container p-3">
+        {{#if cartItems}}
         <div class="row">
             <div class="col-lg-8 col-md-12 p-md-2">
                 <div class="row">
@@ -70,11 +71,37 @@
                         <span >₹ <span class="cart-total-price2">{{cartTotal}}</span></span>
                     </div>
                     <div class="mt-4 order-btn-wrap d-flex justify-content-center">
-                        <button style="padding: 4px 50px;" type="button" class="btn btn-primary rounded">CHECKOUT</button>
+                        <button style="padding: 6px 55px;" type="button" class="btn btn-primary rounded">CHECKOUT</button>
                     </div>
                 </div>
             </div>
         </div>
+        {{else}}
+        <div class="container-fluid  mt-100">
+            <div class="row">
+        
+                <div class="col-md-12">
+        
+                    <div class="card border-0 my-5">
+                        <div class="card-body  cart">
+                            <div class="col-sm-12 empty-cart-cls text-center">
+                                <img style="width: 200px;" src="https://rukminim1.flixcart.com/www/800/800/promos/16/05/2019/d438a32e-765a-4d8b-b4a6-520b560971e8.png?q=90" width="130" height="130" class="img-fluid mb-4 mr-3">
+                                <h4><strong>Your Cart is Empty</strong></h4>
+                                <h6 class="mt-4">Explore our wide selection and find something you like</h6>
+                                <a href="/" class="btn btn-primary cart-btn-transform m-3 mt-4" data-abc="true">continue shopping</a>
+        
+        
+                            </div>
+                        </div>
+                    </div>
+        
+        
+                </div>
+        
+            </div>
+        
+        </div>
+        {{/if}}
     </div>
 </section>
 

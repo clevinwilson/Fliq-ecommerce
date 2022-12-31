@@ -217,10 +217,10 @@ module.exports = {
                     }
                 }
             ]).toArray();
-            if(cartTotal){
+            if(cartTotal.length){
                 resolve(cartTotal[0].total);
             }else{
-                reject();
+               resolve(false)
             }
         })
     }
