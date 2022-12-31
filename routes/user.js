@@ -197,6 +197,11 @@ router.get('/remove-product/:productId', (req, res) => {
   })
 })
 
+//checkout page
+router.get('/checkout',(req,res)=>{
+  res.render('user/checkout')
+})
+
 
 
 module.exports = router;

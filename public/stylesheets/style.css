@@ -646,3 +646,88 @@ span {
   border-left: 1px solid rgba(0, 0, 0, 0.2);
   pointer-events: none;
 }
+
+/* checkout page */
+
+.model-select {
+  border-style: solid;
+  /* border-width: 20px; */
+  border-color: #c4c4c4;
+  border-radius: 13px;
+  outline: none;
+  border-width: 1px;
+  padding: 16px;
+}
+
+.radio-btn {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.model-container input:checked~.model-select {
+  border-color: #2196F3;
+  border-width: 2px;
+}
+
+#navbar.mySidenav {
+  position: absolute !important;
+}
+
+.radio-btn {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.add-address-wrap {
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #c4c4c4;
+  border-radius: 10px;
+  font-size: 21px;
+  height: 100px;
+}
+
+.checkout-btn {
+  cursor: pointer;
+  text-align: center;
+  white-space: nowrap;
+  border-radius: 980px;
+  background: #0071e3;
+  color: #fff;
+  --sk-button-margin-horizontal: 14px;
+  --sk-button-margin-vertical: 14px;
+  font-size: 17px;
+  line-height: 1.17648;
+  font-weight: 400;
+  letter-spacing: -.022em;
+  font-family: SF Pro Text, SF Pro Icons, Helvetica Neue, Helvetica, Arial, sans-serif;
+  min-width: 28px;
+  padding: 18px 31px;
+  --sk-button-margin-horizontal: 22px;
+  --sk-button-margin-vertical: 22px;
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  border-radius: 8px;
+  --sk-button-margin-horizontal: 9px;
+  --sk-button-margin-vertical: 9px;
+  border-radius: 12px;
+  white-space: normal;
+  display: inline-block;
+}
+
+@media screen and (max-width:768px) {
+  .checkout {
+    flex-direction: column-reverse;
+  }
+
+  .order-right-section {
+    height: 45vh;
+    position: static;
+  }
+
+}

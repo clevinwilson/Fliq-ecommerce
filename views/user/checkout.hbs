@@ -1,0 +1,87 @@
+{{>user-header}}
+
+<section>
+    <div class="container ">
+        <div class="row checkout">
+            <div class="col-lg-8 col-md-12 p-md-2">
+                <h4 class="mt-2">Contact information</h4>
+                <div class="row">
+                    <div class="col-md-10 mt-3">
+                        <div class="card-box d-flex">
+                            <p style="font-size: 17px;" class="m-0 p-0">clevinmwilson@gmail.com</p>
+                        </div>
+                        <div class="card-box d-flex mt-3">
+                            <p style="font-size: 17px;" class="m-0 p-0"><span>+91</span> 9400251580</p>
+                        </div>
+                    </div>
+                </div>
+                <h4 class="mt-5">Select an address:</h4>
+                <div class="row">
+                    <div class="col-md-10 mt-3">
+                        <label class="mt-3 model-container text-center w-100 ">
+                            <input type="radio" class="radio-btn" id="device" name="price">
+                            <div style=" padding: 20px;" class="p-4 model-select product-model">
+                                <div class="address-info d-flex ">
+                                    <div class="left-section d-flex flex-column align-items-start">
+                                        <span style="font-size: 17px; font-weight: 500;" class="model-title">Clevin M
+                                            Wilson</span>
+                                        <span class="screen-size mt-1 ">Kannur</span>
+                                    </div>
+                                    <div class="right-section justify-content-end">
+                                        <span class="device-price-right">Default</span>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </label>
+
+                    </div>
+                    <div class="col-md-10 mt-3">
+                        <div class="add-address-wrap ">
+                            <i class="fa-solid fa-plus"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-10 mt-4">
+                        <div class="mt-2 bottem-checkout-btn-container ">
+                            <a onclick="placeOrder()"
+                                class="text-white col-md-6  btn btn-primary  checkout-btn mt-4 ">Continue to Payment</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-12 p-3 order-right-section">
+                <div class="delivery-address-box mt-2">
+                    <p>Delivery options for 670142</p>
+                    <span><span class="me-2"><i class="bi bi-archive"></i></span> Standard Delivery by Wed, 4th
+                        Jan</span>
+                </div>
+
+                <div class="order-summary-wrap mt-3">
+                    <h6>Order Summary (item 1)</h6>
+                    <div class="original-price-wrap d-flex justify-content-between">
+                        <p>Original Price</p>
+                        <span>₹ <span class="cart-total-price1">{{cartTotal}}</span></span>
+                    </div>
+                    <div class="delivery-price-wrap mt-2 d-flex justify-content-between">
+                        <p>Delivery</p>
+                        <span>Free</span>
+                    </div>
+                    <div class="total-wrap d-flex mt-2 justify-content-between">
+                        <p>Total</p>
+                        <span>₹ <span class="cart-total-price2">{{cartTotal}}</span></span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+{{>user-footer}}
+
