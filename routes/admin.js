@@ -6,6 +6,7 @@ const upload=require('../controller/image-upload');
 const productHelpers=require('../helpers/product-helpers');
 const deleteFile=require('../controller/delete-file');
 const { response } = require('express');
+const { Db } = require('mongodb');
 
 
 
@@ -272,6 +273,16 @@ router.post('/edit-product/',(req,res)=>{
         res.redirect('/admin/view-products')
     })
 })
+
+router.get('/view-orders',(req,res)=>{
+    adminHelpers.getAllOrder().then((response)=>{
+        res.render('admin/view-orders', {orders:response, admin: req.session.adminLogin });
+    })
+})
+
+// router.get('/order-details/:orderId/:userId',(req,res)=>{
+//     productHelpers.getOrderDetails(req.params.orderId,req.params.userId)
+// })
 
 
 module.exports = router;

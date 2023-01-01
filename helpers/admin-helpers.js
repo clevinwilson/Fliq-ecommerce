@@ -2,6 +2,7 @@ const db = require('../config/connection');
 const collection = require('../config/collection');
 const bcrypt = require('bcrypt');
 const { ObjectId } = require("mongodb");
+const { response } = require('express');
 
 module.exports = {
     doLogin: (data) => {
@@ -203,6 +204,13 @@ module.exports = {
                 }
             }).then((response)=>{
                 resolve(response)
+            })
+        })
+    },
+    getAllOrder:()=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.USER_COLLECTION).find().toArray().then((response)=>{
+                resolve(response);
             })
         })
     }

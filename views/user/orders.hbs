@@ -1,0 +1,39 @@
+{{>user-header}}
+<section>
+    <div class="headerhny-title text-center mt-3 mb-3">
+        <h3 class="hny-title mb-0 p-4">Orders</h3>
+
+    </div>
+    <div class="container">
+        <div class="row">
+            {{#each orders}}
+            <div class="col-md-12 mt-3">
+                <div class="card-box d-flex">
+                    <div class="left-section card-box-img-wrap d-flex flex-column m-3">
+                        <img src="/images/product-images/{{this.product.images.[0].filename}}" alt="">
+                    </div>
+                    <div class="right-section  flex-column p-3 align-items-md-start justify-content-start">
+                        <div class="card-info-wrap ms-md-3">
+                            <h5  class="mt-2 device-name">{{this.product.name}}</h5>
+                            <h6 class="mt-2">₹ {{this.product.price}}</h6>
+                            <p style="font-size: 11px;">(incl. all Taxes)</p>
+                            <h6 style="font-size: 13px;" class="mt-2">Standard Delivery by Wed, 4th Jan</h6>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</section>
+
+{{>user-footer}}
+
+<style>
+    @media screen and (max-width: 768px) {
+        .card-box {
+            flex-direction: row;
+        }
+    }
+</style>

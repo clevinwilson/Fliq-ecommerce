@@ -170,7 +170,7 @@ router.get('/add-to-cat/:productId', verifyLogin, (req, res) => {
 
 router.get('/cart', verifyLogin, async (req, res) => {
   let cartCount = await userHelpers.getCartCount(req.session.user._id);
-  let cartTotal=await userHelpers.getCartTotal(req.session.user._id);
+  let cartTotal = await userHelpers.getCartTotal(req.session.user._id);
   userHelpers.getCartProducts(req.session.user._id).then((response) => {
     res.render('user/cart', { cartItems: response, user: req.session.user, cartCount, cartTotal })
   })
@@ -180,9 +180,9 @@ router.post('/change-product-quantity', verifyLogin, (req, res) => {
   userHelpers.updateProductCount(req.body, req.session.user._id).then(async (response) => {
     let cartTotal = await userHelpers.getCartTotal(req.session.user._id);
 
-    if(response){
-      res.json({ status: true,cartTotal })
-    }else{
+    if (response) {
+      res.json({ status: true, cartTotal })
+    } else {
       res.json({ status: false, cartTotal })
     }
   }).catch((erro) => {
@@ -191,14 +191,14 @@ router.post('/change-product-quantity', verifyLogin, (req, res) => {
 })
 
 
-router.get('/remove-product/:productId',verifyLogin, (req, res) => {
+router.get('/remove-product/:productId', verifyLogin, (req, res) => {
   userHelpers.deleteProduct(req.params.productId, req.session.user._id).then((response) => {
     res.redirect('/cart')
   })
 })
 
 //checkout page
-router.get('/checkout',verifyLogin,async(req,res)=>{
+router.get('/checkout', verifyLogin, async (req, res) => {
   let userDetails = await userHelpers.getUserAdress(req.session.user._id);
   let cartTotal = await userHelpers.getCartTotal(req.session.user._id);
   const cartCount = await userHelpers.getCartCount(req.session.user._id);
@@ -208,27 +208,34 @@ router.get('/checkout',verifyLogin,async(req,res)=>{
 
 
 //checkout page
-router.post('/add-new-address',verifyLogin,(req,res)=>{
-  userHelpers.addNewAddress(req.body, req.session.user._id).then((response)=>{
+router.post('/add-new-address', verifyLogin, (req, res) => {
+  userHelpers.addNewAddress(req.body, req.session.user._id).then((response) => {
     res.redirect('/checkout');
   })
 })
 
 
 //order
-router.post('/place-order',verifyLogin, async(req,res)=>{
+router.post('/place-order', verifyLogin, async (req, res) => {
   console.log(req.body);
-  let user=await userHelpers.getAddress(req.body.addressId,req.session.user._id);
+  let user = await userHelpers.getAddress(req.body.addressId, req.session.user._id);
   let cartTotal = await userHelpers.getCartTotal(req.session.user._id);
-  
-  userHelpers.placeOrder(req.body.phone,user, cartTotal).then((response)=>{
-    if(response.status){
-      res.json({status:true})
-    }else{
-      res.json({status:false})
+
+  userHelpers.placeOrder(req.body.phone, user, cartTotal).then((response) => {
+    if (response.status) {
+      res.json({ status: true })
+    } else {
+      res.json({ status: false })
     }
   })
 })
+
+router.get('/orders', verifyLogin, (req, res) => {
+  userHelpers.getAllOrders(req.session.user._id).then((response) => {
+    res.render('user/orders', { orders: response, user: req.session.user });
+  })
+})
+
 
 
 module.exports = router;
