@@ -1,57 +1,71 @@
 {{>user-header}}
-
+<script type="text/javascript">
+    window.history.forward();
+    function noBack() {
+        window.history.forward();
+    }
+</script>
 <section>
     <div class="container ">
         <div class="row checkout">
             <div class="col-lg-8 col-md-12 p-md-2">
-                <h4 class="mt-2">Contact information</h4>
-                <div class="row">
-                    <div class="col-md-10 mt-3">
-                        <div class="card-box d-flex">
-                            <p style="font-size: 17px;" class="m-0 p-0">clevinmwilson@gmail.com</p>
-                        </div>
-                        <div class="card-box d-flex mt-3">
-                            <p style="font-size: 17px;" class="m-0 p-0"><span>+91</span> 9400251580</p>
-                        </div>
-                    </div>
-                </div>
-                <h4 class="mt-5">Select an address:</h4>
-                <div class="row">
-                    <div class="col-md-10 mt-3">
-                        <label class="mt-3 model-container text-center w-100 ">
-                            <input type="radio" class="radio-btn" id="device" name="price">
-                            <div style=" padding: 20px;" class="p-4 model-select product-model">
-                                <div class="address-info d-flex ">
-                                    <div class="left-section d-flex flex-column align-items-start">
-                                        <span style="font-size: 17px; font-weight: 500;" class="model-title">Clevin M
-                                            Wilson</span>
-                                        <span class="screen-size mt-1 ">Kannur</span>
-                                    </div>
-                                    <div class="right-section justify-content-end">
-                                        <span class="device-price-right">Default</span>
-
-                                    </div>
-                                </div>
-
+                <form action="/add-new-address" method="post" id="checkout-form">
+                    <h4 class="mt-2">Contact information</h4>
+                    <div class="row">
+                        <div class="col-md-10 mt-3">
+                            <div class="card-box d-flex">
+                                <p style="font-size: 17px;" class="m-0 p-0">clevinmwilson@gmail.com</p>
                             </div>
-                        </label>
-
-                    </div>
-                    <div class="col-md-10 mt-3">
-                        <div class="add-address-wrap ">
-                            <i class="fa-solid fa-plus"></i>
+                            <div class="number ">
+                                <input style="border-radius: 10px; padding: 19px;" type="text"
+                                    class="mt-3 form-input-padding form-control" id="number" name="phone"
+                                    value="{{user.number}}" value="+919400251580" placeholder="Mobile Number" required>
+                            </div>
                         </div>
                     </div>
-                </div>
+                    <h4 class="mt-5">Select an address:</h4>
+                    <div class="row">
+                        {{#each userDetails.address}}
+                        <div class="col-md-10 mt-3">
+                            <label class="mt-3 model-container text-center w-100 ">
+                                <input type="radio" class="radio-btn" id="device" name="addressId" value="{{this.id}}"
+                                    required>
+                                <div style=" padding: 20px;" class="p-4 model-select product-model">
+                                    <div class="address-info d-flex ">
+                                        <div class="left-section d-flex flex-column align-items-start">
+                                            <span style="font-size: 17px; font-weight: 500;"
+                                                class="model-title">{{this.firstName}} {{this.lastName}}</span>
+                                            <span class="screen-size mt-1 ">{{this.street}}</span>
+                                        </div>
+                                        <div class="right-section justify-content-end">
+                                            {{#if this.default}}
+                                            <span class="device-price-right">Default</span>
+                                            {{/if}}
+                                        </div>
+                                    </div>
 
-                <div class="row">
-                    <div class="col-md-10 mt-4">
-                        <div class="mt-2 bottem-checkout-btn-container ">
-                            <a onclick="placeOrder()"
-                                class="text-white col-md-6  btn btn-primary  checkout-btn mt-4 ">Continue to Payment</a>
+                                </div>
+                            </label>
+
+                        </div>
+                        {{/each}}
+
+                        <div onclick="showNewAddress()" class="col-md-10 mt-3">
+                            <div class="add-address-wrap ">
+                                <i class="fa-solid fa-plus"></i>
+                            </div>
                         </div>
                     </div>
-                </div>
+
+                    <div class="row">
+                        <div class="col-md-10 mt-4">
+                            <div class="mt-2 bottem-checkout-btn-container ">
+                                <button class="text-white col-md-6  btn btn-primary  checkout-btn mt-4 "
+                                    type="submit">Continue to Payment</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="col-lg-4 col-md-12 p-3 order-right-section">
                 <div class="delivery-address-box mt-2">
@@ -83,5 +97,92 @@
 </section>
 
 
+
+
 {{>user-footer}}
 
+
+<!-- address Modal -->
+<div class="modal fade " id="addNewAddress" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Add Address</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/add-new-address" method="POST">
+                <div class="col-md-12 p-3">
+                    <div class="email">
+                        <input style="border-radius: 10px;" type="text" class="mt-3 p-2 form-input-padding form-control"
+                            id="firstName" name="firstName" value="{{user.firstname}}" placeholder="First Name"
+                            required>
+                    </div>
+                    <div class="number ">
+                        <input style="border-radius: 10px;" type="text" class="mt-3 p-2 form-input-padding form-control"
+                            id="lastName" name="lastName" value="{{user.lastname}}" placeholder="Last Name" required>
+                    </div>
+                    <div class="address1 ">
+                        <input style="border-radius: 10px;" type="text" class="mt-3 p-2 form-input-padding form-control"
+                            id="street" name="street" value="{{user.address.street}}" placeholder="Address Line 1"
+                            autocomplete="address-level1" required>
+                    </div>
+                    <div class="address2 ">
+                        <input style="border-radius: 10px;" type="text" class="mt-3 p-2 form-input-padding form-control"
+                            id="street2" name="AddressLine2" value="{{user.address.street2}}"
+                            placeholder="Address Line 2 (Optional)" autocomplete="address-level2">
+                    </div>
+                    <div class="landmark ">
+                        <input style="border-radius: 10px;" type="text" class="mt-3 p-2 form-input-padding form-control"
+                            id="street3" name="Landmark" value="{{user.address.street3}}"
+                            placeholder="Landmark (Optional)" autocomplete="address-level3">
+                    </div>
+                    <div class="postalCode ">
+                        <input style="border-radius: 10px;" type="text" class="mt-3 p-2 form-input-padding form-control"
+                            id="postalCode" name="postalCode" value="{{user.address.postalCode}}" placeholder="PIN Code"
+                            autocomplete required>
+                    </div>
+                    <div class="cityState ">
+                        <input style="border-radius: 10px;" type="text" class="mt-3 p-2 form-input-padding form-control"
+                            id="cityState" name="state" value="{{user.address.state}}" placeholder="City, State"
+                            required>
+                    </div>
+                    <div class="country ">
+                        <input style="border-radius: 10px;" type="text" class="mt-3 p-2 form-input-padding form-control"
+                            id="country" name="country" placeholder="Country" value="India" readonly required>
+                    </div>
+                </div>
+
+                <div class="bottem-checkout-btn-container col-md-12 p-3  ">
+                    <button type="submit" id="submit" style="padding: 12px 1px;"
+                        class="text-white col-md-12  btn btn-primary bottem-shipping-btn checkout-btn mb-4  ">Save
+                        Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    function showNewAddress() {
+        $('#addNewAddress').modal('show');
+    }
+</script>
+
+<script>
+    $('#checkout-form').submit((e) => {
+        e.preventDefault();
+        $.ajax({
+            url: '/place-order',
+            method: 'post',
+            data: $('#checkout-form').serialize(),
+            success: ((response) => {
+                if (response.status) {
+                    alert("haaa")
+                }
+            })
+        })
+    })
+</script>

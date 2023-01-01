@@ -223,5 +223,60 @@ module.exports = {
                resolve(false)
             }
         })
+    },
+    addNewAddress:(data,userId)=>{
+        return new Promise((resolve,reject)=>{
+            data.default= false;
+            data.id = Date.now() + '-' + Math.round(Math.random() * 1E9)
+            
+            db.get().collection(collection.USER_COLLECTION).updateOne({_id:ObjectId(userId)},{
+                $push: { address: data }
+            }).then((response)=>{
+                resolve(response)
+            })
+        })
+    },
+    getUserAdress:(userId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.USER_COLLECTION).findOne({_id:ObjectId(userId)}).then((userDetails)=>{
+                resolve(userDetails)
+            })
+        })
+    },
+    getAddress:(addressId,userId)=>{
+        return new Promise(async(resolve,reject)=>{
+           let user=await db.get().collection(collection.USER_COLLECTION).aggregate([
+                {
+                    $match:{_id:ObjectId(userId)}
+                },
+                {
+                    $unwind:"$address"
+                },
+                {
+                    $match:{'address.id':addressId}
+                }
+            ]).toArray();
+            resolve(user[0])
+        })
+    },
+    placeOrder:(phone,details,cartTotal)=>{
+        return new Promise((resolve,reject)=>{
+            details.address.phone=phone;
+            orderObj={
+                deliveryDetails:details.address,
+                paymentMethod:'COD',
+                status:"placed",
+                products:details.cart,
+                totalAmount: cartTotal
+            }
+            db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(details._id) },{ $push:{orders:orderObj}}).then((response)=>{
+                db.get().collection(collection.USER_COLLECTION).updateOne({_id:ObjectId(details._id)},{
+                    $set:{
+                        cart:[]
+                    }
+                })
+                resolve({status:true})
+            })
+        })
     }
 }
