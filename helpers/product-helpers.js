@@ -100,5 +100,12 @@ module.exports={
             ]).toArray();
             console.log(orderDetails);
         })
+    },
+    getAllProducts:(categoryId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.PRODUCT_COLLECTION).find({ categoryId: ObjectId(categoryId) }).toArray().then((response)=>{
+                resolve(response)
+            })
+        })
     }
 }

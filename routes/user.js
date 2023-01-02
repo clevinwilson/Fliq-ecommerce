@@ -236,6 +236,17 @@ router.get('/orders', verifyLogin, (req, res) => {
   })
 })
 
+//category listing 
+router.get('/product-listing/:categoryId',(req,res)=>{
+  let cartCount=0
+  productHelpers.getAllProducts(req.params.categoryId).then(async(response)=>{
+   if(req.session.user){
+      cartCount = await userHelpers.getCartCount(req.session.user._id);
+   }
+    res.render('user/product-listing', { products: response, user: req.session.user, cartCount })
+  })
+})
+
 
 
 module.exports = router;

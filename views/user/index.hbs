@@ -65,9 +65,11 @@
             </div>
             <div class="category-right d-flex align-items-center justify-content-around">
                 {{#each categoryList}}
-                <div class="category d-flex justify-content-center p-2">
-                    <img class="category-icon-image" src="{{this.imageUrl}}" alt="">
-                </div>
+                <a href="/product-listing/{{this._id}}">
+                    <div class="category d-flex justify-content-center p-2">
+                        <img class="category-icon-image" src="{{this.imageUrl}}" alt="">
+                    </div>
+                </a>
                 {{/each}}
             </div>
         </div>
@@ -80,28 +82,19 @@
             <div class="row mt-3 product-listing">
                 {{#each products}}
                 <div class="col-md-3 col-lg-2 col-6  mt-4 d-flex justify-content-center align-items-center">
-                    <a class="text-decoration-none text-dark" href="product-details/{{this._id}}">
-                        <div style="    height: 266px;" class="product-box-wrap">
-                            <div class="proudct-image-wrap d-flex justify-content-center align-items-center">
+                    <a class="text-decoration-none text-dark" href="/product-details/{{this._id}}">
+                        <div style="height: 266px;" class="d-flex flex-column justify-content-around  product-box-wrap">
+                            <div class="proudct-image-wrap mt-4 d-flex justify-content-center align-items-center">
                                 <img class="product-image" src="/images/product-images/{{this.images.[0].filename}}" alt="">
                             </div>
-                            <p class="product-name mt-3">{{this.name}}</p>
+                            <p class="product-name mt-1">{{this.name}}</p>
                             <span class="product-price">₹ {{this.price}}</span>
                             <i class="bi bi-heart"></i>
                         </div>
                     </a>
                 </div>
                 {{/each}}
-                <div class="col-md-3 col-lg-2  col-6  mt-4 d-flex justify-content-center align-items-center">
-                    <div class="product-box-wrap">
-                        <div class="proudct-image-wrap d-flex justify-content-center align-items-center">
-                            <img class="product-image" src="/images/product-images/macpro.png" alt="">
-                        </div>
-                        <p class="product-name mt-3">Apple iPhone 13</p>
-                        <span class="product-price">₹67,990</span>
-                        <i class="bi bi-heart"></i>
-                    </div>
-                </div>
+                
 
             </div>
         </div>
