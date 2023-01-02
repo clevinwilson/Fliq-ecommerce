@@ -310,6 +310,7 @@ body {
 .product-box-wrap {
   background-color: #F2F3F3;
   max-width: 200px;
+  min-width: 184px;
   padding: 20px;
   border-radius: 16px;
   position: relative;
