@@ -52,92 +52,88 @@
                                             </select>
                                         </div>
                                     </div><!-- End .toolbox-sort -->
-                                   
+
                                 </div><!-- End .toolbox-right --> --}}
                             </div><!-- End .toolbox -->
 
                             <div class="products mb-3">
-                                
+
                                 {{#each products}}
                                 <div class="product product-list">
                                     <div class="row">
-                                        <div class="col-12 col-lg-3">
+                                        <div class="col-4 col-lg-3">
                                             <figure class="product-media">
                                                 {{!-- <span class="product-label label-new">New</span> --}}
-                                                <a class="d-flex justify-content-center align-items-center bg-white" href="product-details/{{this._id}}">
-                                                    <img  style="object-fit: contain; width: 203px;" src="/images/product-images/{{this.images.[0].filename}}" alt="Product image" class="product-image bg-white">
+                                                <a class="d-flex justify-content-center align-items-center bg-white"
+                                                    href="/product-details/{{this._id}}">
+                                                    <img style="object-fit: contain; width: 203px;"
+                                                        src="/images/product-images/{{this.images.[0].filename}}"
+                                                        alt="Product image" class="product-image bg-white">
                                                 </a>
                                             </figure><!-- End .product-media -->
                                         </div><!-- End .col-sm-6 col-lg-3 -->
-                                
-                                      
-                                
-                                        <div class="col-12 col-lg-9">
+
+
+
+                                        <div class="col-8 col-lg-9 ps-4">
                                             <div class="product-body product-action-inner">
-                                                <a href="#" class="btn-product btn-wishlist" title="Add to wishlist"><span>add to wishlist</span></a>
+                                                <a href="#" class="btn-product btn-wishlist"
+                                                    title="Add to wishlist"><span>add to wishlist</span></a>
                                                 <div class="product-cat">
                                                     <a href="#">{{this.type}}</a>
                                                 </div><!-- End .product-cat -->
-                                                <h2 class="product-title" style="font-size: 20px;font-weight: 500;"><a href="product-details/{{this._id}}">{{this.name}}</a></h2><!-- End .product-title -->
-                                
-                                                <div class="product-content m-0">
-                                                    <p>{{this.brand}} {{this.modelnumber:}}</p>
-                                                </div><!-- End .product-content -->
-                                                
-                                                <div class="product-content d-flex mb-0">
-                                                    <div class="rounded-circle" style="background-color: {{this.color}}; height: 20px; width:20px">
-
-                                                    </div>
-                                                      <p class="ms-3 m">{{this.color}}</p>
-                                                </div><!-- End .product-content -->
-
-                                                <div class="product-content m-0">
-                                                    {{#each this.specification}}
-                                                    <li>{{this}}</li>
-                                                    {{/each}}
+                                                <h2 class="product-title" style="font-size: 20px;font-weight: 500;"><a
+                                                        href="/product-details/{{this._id}}">{{this.name}}
+                                                        ({{this.storage}} GB, {{this.color}})</a></h2>
+                                                <!-- End .product-title -->
+                                                <div class="special-offer-box mt-1">
+                                                    <p>special offer</p>
                                                 </div>
-                                
-                                                {{!-- <div class="product-nav product-nav-thumbs">
-                                                    <a href="#" class="active">
-                                                        <img src="assets/images/products/product-4-thumb.jpg" alt="product desc">
-                                                    </a>
-                                                    <a href="#">
-                                                        <img src="assets/images/products/product-4-2-thumb.jpg" alt="product desc">
-                                                    </a>
-                                
-                                                    <a href="#">
-                                                        <img src="assets/images/products/product-4-3-thumb.jpg" alt="product desc">
-                                                    </a>
-                                                </div><!-- End .product-nav --> --}}
+                                                <div class="product-content m-0">
+                                                    <p class="product-name">{{this.brand}} {{this.modelnumber}}</p>
+                                                </div>
                                             </div><!-- End .product-body -->
-                                            <div class="product-list-action mt-0 pt-2">
-                                                <div class="product-price">
-                                                    <h5>₹ {{this.price}}</h5>
+
+                                            <div class="product-list-action mt-0 pt-1">
+                                                <div class="product-price-wrap">
+                                                    <h4 class="price mb-0">₹ {{this.price}}</h4>
+                                                    <p style="font-size: 11px;">(Incl. all Taxes)</p>
                                                 </div><!-- End .product-price -->
-                                                <div class="ratings-container">
+
+                                                <div class="ratings-container mt-2 mb-2">
                                                     <div class="ratings">
                                                         <div class="ratings-val" style="width: 20%;"></div>
                                                         <!-- End .ratings-val -->
                                                     </div><!-- End .ratings -->
                                                     <span class="ratings-text">( 2 Reviews )</span>
                                                 </div><!-- End .rating-container -->
-                                            
+                                                <div class="m-0 p-0">
+                                                    <span>
+                                                        <span style="font-size: 18px;" class="me-2"><i
+                                                                class="fa-solid fa-location-dot"></i></span>
+                                                        <span style="font-size: 12px;" class="text-dark">Delivery at:
+                                                            <span style="color: #0088d9;">Kannur, 670142</span></span>
+                                                    </span>
+                                                </div>
                                                 {{!-- <div class="product-action">
-                                                    <a href="popup/quickView.html" class="btn-product btn-quickview" title="Quick view"><span>quick
+                                                    <a href="popup/quickView.html" class="btn-product btn-quickview"
+                                                        title="Quick view"><span>quick
                                                             view</span></a>
-                                                    <a href="#" class="btn-product btn-compare" title="Compare"><span>compare</span></a>
+                                                    <a href="#" class="btn-product btn-compare"
+                                                        title="Compare"><span>compare</span></a>
                                                 </div><!-- End .product-action --> --}}
-                                            
-                                                <a onclick="addToCart('{{this._id}}')" class="btn-product btn-cart"><span>add to cart</span></a>
+
+                                                {{!-- <a onclick="addToCart('{{this._id}}')"
+                                                    class="btn-product btn-cart"><span>add to cart</span></a> --}}
                                             </div>
                                         </div><!-- End .col-lg-6 -->
                                     </div><!-- End .row -->
                                 </div><!-- End .product -->
                                 {{/each}}
-                                
 
-                             
-{{!-- 
+
+
+                                {{!--
                                 <div class="product product-list">
                                     <div class="row">
                                         <div class="col-6 col-lg-3">
@@ -175,11 +171,11 @@
                                             </div><!-- End .product-list-action -->
                                         </div><!-- End .col-sm-6 col-lg-3 -->
 
-                                    <!-- End .col-lg-6 -->
+                                        <!-- End .col-lg-6 -->
                                     </div><!-- End .row -->
                                 </div><!-- End .product --> --}}
 
-                        
+
                             </div><!-- End .products -->
 
                             <nav aria-label="Page navigation">
@@ -203,7 +199,7 @@
                                 </ul>
                             </nav>
                         </div><!-- End .col-lg-9 -->
-                        <aside class="col-lg-3 order-lg-first">
+                        <aside class="col-lg-3 order-lg-first" style="border-right: 1px solid #ebebeb;">
                             <div class="sidebar sidebar-shop">
                                 <div class="widget widget-clean">
                                     <label>Filters:</label>
@@ -223,29 +219,35 @@
                                             <div class="filter-items filter-items-count">
                                                 <div class="filter-item">
                                                     <div class="custom-control custom-checkbox d-flex">
-                                                        <input type="checkbox" class="custom-control-input me-3" id="cat-1">
-                                                        <label class="d-flex custom-control-label" for="cat-1">Phone</label>
+                                                        <input type="checkbox" class="custom-control-input me-3"
+                                                            id="cat-1">
+                                                        <label class="d-flex custom-control-label"
+                                                            for="cat-1">Phone</label>
                                                     </div><!-- End .custom-checkbox -->
                                                     <span class="item-count">3</span>
                                                 </div><!-- End .filter-item -->
 
                                                 <div class="filter-item">
                                                     <div class="custom-control custom-checkbox d-flex ">
-                                                        <input type="checkbox" class="custom-control-input me-3" id="cat-2">
-                                                        <label class="custom-control-label d-flex " for="cat-2">Laptop</label>
+                                                        <input type="checkbox" class="custom-control-input me-3"
+                                                            id="cat-2">
+                                                        <label class="custom-control-label d-flex "
+                                                            for="cat-2">Laptop</label>
                                                     </div><!-- End .custom-checkbox -->
                                                     <span class="item-count">0</span>
                                                 </div><!-- End .filter-item -->
 
                                                 <div class="filter-item">
                                                     <div class="custom-control custom-checkbox d-flex ">
-                                                        <input type="checkbox" class="custom-control-input me-3" id="cat-3">
-                                                        <label class="custom-control-label d-flex " for="cat-3">Tv</label>
+                                                        <input type="checkbox" class="custom-control-input me-3"
+                                                            id="cat-3">
+                                                        <label class="custom-control-label d-flex "
+                                                            for="cat-3">Tv</label>
                                                     </div><!-- End .custom-checkbox -->
                                                     <span class="item-count">4</span>
                                                 </div><!-- End .filter-item -->
 
-                                               
+
                                             </div><!-- End .filter-items -->
                                         </div><!-- End .widget-body -->
                                     </div><!-- End .collapse -->
@@ -444,7 +446,7 @@
             </div><!-- End .page-content -->
         </main><!-- End .main -->
 
-       
+
     </div><!-- End .page-wrapper -->
     <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
 
@@ -494,18 +496,28 @@
 <script src="/stylesheets/assets/js/main.js"></script>
 </body>
 
-
-<script>
-    function addToCart(productId) {
-        $.ajax({
-            url: '/add-to-cat/' + productId,
-            method: 'get',
-            success: (response) => {
-                if (response.status) {
-                    let count = $('#cartCount').html()
-                    $('#cartCount').html(response.cartCount)
-                }
-            }
-        })
+<style>
+    .ratings-text {
+        color: #0088d9;
+        letter-spacing: -.01em;
+        margin-left: 0.8rem;
     }
-</script>
+     .product.product-list .product-body .btn-wishlist {
+            top: 0.1rem;
+            font-size: 22px;
+        }
+
+    @media screen and (max-width:768px) {
+        .product-title {
+            font-size: 14px !important;
+        }
+
+        .product.product-list .product-body .btn-wishlist {
+            top: 0.1rem;
+            font-size: 19px;
+        }
+        .price{
+            font-size: 17px;
+        }
+    }
+</style>

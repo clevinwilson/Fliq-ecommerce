@@ -310,7 +310,7 @@ body {
 .product-box-wrap {
   background-color: #F2F3F3;
   max-width: 200px;
-  min-width: 184px;
+  min-width: 186px;
   padding: 20px;
   border-radius: 16px;
   position: relative;
@@ -731,4 +731,22 @@ span {
     position: static;
   }
 
+}
+
+
+/* product details */
+.special-offer-box {
+  display: inline-block;
+  background-color: white;
+  border: 2px solid #0088d9;
+  border-radius: 3px;
+  padding: 0px 14px;
+  text-transform: capitalize;
+}
+
+.special-offer-box>p {
+
+  font-size: 11px;
+  color: #0088d9;
+  font-weight: 500;
 }
