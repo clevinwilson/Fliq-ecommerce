@@ -138,7 +138,7 @@ module.exports = {
                     $set: {
                         name: data.name,
                         description: data.description,
-                        imageUrl: data.imageUrl
+                        image: data.image
                     }
                 }).then((response) => {
                     resolve(true)

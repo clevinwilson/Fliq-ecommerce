@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const adminHelpers = require('../helpers/admin-helpers');
 const baseUrl = require('../controller/url');
-const uploadProduct = require('../controller/image-upload');
+const { uploadProduct, uploadCategoryImage } = require('../controller/image-upload');
 const productHelpers = require('../helpers/product-helpers');
 const deleteImages = require('../controller/delete-file');
 
@@ -120,19 +120,14 @@ router.get('/add-category', verifyLogin, (req, res) => {
     res.render('admin/add-category', { admin: req.session.adminLogin })
 })
 
-router.post('/add-category', verifyLogin, (req, res) => {
-    const image = req.files.image
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9) + image.name;
-    image.mv(`./public/images/category-images/${uniqueSuffix}`, (err, done) => {
-        req.body.imageUrl = `${baseUrl}/images/category-images/${uniqueSuffix}`;
-
-        adminHelpers.addCategory(req.body).then((response) => {
-            if (response.insertedId) {
-                res.redirect('/admin/view-category')
-            } else {
-                res.redirect('/admin/view-category')
-            }
-        })
+router.post('/add-category', verifyLogin, uploadCategoryImage, (req, res) => {
+    req.body.image = req.files.image[0];
+    adminHelpers.addCategory(req.body).then((response) => {
+        if (response.insertedId) {
+            res.redirect('/admin/view-category')
+        } else {
+            res.redirect('/admin/view-category')
+        }
     })
 })
 
@@ -149,17 +144,16 @@ router.get('/edit-category/:categoryId', verifyLogin, (req, res) => {
     })
 })
 
-router.post('/edit-category', verifyLogin, (req, res) => {
+router.post('/edit-category', verifyLogin, uploadCategoryImage, async (req, res) => {
     if (req.files != null) {
-        const image = req.files.image
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9) + image.name;
-        image.mv(`./public/images/category-images/${uniqueSuffix}`, (err, done) => {
-            req.body.imageUrl = `${baseUrl}/images/category-images/${uniqueSuffix}`;
+        let category = await adminHelpers.getCategoryDetails(req.body.categoryId);
+        req.body.image = req.files.image[0];
+        deleteImages(category.image.path);
 
-            adminHelpers.editCategoryWithImage(req.body).then((response) => {
-                req.session.categoryUpdate = "Cateogry updated"
-                res.redirect('/admin/view-category');
-            })
+
+        adminHelpers.editCategoryWithImage(req.body).then((response) => {
+            req.session.categoryUpdate = "Cateogry updated"
+            res.redirect('/admin/view-category');
         })
     } else {
         adminHelpers.editCategory(req.body).then((response) => {
@@ -170,9 +164,13 @@ router.post('/edit-category', verifyLogin, (req, res) => {
 
 })
 
-router.get('/delete-category/:categoryId', verifyLogin, (req, res) => {
+router.get('/delete-category/:categoryId', verifyLogin, async (req, res) => {
+    let category = await adminHelpers.getCategoryDetails(req.params.categoryId);
+
     adminHelpers.deleteCategory(req.params.categoryId).then((response) => {
         res.redirect('/admin/view-category');
+        deleteImages(category.image.path);
+
     })
 })
 
