@@ -70,6 +70,7 @@ module.exports={
                     storage: data.storage,
                     specification: data.specification,
                     overview: data.overview,
+                    images:data.images
                 }
             }).then((response)=>{
                 resolve(response)
@@ -105,6 +106,14 @@ module.exports={
         return new Promise((resolve,reject)=>{
             db.get().collection(collection.PRODUCT_COLLECTION).find({ categoryId: ObjectId(categoryId) }).toArray().then((response)=>{
                 resolve(response)
+            })
+        })
+    },
+    fetchProductImage:(productId,imageNo)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.PRODUCT_COLLECTION).findOne({_id:ObjectId(productId)}).then((response)=>{
+                console.log(response.images[imageNo]);
+                resolve(response.images[imageNo])
             })
         })
     }

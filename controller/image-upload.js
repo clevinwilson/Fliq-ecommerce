@@ -1,6 +1,6 @@
 const multer = require('multer');
 
-const categoryStorage = multer.diskStorage({
+const ProductStorage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, './public/images/product-images')
     },
@@ -14,6 +14,6 @@ const fileFilter=()=>{
 
 }
 
-const upload = multer({ storage: categoryStorage});
+const uploadProduct = multer({ storage: ProductStorage }).fields([{ name: 'image1', maxCount: 1 }, { name: 'image2', maxCount: 1 }, { name: 'image3', maxCount: 1 }, { name: 'image4', maxCount: 1 }]);
 
-module.exports=upload;
+module.exports = uploadProduct;

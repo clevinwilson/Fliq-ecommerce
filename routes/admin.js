@@ -1,12 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const adminHelpers = require('../helpers/admin-helpers');
-const baseUrl=require('../controller/url');
-const upload=require('../controller/image-upload');
-const productHelpers=require('../helpers/product-helpers');
-const deleteFile=require('../controller/delete-file');
-const { response } = require('express');
-const { Db } = require('mongodb');
+const baseUrl = require('../controller/url');
+const uploadProduct = require('../controller/image-upload');
+const productHelpers = require('../helpers/product-helpers');
+const deleteImages = require('../controller/delete-file');
 
 
 
@@ -60,27 +58,27 @@ router.get('/logout', verifyLogin, (req, res) => {
 })
 
 //user management 
-router.get('/users-list',verifyLogin,(req,res)=>{
-    adminHelpers.getUsersList().then((usersList)=>{
-        res.render('admin/view-user-list', { usersList, admin: req.session.adminLogin, userUpdate:req.session.userUpdate });
-        req.session.userUpdate=false;
+router.get('/users-list', verifyLogin, (req, res) => {
+    adminHelpers.getUsersList().then((usersList) => {
+        res.render('admin/view-user-list', { usersList, admin: req.session.adminLogin, userUpdate: req.session.userUpdate });
+        req.session.userUpdate = false;
     })
 })
 
-router.get('/delete-user/:userId',verifyLogin,(req,res)=>{
-    adminHelpers.deleteUser(req.params.userId).then((response)=>{
+router.get('/delete-user/:userId', verifyLogin, (req, res) => {
+    adminHelpers.deleteUser(req.params.userId).then((response) => {
         res.redirect('/admin/users-list');
     })
 })
 
-router.get('/edit-user/:userId',verifyLogin,(req,res)=>{
-    adminHelpers.getUserDetails(req.params.userId).then((userDetails)=>{
+router.get('/edit-user/:userId', verifyLogin, (req, res) => {
+    adminHelpers.getUserDetails(req.params.userId).then((userDetails) => {
         res.render('admin/edit-user', { userDetails, admin: req.session.adminLogin });
     })
 })
 
-router.post('/edit-user',verifyLogin,(req,res)=>{
-    adminHelpers.EditUserDetails(req.body).then((response)=>{
+router.post('/edit-user', verifyLogin, (req, res) => {
+    adminHelpers.EditUserDetails(req.body).then((response) => {
         if (response) {
             req.session.userUpdate = "User Details Updated";
             res.redirect('/admin/users-list');
@@ -91,20 +89,20 @@ router.post('/edit-user',verifyLogin,(req,res)=>{
     })
 })
 
-router.get('/block-user/:userId', verifyLogin,(req,res)=>{
-    adminHelpers.blockUser(req.params.userId).then((response)=>{
+router.get('/block-user/:userId', verifyLogin, (req, res) => {
+    adminHelpers.blockUser(req.params.userId).then((response) => {
         console.log(response);
-        if(response){
+        if (response) {
             req.session.userUpdate = "User Blocked";
             res.redirect('/admin/users-list');
-        }else{
+        } else {
             req.session.userUpdate = "Something went wrong";
             res.redirect('/admin/users-list');
         }
     })
 })
 
-router.get('/unblock-user/:userId',verifyLogin, (req, res) => {
+router.get('/unblock-user/:userId', verifyLogin, (req, res) => {
     adminHelpers.unBlockUser(req.params.userId).then((response) => {
         if (response) {
             req.session.userUpdate = "User Unblocked";
@@ -118,41 +116,41 @@ router.get('/unblock-user/:userId',verifyLogin, (req, res) => {
 
 //category management
 
-router.get('/add-category',verifyLogin,(req,res)=>{
+router.get('/add-category', verifyLogin, (req, res) => {
     res.render('admin/add-category', { admin: req.session.adminLogin })
 })
 
-router.post('/add-category',verifyLogin,(req,res)=>{
-    const image=req.files.image
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)+image.name;
+router.post('/add-category', verifyLogin, (req, res) => {
+    const image = req.files.image
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9) + image.name;
     image.mv(`./public/images/category-images/${uniqueSuffix}`, (err, done) => {
-        req.body.imageUrl =`${baseUrl}/images/category-images/${uniqueSuffix}`;
+        req.body.imageUrl = `${baseUrl}/images/category-images/${uniqueSuffix}`;
 
-        adminHelpers.addCategory(req.body).then((response)=>{
-            if(response.insertedId){
+        adminHelpers.addCategory(req.body).then((response) => {
+            if (response.insertedId) {
                 res.redirect('/admin/view-category')
-            }else{
+            } else {
                 res.redirect('/admin/view-category')
             }
         })
     })
 })
 
-router.get('/view-category',verifyLogin,(req,res)=>{
-    adminHelpers.getCategoryList().then((response)=>{
+router.get('/view-category', verifyLogin, (req, res) => {
+    adminHelpers.getCategoryList().then((response) => {
         res.render('admin/view-category', { categoryList: response, admin: req.session.adminLogin, categoryUpdate: req.session.categoryUpdate })
-        req.session.categoryUpdate=false;
+        req.session.categoryUpdate = false;
     })
 })
 
-router.get('/edit-category/:categoryId',verifyLogin,(req,res)=>{
-    adminHelpers.getCategoryDetails(req.params.categoryId).then((categoryDetails)=>{
+router.get('/edit-category/:categoryId', verifyLogin, (req, res) => {
+    adminHelpers.getCategoryDetails(req.params.categoryId).then((categoryDetails) => {
         res.render('admin/edit-category', { categoryDetails, admin: req.session.adminLogin });
     })
 })
 
-router.post('/edit-category', verifyLogin,(req,res)=>{
-    if(req.files!=null){
+router.post('/edit-category', verifyLogin, (req, res) => {
+    if (req.files != null) {
         const image = req.files.image
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9) + image.name;
         image.mv(`./public/images/category-images/${uniqueSuffix}`, (err, done) => {
@@ -163,39 +161,39 @@ router.post('/edit-category', verifyLogin,(req,res)=>{
                 res.redirect('/admin/view-category');
             })
         })
-    }else{
+    } else {
         adminHelpers.editCategory(req.body).then((response) => {
             req.session.categoryUpdate = "Cateogry updated"
             res.redirect('/admin/view-category');
         })
     }
- 
+
 })
 
-router.get('/delete-category/:categoryId',verifyLogin,(req,res)=>{
-    adminHelpers.deleteCategory(req.params.categoryId).then((response)=>{
+router.get('/delete-category/:categoryId', verifyLogin, (req, res) => {
+    adminHelpers.deleteCategory(req.params.categoryId).then((response) => {
         res.redirect('/admin/view-category');
     })
 })
 
-router.get('/block-category/:categoryId',verifyLogin,(req,res)=>{
-    adminHelpers.changeStatus(req.params.categoryId,false).then((response)=>{
+router.get('/block-category/:categoryId', verifyLogin, (req, res) => {
+    adminHelpers.changeStatus(req.params.categoryId, false).then((response) => {
         res.redirect('/admin/view-category')
     })
 })
 
-router.get('/unblock-category/:categoryId',verifyLogin,(req,res)=>{
-    adminHelpers.changeStatus(req.params.categoryId,true).then((response)=>{
+router.get('/unblock-category/:categoryId', verifyLogin, (req, res) => {
+    adminHelpers.changeStatus(req.params.categoryId, true).then((response) => {
         res.redirect('/admin/view-category')
     })
 })
 
 //banner
-router.get('/add-banner',verifyLogin,(req,res)=>{
-    res.render('admin/add-banner', {admin: req.session.adminLogin })
+router.get('/add-banner', verifyLogin, (req, res) => {
+    res.render('admin/add-banner', { admin: req.session.adminLogin })
 })
 
-router.post('/add-banner',verifyLogin,(req,res)=>{
+router.post('/add-banner', verifyLogin, (req, res) => {
     const image = req.files.image
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9) + image.name;
     image.mv(`./public/images/banner/${uniqueSuffix}`, (err, done) => {
@@ -205,26 +203,26 @@ router.post('/add-banner',verifyLogin,(req,res)=>{
     res.redirect('/admin/view-banner')
 })
 
-router.get('/view-banner',verifyLogin, async(req,res)=>{
-    let bannerList=await adminHelpers.getBanner();
+router.get('/view-banner', verifyLogin, async (req, res) => {
+    let bannerList = await adminHelpers.getBanner();
     res.render('admin/view-banner', { bannerList, admin: req.session.adminLogin })
 })
 
-router.get('/delete-banner/:bannerId',verifyLogin,(req,res)=>{
-    adminHelpers.deleteBanner(req.params.bannerId).then((response)=>{
+router.get('/delete-banner/:bannerId', verifyLogin, (req, res) => {
+    adminHelpers.deleteBanner(req.params.bannerId).then((response) => {
         res.redirect('/admin/view-banner');
     })
 })
 
-router.get('/edit-banner/:bannerId',verifyLogin,(req,res)=>{
-    adminHelpers.getBannerDetails(req.params.bannerId).then((bannerDetails)=>{
+router.get('/edit-banner/:bannerId', verifyLogin, (req, res) => {
+    adminHelpers.getBannerDetails(req.params.bannerId).then((bannerDetails) => {
         res.render('admin/edit-banner', { bannerDetails, admin: req.session.adminLogin });
 
     })
 })
 
-router.post('/edit-banner',verifyLogin,(req,res)=>{
-    adminHelpers.editBanner(req.body).then((response)=>{
+router.post('/edit-banner', verifyLogin, (req, res) => {
+    adminHelpers.editBanner(req.body).then((response) => {
         res.redirect('/admin/view-banner');
     })
 })
@@ -232,51 +230,86 @@ router.post('/edit-banner',verifyLogin,(req,res)=>{
 
 // product section
 
-router.get('/add-product',verifyLogin, async(req,res)=>{
+router.get('/add-product', verifyLogin, async (req, res) => {
     let categoryList = await adminHelpers.getCategoryList();
 
     res.render('admin/add-product', { admin: req.session.adminLogin, categoryList })
 })
 
-router.post('/add-product', verifyLogin, upload.array('image'),async (req, res) => {
-    req.body.images=req.files;
-    productHelpers.addProduct(req.body).then((response)=>{
+router.post('/add-product', verifyLogin, uploadProduct, async (req, res) => {
+    req.body.images = [req.files.image1[0], req.files.image2[0], req.files.image3[0], req.files.image4[0]];
+    productHelpers.addProduct(req.body).then((response) => {
         res.redirect('/admin/view-products')
     })
 })
 
-router.get('/view-products',verifyLogin, async(req,res)=>{
-    productHelpers.getProducts().then((response)=>{
-        res.render('admin/view-products', { admin: req.session.adminLogin, products:response});
+router.get('/view-products', verifyLogin, async (req, res) => {
+    productHelpers.getProducts().then((response) => {
+        res.render('admin/view-products', { admin: req.session.adminLogin, products: response });
     })
 })
 
-router.get('/delete-product/:productId',verifyLogin, async(req,res)=>{
+router.get('/delete-product/:productId', verifyLogin, async (req, res) => {
     let productDetails = await productHelpers.getProductDetails(req.params.productId)
-    productHelpers.deleteProduct(req.params.productId).then((response)=>{
+    productHelpers.deleteProduct(req.params.productId).then((response) => {
         res.redirect('/admin/view-products');
         productDetails.images.forEach(obj => {
-            deleteFile(obj.path);
+            deleteImages(obj.path);
         });
     })
 })
 
-router.get('/edit-product/:productId',async(req,res)=>{
+router.get('/edit-product/:productId', async (req, res) => {
     let productDetails = await productHelpers.getProductDetails(req.params.productId);
     let categoryList = await adminHelpers.getCategoryList();
 
     res.render('admin/edit-product', { categoryList, productDetails, admin: req.session.adminLogin });
 })
 
-router.post('/edit-product/',(req,res)=>{
-    productHelpers.editProduct(req.body).then((response)=>{
-        res.redirect('/admin/view-products')
+router.post('/edit-product', uploadProduct, async (req, res) => {
+    if (req.files.image1 == null) {
+        image1 = await productHelpers.fetchProductImage(req.body.productId, 0)
+    } else {
+        existImage1 = await productHelpers.fetchProductImage(req.body.productId, 0)
+        image1 = req.files.image1[0];
+        deleteImages(existImage1.path);
+    }
+
+    if (req.files.image2 == null) {
+        image2 = await productHelpers.fetchProductImage(req.body.productId, 1)
+    } else {
+        existImage2 = await productHelpers.fetchProductImage(req.body.productId, 1)
+        image2 = req.files.image2[0];
+        deleteImages(existImage2.path);
+    }
+
+    if (req.files.image3 == null) {
+        image3 = await productHelpers.fetchProductImage(req.body.productId, 2)
+    } else {
+        existImage3 = await productHelpers.fetchProductImage(req.body.productId, 2)
+        image3 = req.files.image3[0];
+        deleteImages(existImage3.path);
+    }
+
+    if (req.files.image4 == null) {
+        image4 = await productHelpers.fetchProductImage(req.body.productId, 3)
+    } else {
+        existImage4 = await productHelpers.fetchProductImage(req.body.productId, 3)
+        image4 = req.files.image4[0];
+        deleteImages(existImage4.path);
+    }
+
+    req.body.images = [image1, image2, image3, image4];
+
+    productHelpers.editProduct(req.body).then((response) => {
+
+        res.redirect('/admin/view-products');
     })
 })
 
-router.get('/view-orders',(req,res)=>{
-    adminHelpers.getAllOrder().then((response)=>{
-        res.render('admin/view-orders', {orders:response, admin: req.session.adminLogin });
+router.get('/view-orders', (req, res) => {
+    adminHelpers.getAllOrder().then((response) => {
+        res.render('admin/view-orders', { orders: response, admin: req.session.adminLogin });
     })
 })
 

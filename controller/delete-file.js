@@ -1,6 +1,6 @@
 const fs=require('fs');
 
-const deleteFile=function(filePath){
+const deleteImages =function(filePath){
     fs.unlink(filePath,(error)=>{
         if(error){
             throw (error)
@@ -8,4 +8,4 @@ const deleteFile=function(filePath){
     })
 }
 
-module.exports=deleteFile;
+module.exports = deleteImages;
