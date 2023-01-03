@@ -57,7 +57,7 @@
                                             )</a>
                                     </div><!-- End .rating-container -->
 
-                                    <div class="product-price">
+                                    <div class="product-price text-dark">
                                         <i class="fa-solid fa-indian-rupee-sign me-2"></i> {{product.price}}
                                     </div><!-- End .product-price -->
 
@@ -528,13 +528,10 @@
                 </div><!-- End .col-6 -->
 
                 <div class="col-6 justify-content-end">
-                    <div class="product-price">
+                    <div class="product-price text-dark">
                         <i class="fa-solid fa-indian-rupee-sign me-2"></i> {{product.price}}
                     </div><!-- End .product-price -->
-                    <div class="product-details-quantity">
-                        <input type="number" id="sticky-cart-qty" class="form-control" value="1" min="1" max="10"
-                            step="1" data-decimals="0" required>
-                    </div><!-- End .product-details-quantity -->
+                 
 
                     <div class="product-details-action">
                         <a onclick="addToCart('{{product._id}}')" class="btn-product btn-cart"><span>add to cart</span></a>

@@ -74,7 +74,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group mt-3 ">
                                                 <label for="">Category</label>
-                                                <select name="categoryId" class="form-select mt-2"
+                                                <select name="categoryId"  class="form-select mt-2"
                                                     style=" border-color: #b4e3eb;" aria-label="Default select example">
                                                     <option selected>Select</option>
 
@@ -273,3 +273,63 @@
         object-fit: cover;
     }
 </style>
+
+{{!-- displayOptions(this.options[this.selectedIndex].text) --}}
+    {{!--
+    <script>
+        function displayOptions(value) {
+            alert(value)
+            let ha = document.getElementById('ha');
+            console.log(ha)
+            let ee = document.getElementById('ee').style.display =;
+            console.log(ee)
+            ha.append(ee)
+        }
+    </script> --}}
+    
+    
+    {{!-- <div class="row " id="phone-div">
+        <div class="col-md-6">
+            <div class="form-group mt-3 ">
+                <label for="">Display</label>
+                <input style="border-color:#b4e3eb;" value="" type="text" class="form-control col-md-12 mt-2" id="display"
+                    name="display" required>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group mt-3 ">
+                <label for="">Memory</label>
+                <input style="border-color:#b4e3eb;" value="" type="text" class="form-control col-md-12 mt-2" id="memory"
+                    name="memory" required>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group mt-3 ">
+                <label for="">Processor</label>
+                <input style="border-color:#b4e3eb;" value="" type="text" class="form-control col-md-12 mt-2" id="processor"
+                    name="processor" required>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group mt-3 ">
+                <label for="">Storage</label>
+                <input style="border-color:#b4e3eb;" value="" type="text" class="form-control col-md-12 mt-2" id="storage"
+                    name="storage" required>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group mt-3 ">
+                <label for="">Category</label>
+                <select onchange="displayOptions(this.options[this.selectedIndex].text)" name="categoryId"
+                    class="form-select mt-2" style=" border-color: #b4e3eb;" aria-label="Default select example">
+                    <option selected>Select</option>
+    
+                    {{#each categoryList}}
+                    <option name="categoryId" class="m-4" value="{{this._id}}">
+                        {{this.name}}</option>
+                    {{/each}}
+                </select>
+    
+            </div>
+        </div>
+    </div> --}}
