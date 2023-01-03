@@ -200,7 +200,8 @@ module.exports = {
                     title:data.title,
                     subtitle:data.subtitle,
                     text:data.text,
-                    color:data.color
+                    color:data.color,
+                    image: data.image,
                 }
             }).then((response)=>{
                 resolve(response)

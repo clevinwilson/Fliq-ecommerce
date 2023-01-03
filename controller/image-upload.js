@@ -25,4 +25,15 @@ const multerStorageCategory = multer.diskStorage({
 })
 const uploadCategoryImage= multer({ storage: multerStorageCategory }).fields([{ name: 'image', maxCount: 1 }])
 
-module.exports = {uploadProduct,uploadCategoryImage};
+
+//uploads banner img
+const multerStorageBanner = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, "./public/images/banner");
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname)
+    }
+})
+const uploadBannerImage = multer({ storage: multerStorageBanner }).fields([{ name: 'image', maxCount: 1 }])
+module.exports = { uploadProduct, uploadCategoryImage, uploadBannerImage };

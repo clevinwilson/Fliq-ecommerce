@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const adminHelpers = require('../helpers/admin-helpers');
 const baseUrl = require('../controller/url');
-const { uploadProduct, uploadCategoryImage } = require('../controller/image-upload');
+const { uploadProduct, uploadCategoryImage, uploadBannerImage } = require('../controller/image-upload');
 const productHelpers = require('../helpers/product-helpers');
 const deleteImages = require('../controller/delete-file');
 
@@ -147,10 +147,12 @@ router.get('/edit-category/:categoryId', verifyLogin, (req, res) => {
 router.post('/edit-category', verifyLogin, uploadCategoryImage, async (req, res) => {
     if (req.files != null) {
         let category = await adminHelpers.getCategoryDetails(req.body.categoryId);
-        req.body.image = req.files.image[0];
-        deleteImages(category.image.path);
-
-
+        if(req.files.image){
+            req.body.image = req.files.image[0];
+            deleteImages(category.image.path);
+        }else{
+            req.body.image=category.image
+        }
         adminHelpers.editCategoryWithImage(req.body).then((response) => {
             req.session.categoryUpdate = "Cateogry updated"
             res.redirect('/admin/view-category');
@@ -191,13 +193,9 @@ router.get('/add-banner', verifyLogin, (req, res) => {
     res.render('admin/add-banner', { admin: req.session.adminLogin })
 })
 
-router.post('/add-banner', verifyLogin, (req, res) => {
-    const image = req.files.image
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9) + image.name;
-    image.mv(`./public/images/banner/${uniqueSuffix}`, (err, done) => {
-        req.body.imageUrl = `${baseUrl}images/banner/${uniqueSuffix}`;
-        adminHelpers.addBanner(req.body)
-    })
+router.post('/add-banner', verifyLogin, uploadBannerImage, (req, res) => {
+    req.body.image = req.files.image[0];
+    adminHelpers.addBanner(req.body)
     res.redirect('/admin/view-banner')
 })
 
@@ -206,7 +204,11 @@ router.get('/view-banner', verifyLogin, async (req, res) => {
     res.render('admin/view-banner', { bannerList, admin: req.session.adminLogin })
 })
 
-router.get('/delete-banner/:bannerId', verifyLogin, (req, res) => {
+router.get('/delete-banner/:bannerId', verifyLogin, async (req, res) => {
+    let banner = await adminHelpers.getBannerDetails(req.params.bannerId)
+
+    deleteImages(banner.image.path)
+
     adminHelpers.deleteBanner(req.params.bannerId).then((response) => {
         res.redirect('/admin/view-banner');
     })
@@ -219,7 +221,19 @@ router.get('/edit-banner/:bannerId', verifyLogin, (req, res) => {
     })
 })
 
-router.post('/edit-banner', verifyLogin, (req, res) => {
+router.post('/edit-banner', verifyLogin, uploadBannerImage, async (req, res) => {
+    let category = await adminHelpers.getBannerDetails(req.body.bannerId)
+    console.log(req.files.image);
+
+    if (req.files.image) {
+        console.log("haa");
+        req.body.image = req.files.image[0];
+        deleteImages(category.image.path)
+    } else {
+        {
+            req.body = category.image
+        }
+    }
     adminHelpers.editBanner(req.body).then((response) => {
         res.redirect('/admin/view-banner');
     })
