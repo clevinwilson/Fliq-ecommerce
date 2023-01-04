@@ -1,0 +1,314 @@
+{{>user-header}}
+<section>
+    <div class="headerhny-title text-center mt-3 mb-3">
+        <h3 class="hny-title mb-0 p-4">Order Details</h3>
+
+    </div>
+    <div class="container">
+        <div class="row  justify-content-center p-2">
+
+            <div class="col-md-4">
+                <div class="order-card">
+                    <p class="mt-2 ">Order Tracking</p>
+                    <hr style="color: #b5b5b5;">
+                    </hr>
+                    <div class="row">
+                        <div class="timeline p-4  mb-4">
+                            <div class="tl-item active">
+                                <div class="tl-dot b-warning"></div>
+                                <div class="tl-content">
+                                    <div class="">Order Confirmed</div>
+                                    <div class="tl-date text-muted mt-1">13 june 18</div>
+                                </div>
+                            </div>
+                            <div class="tl-item">
+                                <div class="tl-dot b-primary"></div>
+                                <div class="tl-content">
+                                    <div class="">Shipped</div>
+                                    <div class="tl-date text-muted mt-1">45 minutes ago</div>
+                                </div>
+                            </div>
+                            <div class="tl-item">
+                                <div class="tl-dot b-danger"></div>
+                                <div class="tl-content">
+                                    <div class="">Out for delivery</div>
+                                    <div class="tl-date text-muted mt-1">1 day ago</div>
+                                </div>
+                            </div>
+                            <div class="tl-item">
+                                <div class="tl-dot b-danger"></div>
+                                <div class="tl-content">
+                                    <div class="">Delivered</div>
+                                    <div class="tl-date text-muted mt-1">1 Week ago</div>
+                                </div>
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class=" col-md-8">
+                <div class="orders-wrap ">
+                    <div class="order-header d-flex justify-content-between mt-2">
+                        <p class="m-0 order-id"><span class="text-dark text-capitalize">Order</span> #{{order._id}}</p>
+                        <p class="m-0 text-secondary order-date d-flex align-items-center">Order Placed: {{order.date}}
+                        </p>
+                    </div>
+                    <hr style="color: #b5b5b5;">
+                    </hr>
+                    {{#each order.products}}
+                    <a href="/product-details/{{this._id}}"
+                        class="text-dark text-decoration-none m-1 d-flex justify-content-center">
+                        <div class="col-12 col-md-10 col-lg-10 mt-3">
+                            <div class="card-box m-1 orders p-2 p-lg-4 row">
+                                <div class=" col-4 col-md-6 p-2 my-2 d-flex justify-content-center position-relative">
+                                    <img class="w-100" style="max-width: 260px; height: 130px; object-fit: contain;"
+                                        src="/images/product-images/{{this.images.[0].filename}}" alt="">
+                                </div>
+                                <div class=" col-8 col-md-5 align-items-center d-flex ">
+                                    <div class="card-info-wrap ms-md-3">
+                                        <h6 class="mt-2 device-name text-capitalize">Order {{../order.orderStatus}}</h6>
+                                        <p style="font-size: 12px;" class="m-0">Orderd date: {{../order.date}}</p>
+                                        <h6 class="mt-2">₹ {{../order.totalAmount}}</h6>
+                                        <p style="font-size: 11px;">(incl. all Taxes)</p>
+                                        <h6 style="font-size: 13px;" class="mt-2">Standard Delivery by Wed, 4th Jan</h6>
+
+                                    </div>
+                                </div>
+                                <div
+                                    class="  col-md-1 d-flex justify-content-center align-items-center d-none d-md-flex ">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    {{/each}}
+                    <hr style="color: #b5b5b5;">
+                    </hr>
+                    <div class="d-flex justify-content-center align-items-center order-footer">
+                        {{!-- <div class="order-cancel-wrap">
+                            <a href="">Click</a>
+                        </div> --}}
+                        <div class="order-more-wrap d-flex justify-content-center ">
+                            <a class="text-dark text-decoration-none" href="/order-details/{{this._id}}">View More</a>
+                        </div>
+
+                        {{!-- <div class="order-total-wrap">
+                            <p class="m-0">Total: ₹{{this.totalAmount}}</p>
+                        </div> --}}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{{>user-footer}}
+
+
+<style>
+
+
+@media (min-width:992px) {
+    .page-container {
+        max-width: 1140px;
+        margin: 0 auto
+    }
+
+    .page-sidenav {
+        display: block !important
+    }
+}
+
+.padding {
+    padding: 2rem
+}
+
+.w-32 {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: .85em
+}
+
+.tl-item .avatar {
+    z-index: 2
+}
+
+.circle {
+    border-radius: 500px
+}
+
+.gd-warning {
+    color: #fff;
+    border: none;
+    background: #f4c414 linear-gradient(45deg, #f4c414, #f45414)
+}
+
+.timeline {
+    position: relative;
+    border-color: rgba(160, 175, 185, .15);
+    padding: 0;
+    margin: 0
+}
+
+.p-4 {
+    padding: 1.5rem !important
+}
+
+.block,
+.card {
+    background: #fff;
+    border-width: 0;
+    border-radius: .25rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .05);
+    margin-bottom: 1.5rem
+}
+
+.mb-4,
+.my-4 {
+    margin-bottom: 1.5rem !important
+}
+
+.tl-item {
+    border-radius: 3px;
+    position: relative;
+    display: -ms-flexbox;
+    display: flex
+}
+
+.tl-item>* {
+    padding: 10px
+}
+
+.tl-item .avatar {
+    z-index: 2
+}
+
+.tl-item:last-child .tl-dot:after {
+    display: none
+}
+
+.tl-item.active .tl-dot:before {
+    border-color: #448bff;
+    box-shadow: 0 0 0 4px rgba(68, 139, 255, .2)
+}
+
+.tl-item:last-child .tl-dot:after {
+    display: none
+}
+
+.tl-item.active .tl-dot:before {
+    border-color: #448bff;
+    box-shadow: 0 0 0 4px rgba(68, 139, 255, .2)
+}
+
+.tl-dot {
+    position: relative;
+    border-color: rgba(160, 175, 185, .15)
+}
+
+.tl-dot:after,
+.tl-dot:before {
+    content: '';
+    position: absolute;
+    border-color: inherit;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%)
+}
+
+.tl-dot:after {
+    width: 0;
+    height: auto;
+    top: 25px;
+    bottom: -15px;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-radius: 0
+}
+
+tl-item.active .tl-dot:before {
+    border-color: #448bff;
+    box-shadow: 0 0 0 4px rgba(68, 139, 255, .2)
+}
+
+.tl-dot {
+    position: relative;
+    border-color: rgba(160, 175, 185, .15)
+}
+
+.tl-dot:after,
+.tl-dot:before {
+    content: '';
+    position: absolute;
+    border-color: inherit;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%)
+}
+
+.tl-dot:after {
+    width: 0;
+    height: auto;
+    top: 25px;
+    bottom: -15px;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-radius: 0
+}
+
+.tl-content p:last-child {
+    margin-bottom: 0
+}
+
+.tl-date {
+    font-size: .85em;
+    margin-top: 2px;
+    min-width: 100px;
+    max-width: 100px
+}
+
+.avatar {
+    position: relative;
+    line-height: 1;
+    border-radius: 500px;
+    white-space: nowrap;
+    font-weight: 700;
+    border-radius: 100%;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    border-radius: 500px;
+    box-shadow: 0 5px 10px 0 rgba(50, 50, 50, .15)
+}
+
+.b-warning {
+    border-color: #f4c414!important;
+}
+
+.b-primary {
+    border-color: #448bff!important;
+}
+
+.b-danger {
+    border-color: #f54394!important;
+}
+</style>

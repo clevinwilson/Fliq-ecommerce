@@ -238,9 +238,9 @@ router.get('/orders', verifyLogin, (req, res) => {
 })
 
 router.get('/order-details/:orderId',(req,res)=>{
-  userHelpers.getOrderDetails(req.session.user._id).then((response)=>{
-    
-  })
+  userHelpers.getOrderDetails(req.params.orderId).then((response)=>{
+      res.render('user/order-details',{order:response});
+  }).catch(() =>{ res.redirect('/orders')})
 })
 
 //category listing 

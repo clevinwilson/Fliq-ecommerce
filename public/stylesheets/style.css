@@ -761,3 +761,27 @@ span {
   font-size: 13px;
   text-transform: uppercase;
 }
+
+@media screen and (max-width: 768px) {
+  .card-box {
+    flex-direction: row;
+  }
+}
+
+
+
+@media screen and (max-width:768px) {
+
+  .order-id,
+  .order-date {
+    font-size: 10px;
+  }
+}
+
+.orders-wrap,
+.order-card {
+  background-color: white;
+  box-shadow: 1px 1px 5px 1px #e5e2e2;
+  padding: 11px;
+  border-radius: 10px;
+}
