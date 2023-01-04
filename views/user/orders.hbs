@@ -8,14 +8,15 @@
         <div class="row">
             {{#each orders}}
             <div class="col-md-12 mt-3">
-                <div class="card-box d-flex">
-                    <div class="left-section card-box-img-wrap d-flex flex-column m-3">
-                        <img src="/images/product-images/{{this.product.images.[0].filename}}" alt="">
+                <div class="card-box p-2 p-lg-4 row">
+                    <div class=" col-4 col-md-6 d-flex justify-content-center">
+                        <img class="w-100 " style="max-width: 260px; object-fit: contain;" src="/images/product-images/{{this.product.images.[0].filename}}" alt="">
                     </div>
-                    <div class="right-section  flex-column p-3 align-items-md-start justify-content-start">
+                    <div class=" col-8 col-md-6 ">
                         <div class="card-info-wrap ms-md-3">
-                            <h5  class="mt-2 device-name">{{this.product.name}}</h5>
-                            <h6 class="mt-2">₹ {{this.product.price}}</h6>
+                            <h5 class="mt-2 device-name text-capitalize">Order {{this.orderStatus}}</h5>
+                            <p style="font-size: 12px;" class="m-0">Orderd date: {{this.date}}</p>
+                            <h6 class="mt-2">₹ {{this.totalAmount}}</h6>
                             <p style="font-size: 11px;">(incl. all Taxes)</p>
                             <h6 style="font-size: 13px;" class="mt-2">Standard Delivery by Wed, 4th Jan</h6>
 
@@ -29,6 +30,7 @@
 </section>
 
 {{>user-footer}}
+
 
 <style>
     @media screen and (max-width: 768px) {

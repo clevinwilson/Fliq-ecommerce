@@ -259,19 +259,46 @@ module.exports = {
             resolve(user[0])
         })
     },
+    // placeOrder: (phone, details, cartTotal) => {
+    //     return new Promise((resolve, reject) => {
+    //         details.address.phone = phone;
+    //         orderObj = {
+    //             id: Date.now() + '-' + Math.round(Math.random() * 1E9),
+    //             deliveryDetails: details.address,
+    //             paymentMethod: 'COD',
+    //             paymentstatus: "placed",
+    //             products: details.cart,
+    //             totalAmount: cartTotal,
+    //             shipmentStatus: 'Order Placed'
+    //         }
+    //         db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(details._id) }, { $push: { orders: orderObj } }).then((response) => {
+    //             db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(details._id) }, {
+    //                 $set: {
+    //                     cart: []
+    //                 }
+    //             })
+    //             resolve({ status: true })
+    //         })
+    //     })
+    // }
     placeOrder: (phone, details, cartTotal) => {
         return new Promise((resolve, reject) => {
             details.address.phone = phone;
+            var date = new Date();
+            var current_date = date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear() ;
+            var current_time = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+           
             orderObj = {
-                id: Date.now() + '-' + Math.round(Math.random() * 1E9),
+                userId:ObjectId(details._id),
                 deliveryDetails: details.address,
                 paymentMethod: 'COD',
-                paymentstatus: "placed",
+                orderStatus: "placed",
                 products: details.cart,
                 totalAmount: cartTotal,
-                shipmentStatus: 'Order Placed'
+                date:current_date,
+                shipmentStatus: [{ id: Date.now() + '-' + Math.round(Math.random() * 1E9), status: 'Order Placed',lastUpdate:{date:current_date,time:current_time} }]
             }
-            db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(details._id) }, { $push: { orders: orderObj } }).then((response) => {
+            db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response) => {
                 db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(details._id) }, {
                     $set: {
                         cart: []
@@ -283,22 +310,22 @@ module.exports = {
     },
     getAllOrders: (userId) => {
         return new Promise(async(resolve, reject) => {
-            let orders = await db.get().collection(collection.USER_COLLECTION).aggregate([
+            let orders = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
                 {
-                    $match: { _id: ObjectId(userId) }
+                    $match: { userId: ObjectId(userId) }
                 },
                 {
-                    $unwind: '$orders'
-                },
-                {
-                    $unwind: '$orders.products'
+                    $unwind: '$products'
                 },
                 {
                     $project: {
                         paymentMethod: 1, 
                         totalAmount: 1,
-                        item: '$orders.products.product',
-                        quantity: '$orders.products.quantity'
+                        item: '$products.product',
+                        quantity: '$products.quantity',
+                        orderStatus: 1, 
+                        date: 1, 
+                        shipmentStatus: 1
                     }
                 },
                 {
@@ -311,7 +338,7 @@ module.exports = {
                 },
                 {
                     $project: {
-                        item: 1, paymentstatus: 1, paymentMethod: 1, totalAmount: 1, quantity: 1, product: { $arrayElemAt: ['$product', 0] }
+                        item: 1, paymentstatus: 1, paymentMethod: 1,orderStatus:1,date:1,shipmentStatus:1, totalAmount: 1, quantity: 1, product: { $arrayElemAt: ['$product', 0] }
                     }
                 }
             ]).toArray()

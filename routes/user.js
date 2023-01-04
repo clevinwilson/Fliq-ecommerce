@@ -217,7 +217,7 @@ router.post('/add-new-address', verifyLogin, (req, res) => {
 
 //order
 router.post('/place-order', verifyLogin, async (req, res) => {
-  console.log(req.body);
+  
   let user = await userHelpers.getAddress(req.body.addressId, req.session.user._id);
   let cartTotal = await userHelpers.getCartTotal(req.session.user._id);
 
@@ -232,6 +232,7 @@ router.post('/place-order', verifyLogin, async (req, res) => {
 
 router.get('/orders', verifyLogin, (req, res) => {
   userHelpers.getAllOrders(req.session.user._id).then((response) => {
+    console.log(response);
     res.render('user/orders', { orders: response, user: req.session.user });
   })
 })
