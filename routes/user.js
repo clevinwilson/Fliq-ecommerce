@@ -237,6 +237,12 @@ router.get('/orders', verifyLogin, (req, res) => {
   })
 })
 
+router.get('/order-details/:orderId',(req,res)=>{
+  userHelpers.getOrderDetails(req.session.user._id).then((response)=>{
+    
+  })
+})
+
 //category listing 
 router.get('/product-listing/:categoryId',(req,res)=>{
   let cartCount=0

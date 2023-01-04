@@ -333,7 +333,7 @@ body {
 }
 
 .proudct-image-wrap>.product-image {
-  max-width: 135px;
+  max-width: 86px;
 }
 
 .product-box-wrap>.product-name,
@@ -749,4 +749,15 @@ span {
   font-size: 11px;
   color: #0088d9;
   font-weight: 500;
+}
+
+/* order page */
+.order-id {
+  background-color: #f7f7f7;
+  padding: 6px 7px;
+  border-radius: 24px;
+  color: #0088d9;
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: uppercase;
 }

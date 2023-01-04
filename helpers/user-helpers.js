@@ -310,6 +310,25 @@ module.exports = {
     },
     getAllOrders: (userId) => {
         return new Promise(async(resolve, reject) => {
+           let orders=await db.get().collection(collection.ORDER_COLLECTION).aggregate([
+                {
+                    $match:{userId:ObjectId(userId)}
+                },
+                {
+                    $lookup:
+                    {
+                        from: collection.PRODUCT_COLLECTION,
+                        localField: 'products.product',
+                        foreignField: '_id',
+                        as: 'products'
+                    }
+                }
+            ]).toArray();
+            resolve(orders);
+        })
+    },
+    getOrderDetails:(userId)=>{
+        return new Promise(async (resolve, reject) => {
             let orders = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
                 {
                     $match: { userId: ObjectId(userId) }
@@ -319,12 +338,12 @@ module.exports = {
                 },
                 {
                     $project: {
-                        paymentMethod: 1, 
+                        paymentMethod: 1,
                         totalAmount: 1,
                         item: '$products.product',
                         quantity: '$products.quantity',
-                        orderStatus: 1, 
-                        date: 1, 
+                        orderStatus: 1,
+                        date: 1,
                         shipmentStatus: 1
                     }
                 },
@@ -338,7 +357,7 @@ module.exports = {
                 },
                 {
                     $project: {
-                        item: 1, paymentstatus: 1, paymentMethod: 1,orderStatus:1,date:1,shipmentStatus:1, totalAmount: 1, quantity: 1, product: { $arrayElemAt: ['$product', 0] }
+                        item: 1, paymentstatus: 1, paymentMethod: 1, orderStatus: 1, date: 1, shipmentStatus: 1, totalAmount: 1, quantity: 1, product: { $arrayElemAt: ['$product', 0] }
                     }
                 }
             ]).toArray()
