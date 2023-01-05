@@ -37,44 +37,44 @@ module.exports = {
             })
         })
     },
-    getUserDetails:(userId)=>{
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(userId)}).then((userDetails)=>{
+    getUserDetails: (userId) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(userId) }).then((userDetails) => {
                 resolve(userDetails);
             })
         })
     },
-    EditUserDetails:(userDetails)=>{
+    EditUserDetails: (userDetails) => {
         console.log(userDetails);
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userDetails.userId)},
-            {
-                $set:{
-                    fname: userDetails.fname,
-                    lname:userDetails.lname,
-                    email:userDetails.email,
-                    phone:userDetails.phone
-                }
-            }).then((response)=>{
-                if (response.modifiedCount==1){
-                    resolve(true)
-                }else{
-                    resolve(false)
-                }
-                console.log(response);
-                // 
-            })
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userDetails.userId) },
+                {
+                    $set: {
+                        fname: userDetails.fname,
+                        lname: userDetails.lname,
+                        email: userDetails.email,
+                        phone: userDetails.phone
+                    }
+                }).then((response) => {
+                    if (response.modifiedCount == 1) {
+                        resolve(true)
+                    } else {
+                        resolve(false)
+                    }
+                    console.log(response);
+                    // 
+                })
         })
     },
-    blockUser:(userId)=>{
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collection.USER_COLLECTION).updateOne({_id:ObjectId(userId)},
-            {
-                $set:{
-                    status:false
+    blockUser: (userId) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) },
+                {
+                    $set: {
+                        status: false
+                    }
                 }
-            }
-            ).then((response)=>{
+            ).then((response) => {
                 resolve(response.modifiedCount)
             })
         })
@@ -92,43 +92,43 @@ module.exports = {
             })
         })
     },
-    addCategory:(data)=>{
-        data.status=true;
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collection.CATEGORY_COLLECTION).insertOne(data).then((response)=>{
+    addCategory: (data) => {
+        data.status = true;
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.CATEGORY_COLLECTION).insertOne(data).then((response) => {
                 resolve(response)
             })
         })
     },
-    getCategoryList:()=>{
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collection.CATEGORY_COLLECTION).find().toArray().then((categoryList)=>{
+    getCategoryList: () => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.CATEGORY_COLLECTION).find().toArray().then((categoryList) => {
                 resolve(categoryList)
             })
         })
     },
-    getCategoryDetails: (categoryId)=>{
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collection.CATEGORY_COLLECTION).findOne({_id:ObjectId(categoryId)}).then((response)=>{
-                if(response){
+    getCategoryDetails: (categoryId) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.CATEGORY_COLLECTION).findOne({ _id: ObjectId(categoryId) }).then((response) => {
+                if (response) {
                     resolve(response)
-                }else{
+                } else {
                     resolve(false)
                 }
             })
         })
     },
-    editCategory:(data)=>{
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collection.CATEGORY_COLLECTION).updateOne({_id:ObjectId(data.categoryId)},
-            {
-                $set:{
-                    name:data.name,
-                    description:data.description
-                }
-            }).then((response)=>{
-                resolve(true)
-            })
+    editCategory: (data) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.CATEGORY_COLLECTION).updateOne({ _id: ObjectId(data.categoryId) },
+                {
+                    $set: {
+                        name: data.name,
+                        description: data.description
+                    }
+                }).then((response) => {
+                    resolve(true)
+                })
         })
     },
     editCategoryWithImage: (data) => {
@@ -145,75 +145,124 @@ module.exports = {
                 })
         })
     },
-    deleteCategory:(categoryId)=>{
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collection.CATEGORY_COLLECTION).deleteOne({_id:ObjectId(categoryId)}).then((response)=>{
+    deleteCategory: (categoryId) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.CATEGORY_COLLECTION).deleteOne({ _id: ObjectId(categoryId) }).then((response) => {
                 resolve(response);
             })
         })
     },
-    changeStatus:(categoryId,status)=>{
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collection.CATEGORY_COLLECTION).updateOne({_id:ObjectId(categoryId)},
-            {
-                $set:{
-                    status
-                }
+    changeStatus: (categoryId, status) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.CATEGORY_COLLECTION).updateOne({ _id: ObjectId(categoryId) },
+                {
+                    $set: {
+                        status
+                    }
                 }).then((response) => {
                     resolve(response);
                 })
         })
     },
-    addBanner:(data)=>{
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collection.BANNER_COLLECTION).insertOne(data).then((response)=>{
+    addBanner: (data) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.BANNER_COLLECTION).insertOne(data).then((response) => {
                 resolve(response)
             })
         })
     },
-    getBanner:()=>{
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collection.BANNER_COLLECTION).find().toArray().then((bannerList)=>{
+    getBanner: () => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.BANNER_COLLECTION).find().toArray().then((bannerList) => {
                 resolve(bannerList)
             })
         })
     },
-    deleteBanner: (bannerId)=>{
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collection.BANNER_COLLECTION).deleteOne({_id:ObjectId(bannerId)}).then((response)=>{
+    deleteBanner: (bannerId) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.BANNER_COLLECTION).deleteOne({ _id: ObjectId(bannerId) }).then((response) => {
                 resolve(response)
             })
         })
     },
-    getBannerDetails:(bannerId)=>{
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collection.BANNER_COLLECTION).findOne({_id:ObjectId(bannerId)}).then((response)=>{
+    getBannerDetails: (bannerId) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.BANNER_COLLECTION).findOne({ _id: ObjectId(bannerId) }).then((response) => {
                 resolve(response)
             })
         })
     },
-    editBanner:(data)=>{
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collection.BANNER_COLLECTION).updateOne({ _id: ObjectId(data.bannerId)},
-            {
-                $set:{
-                    title:data.title,
-                    subtitle:data.subtitle,
-                    text:data.text,
-                    color:data.color,
-                    image: data.image,
-                }
-            }).then((response)=>{
-                resolve(response)
-            })
+    editBanner: (data) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.BANNER_COLLECTION).updateOne({ _id: ObjectId(data.bannerId) },
+                {
+                    $set: {
+                        title: data.title,
+                        subtitle: data.subtitle,
+                        text: data.text,
+                        color: data.color,
+                        image: data.image,
+                    }
+                }).then((response) => {
+                    resolve(response)
+                })
         })
     },
-    getAllOrder:()=>{
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collection.USER_COLLECTION).find().toArray().then((response)=>{
+    getAllOrder: () => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.ORDER_COLLECTION).find().toArray().then((response) => {
                 resolve(response);
             })
         })
+    },
+    changeOrderstatus: (orderId, status) => {
+        var date = new Date();
+        var current_date = date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
+        var current_time = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+        const obj = {
+            id: Date.now() + '-' + Math.round(Math.random() * 1E9),
+            status: true,
+            lastUpdate: { date: current_date, time: current_time, placeUpdates: [] }
+        }
+        return new Promise((resolve, reject) => {
+            if (status == 0) {
+                db.get().collection(collection.ORDER_COLLECTION).updateOne({ _id: ObjectId(orderId) }, {
+                    $set: {
+                        'shipmentStatus.ordrePlaced':obj,
+                        'shipmentStatus.shipped.status': false,
+                        'shipmentStatus.outForDelivery.status': false,
+                        'shipmentStatus.delivered.status': false,
+                    }
+                }).then((response) => { resolve() })
+            } else if(status ==1){
+                db.get().collection(collection.ORDER_COLLECTION).updateOne({ _id: ObjectId(orderId) }, {
+                    $set: {
+                        'shipmentStatus.ordrePlaced.status':true,
+                        'shipmentStatus.shipped': obj,
+                        'shipmentStatus.outForDelivery.status': false,
+                        'shipmentStatus.delivered.status': false,
+                    }
+                }).then((response)=>{resolve()})
+            }else if(status ==2){
+                db.get().collection(collection.ORDER_COLLECTION).updateOne({ _id: ObjectId(orderId) }, {
+                    $set: {
+                        'shipmentStatus.ordrePlaced.status': true,
+                        'shipmentStatus.shipped.status': true,
+                        'shipmentStatus.outForDelivery': obj,
+                        'shipmentStatus.delivered.status':false
+                    }
+                }).then((response) => { resolve() })
+            } else if (status == 3) {
+                db.get().collection(collection.ORDER_COLLECTION).updateOne({ _id: ObjectId(orderId) }, {
+                    $set: {
+                        'shipmentStatus.ordrePlaced.status': true,
+                        'shipmentStatus.shipped.status': true,
+                        'shipmentStatus.outForDelivery.status': true,
+                        'shipmentStatus.delivered': obj
+                    }
+                }).then((response) => { resolve() })
+            }
+        })
     }
-  
+
 }

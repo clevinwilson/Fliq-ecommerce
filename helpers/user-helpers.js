@@ -296,7 +296,7 @@ module.exports = {
                 products: details.cart,
                 totalAmount: cartTotal,
                 date:current_date,
-                shipmentStatus: [{ id: Date.now() + '-' + Math.round(Math.random() * 1E9), status: 'Order Placed',lastUpdate:{date:current_date,time:current_time} }]
+                shipmentStatus: {ordrePlaced:{ id: Date.now() + '-' + Math.round(Math.random() * 1E9), status: true,lastUpdate:{date:current_date,time:current_time,placeUpdates:[]} }}
             }
             db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response) => {
                 db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(details._id) }, {

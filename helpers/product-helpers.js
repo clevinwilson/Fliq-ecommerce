@@ -77,29 +77,23 @@ module.exports={
             })
         })
     },
-    getOrderDetails:(orderId,userId)=>{
-        console.log(orderId);
+    getOrderDetails:(orderId)=>{
         return new Promise(async(resolve,reject)=>{
-           let orderDetails=await db.get().collection(collection.USER_COLLECTION).aggregate([
+            let orders = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
                 {
-                    $match:{_id:ObjectId(userId)}
+                    $match: { _id: ObjectId(orderId) }
                 },
                 {
-                    $unwind:'$orders'
-                },
-                {
-                    $match: { "orders.id":orderId}
-                },
-                {
-                    $lookup:{
-                        from:collection.PRODUCT_COLLECTION,
-                        localField:'products.product',
-                        foreignField:'_id',
-                        as:'product'
+                    $lookup:
+                    {
+                        from: collection.PRODUCT_COLLECTION,
+                        localField: 'products.product',
+                        foreignField: '_id',
+                        as: 'products'
                     }
                 }
             ]).toArray();
-            console.log(orderDetails);
+             resolve(orders[0]);
         })
     },
     getAllProducts:(categoryId)=>{

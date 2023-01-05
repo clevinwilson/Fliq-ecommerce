@@ -46,36 +46,51 @@
                     <hr style="color: #b5b5b5;">
                     </hr>
                     <div class="row">
-                        <div class="timeline p-3 ps-5 ">
+                        <div class="timeline p-3 ms-4 ">
+                            {{#if order.shipmentStatus.ordrePlaced.status}}
                             <div class="tl-item ">
                                 <div class="tl-dot b-success"></div>
                                 <div class="tl-content">
                                     <div class="">Order Confirmed</div>
-                                    <div class="tl-date text-muted mt-1">13 june 18</div>
+                                    <div class="tl-date text-muted mt-1">
+                                        {{order.shipmentStatus.ordrePlaced.lastUpdate.date}}</div>
                                 </div>
                             </div>
-                            <div class="tl-item active">
+                            {{/if}}
+                    
+                            {{#if order.shipmentStatus.shipped.status}}
+                            <div class="tl-item ">
                                 <div class="tl-dot b-success"></div>
                                 <div class="tl-content">
                                     <div class="">Shipped</div>
-                                    <div class="tl-date text-muted mt-1">45 minutes ago</div>
+                                    <div class="tl-date text-muted mt-1">
+                                        {{order.shipmentStatus.shipped.lastUpdate.date}}</div>
                                 </div>
                             </div>
+                            {{/if}}
+                    
+                            {{#if order.shipmentStatus.outForDelivery.status}}
                             <div class="tl-item">
-                                <div class="tl-dot b-success"></div>
+                                <div class="tl-dot b-success "></div>
                                 <div class="tl-content">
                                     <div class="">Out for delivery</div>
-                                    <div class="tl-date text-muted mt-1">1 day ago</div>
+                                    <div class="tl-date text-muted mt-1">
+                                        {{order.shipmentStatus.outForDelivery.lastUpdate.date}}</div>
                                 </div>
                             </div>
+                            {{/if}}
+                    
+                            {{#if order.shipmentStatus.delivered.status}}
                             <div class="tl-item">
                                 <div class="tl-dot b-success"></div>
                                 <div class="tl-content">
                                     <div class="">Delivered</div>
-                                    <div class="tl-date text-muted mt-1">1 Week ago</div>
+                                    <div class="tl-date text-muted mt-1">
+                                        {{order.shipmentStatus.delivered.lastUpdate.date}}</div>
                                 </div>
                             </div>
-
+                            {{/if}}
+                    
                         </div>
                     </div>
                 </div>

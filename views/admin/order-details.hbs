@@ -8,111 +8,228 @@
     {{>admin-header}}
     <!-- End of Sidebar -->
 
-    <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
+    <section>
+        <div class="container">
+            <div class="row order-card m-2">
+                <div class="col-md-5">
+                    <div class=" order-card-info mb-3 mb-md-0">
+                        <h5 class="mt-2 ">Delivery Address</h5>
+                        <hr style="color: #b5b5b5;">
+                        </hr>
+                        <div class="address-info-wrap">
+                            <h6 class="font-weight-bold">{{order.deliveryDetails.firstName}}
+                                {{order.deliveryDetails.lastName}}</h6>
+                            <p class="font-weight-normal">
+                                {{order.deliveryDetails.street}},{{order.deliveryDetails.AddressLine2}},
+                                {{order.deliveryDetails.Landmark}}-{{order.deliveryDetails.postalCode}},
+                                {{order.deliveryDetails.state}} </p>
 
-        <!-- Main Content -->
-        <div id="content">
-
-
-
-            <!-- Begin Page Content -->
-            <div class="container-fluid">
-
-                <!-- Page Heading -->
-                <h1 class="h3 mb-2 text-gray-800">Orders Details</h1>
-
-                <!-- DataTales Example -->
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Details</h6>
+                            <h6 class="font-weight-bold">Phone number</h6>
+                            <p>{{order.deliveryDetails.phone}}</p>
+                        </div>
                     </div>
+                </div>
+                <div class="col-md-7">
+                    <div class=" order-card-info">
+                        <h5 class="mt-2 ">More actions</h5>
+                        <hr style="color: #b5b5b5;">
+                        </hr>
+                        <div>
+                            <h5 class="text-success text-capitalize">Order {{order.orderStatus}}</h5>
+                            <p style="font-size: 14px;" class="mt-3">Payment Method: {{order.paymentMethod}}</p>
+                            <p class="mt-3">Expected by Fri, 31st Jul '23
+                            </p>
 
-                    <div class="card-body">
-                        {{#if categoryUpdate}}
-                        <div class="alert alert-success" role="alert">
-                            {{categoryUpdate}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row  justify-content-center p-2">
+                <div class="col-md-4">
+                    <div class="order-card  order-card-info mb-3">
+                        <h5 class="mt-2 ">Order Tracking</h5>
+                        <hr style="color: #b5b5b5;">
+                        </hr>
+                        <div class="row">
+                            <div class="timeline p-3 ms-4 ">
+                                {{#if order.shipmentStatus.ordrePlaced.status}}
+                                <div class="tl-item ">
+                                    <div class="tl-dot b-success"></div>
+                                    <div class="tl-content">
+                                        <div class="">Order Confirmed</div>
+                                        <div class="tl-date text-muted mt-1">
+                                            {{order.shipmentStatus.ordrePlaced.lastUpdate.date}}</div>
+                                    </div>
+                                </div>
+                                {{/if}}
+
+                                {{#if order.shipmentStatus.shipped.status}}
+                                <div class="tl-item ">
+                                    <div class="tl-dot b-success"></div>
+                                    <div class="tl-content">
+                                        <div class="">Shipped</div>
+                                        <div class="tl-date text-muted mt-1">
+                                            {{order.shipmentStatus.shipped.lastUpdate.date}}</div>
+                                    </div>
+                                </div>
+                                {{/if}}
+
+                                {{#if order.shipmentStatus.outForDelivery.status}}
+                                <div class="tl-item">
+                                    <div class="tl-dot b-success "></div>
+                                    <div class="tl-content">
+                                        <div class="">Out for delivery</div>
+                                        <div class="tl-date text-muted mt-1">
+                                            {{order.shipmentStatus.outForDelivery.lastUpdate.date}}</div>
+                                    </div>
+                                </div>
+                                {{/if}}
+
+                                {{#if order.shipmentStatus.delivered.status}}
+                                <div class="tl-item">
+                                    <div class="tl-dot b-success"></div>
+                                    <div class="tl-content">
+                                        <div class="">Delivered</div>
+                                        <div class="tl-date text-muted mt-1">
+                                            {{order.shipmentStatus.delivered.lastUpdate.date}}</div>
+                                    </div>
+                                </div>
+                                {{/if}}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class=" col-md-8">
+                    <div class="orders-wrap ">
+                        <div class="order-header d-flex justify-content-between mt-2">
+                            <p class="m-0 order-id"><span class="text-dark text-capitalize">Order</span> #{{order._id}}
+                            </p>
+                            <p class="m-0 text-secondary order-date d-flex align-items-center">Order Placed:
+                                {{order.date}}
+                            </p>
+                        </div>
+                        <hr style="color: #b5b5b5;">
+                        </hr>
+                        {{#each order.products}}
+                        <a href="/product-details/{{this._id}}"
+                            class="text-dark text-decoration-none m-1 d-flex justify-content-center">
+                            <div class="col-12 col-md-10 col-lg-10 mt-3">
+                                <div class="card-box m-1 orders p-2 p-lg-4 row">
+                                    <div
+                                        class=" col-4 col-md-6 p-2 my-2 d-flex justify-content-center position-relative">
+                                        <img class="w-100" style="max-width: 260px; height: 130px; object-fit: contain;"
+                                            src="/images/product-images/{{this.images.[0].filename}}" alt="">
+                                    </div>
+                                    <div class=" col-8 col-md-5 align-items-center d-flex ">
+                                        <div class="card-info-wrap ms-md-3">
+                                            <h6 class="mt-2 device-name text-capitalize">{{this.name}}</h6>
+                                            <p style="font-size: 12px;" class="m-0">{{this.brand}}</p>
+                                            <h6 class="mt-2">₹ {{this.price}}</h6>
+                                            <p style="font-size: 11px;">(incl. all Taxes)</p>
+                                            <h6 style="font-size: 13px;" class="mt-2">{{this.color}}</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        {{/each}}
+                        <hr style="color: #b5b5b5;">
+                        </hr>
+                        <div class="d-flex justify-content-end align-items-center order-footer mb-2">
+                            {{!-- <div class="order-more-wrap d-flex justify-content-center ">
+                                <a class="text-dark text-decoration-none" href="/order-details/{{this._id}}">View
+                                    More</a>
+                            </div> --}}
+                            <div class="order-total-wrap">
+                                <h6 class="me-2 mb-0">Total: ₹{{order.totalAmount}}</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row order-card m-2 d-flex justify-content-center mb-4">
+                <div class="col-md-12 ">
+                    <h5 class="mt-2  mt-5 mt-md-0 ">Order Action</h5>
+                    <hr style="color: #b5b5b5;">
+                    </hr>
+                </div>
+                <div class="row  mt-5 mt-md-0 py-4">
+                    <div class="col-md-12 col-lg-3 d-flex justify-content-center align-items-center">
+                        {{#if order.orderStatus}}
+                        {{#if order.shipmentStatus.delivered.status}}
+                        <h5 class="text-success">Delivered</h5>
+                        {{else if order.shipmentStatus.outForDelivery.status}}
+                        <h5 class="text-success">Out For Delivery</h5>
+                        {{else if order.shipmentStatus.shipped.status}}
+                        <h5 class="text-success">Shipped</h5>
+                        {{else if order.shipmentStatus.ordrePlaced.status}}
+                        <h5 class="text-success font-weight-bold">Order Confirmed</h5>
+                        {{/if}}
+                        {{else}}
+                        <h5 class="text-danger">Canceled</h5>
+                        {{/if}}
+                    </div>
+                    <div class="col-md-12 mt-2 col-lg-9">
+                        {{#if order.orderStatus}}
+                        <div class="row mt-5 mt-md-0">
+                            {{#if order.shipmentStatus.ordrePlaced.status}}
+                            {{#if order.shipmentStatus.shipped.status}}
+                            {{else}}
+                            <div class="col-xl-3 col-lg-6 col-md-6 mt-2 d-flex justify-content-center">
+                                <a onclick="changeShipmentStatus('{{order._id}}',1)"
+                                    class="text-white btn btn-dark me-2 w-100">Shipped</a>
+                            </div>
+                            {{/if}}
+                            {{/if}}
+
+                            {{#if order.shipmentStatus.shipped.status}}
+                            {{#if order.shipmentStatus.outForDelivery.status}}
+                            {{else}}
+                            <div class="col-xl-3 col-lg-6 col-md-6 mt-2 d-flex justify-content-center">
+                                <a onclick="changeShipmentStatus('{{order._id}}',0)"
+                                    class="text-white btn btn-dark me-2 w-100">Back to Confirmed</a>
+                            </div>
+                            <div class="col-xl-3 col-lg-6 col-md-6 mt-2 d-flex justify-content-center">
+                                <a onclick="changeShipmentStatus('{{order._id}}',2)"
+                                    class="text-white btn btn-dark me-2  w-100">Out for Delivery</a>
+                            </div>
+                            {{/if}}
+                            {{/if}}
+
+                            {{#if order.shipmentStatus.outForDelivery.status}}
+                            {{#if order.shipmentStatus.delivered.status}}
+                            {{else}}
+                            <div class="col-xl-3 col-lg-6 col-md-6 mt-2 d-flex justify-content-center">
+                                <a onclick="changeShipmentStatus('{{order._id}}',1)"
+                                    class="text-white btn btn-dark me-2 w-100">Back to Shipped</a>
+                            </div>
+                            <div class="col-xl-3 col-lg-6 col-md-6 mt-2 d-flex justify-content-center">
+                                <a onclick="changeShipmentStatus('{{order._id}}',3)"
+                                    class="text-white btn btn-dark me-2  w-100">Deliverd</a>
+                            </div>
+                            {{/if}}
+                            {{/if}}
+
+                            {{#if order.shipmentStatus.delivered.status}}
+                            <div class="col-xl-3 col-lg-6 col-md-6 mt-2 d-flex justify-content-center">
+                                <a onclick="changeShipmentStatus('{{order._id}}',2)"
+                                    class="text-white btn btn-dark me-2 w-100">Back to Out</a>
+                            </div>
+                            {{/if}}
+
+                            <div class="col-xl-3 col-lg-6 mt-2 col-md-6 d-flex justify-content-center">
+                                <a class="text-white btn btn-danger me-2  w-100">Cancel</a>
+                            </div>
                         </div>
                         {{/if}}
-                        <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                <thead>
-                                    <tr>
-                                        <th>User Name</th>
-                                        <th>Address</th>
-                                        <th>Payment Method</th>
-                                        <th>Order Status</th>
-                                        <th>Total Price</th>
-                                        <th>Shipment Status</th>
-                                        <th>Action</th>
-
-                                    </tr>
-                                </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th>User Name</th>
-                                        <th>Address</th>
-                                        <th>Payment Method</th>
-                                        <th>Order Status</th>
-                                        <th>Total Price</th>
-                                        <th>Shipment Status</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </tfoot>
-                                <tbody>
-                                    {{#each orders}}
-                                    {{#each this.orders}}
-                                    <tr>
-                                        <td>{{../this.fname}} {{../this.lname}} </td>
-                                        <td>{{this.deliveryDetails.firstName}} {{this.deliveryDetails.lastName}},
-                                            <br>{{this.deliveryDetails.street}} {{this.deliveryDetails.AddressLine2}},
-                                            <br>{{this.deliveryDetails.Landmark}} {{this.deliveryDetails.state}} ,
-                                            <br>{{this.deliveryDetails.postalCode}} {{this.deliveryDetails.country}}
-                                        </td>
-                                        <td>{{this.paymentMethod}}</td>
-                                        <td>{{this.paymentstatus}}</td>
-                                        <td>₹ {{this.totalAmount}}</td>
-                                        <td>{{this.shipmentStatus}}</td>
-                                        <td class="d-flex justify-content-center align-items-center">
-                                            <a href="/admin/order-details/{{this._id}}" class="btn btn-primary">View Details</a>
-                                        </td>
-
-                                        {{!-- <td class="d-flex">
-                                            <a title="Delete" class="table-btn btn btn-danger p-2"
-                                                href="/admin/delete-product/{{this._id}}"><i
-                                                    class="fa-solid fa-trash"></i></a>
-                                            <a title="Edit" href="/admin/edit-product/{{this._id}}"
-                                                class="table-btn ml-2 text-white btn btn-warning p-2"><i
-                                                    class="fa-solid fa-pen"></i></a>
-
-                                        </td> --}}
-                                    </tr>
-                                    {{/each}}
-                                    {{/each}}
-                                </tbody>
-                            </table>
-                        </div>
                     </div>
                 </div>
-
             </div>
-            <!-- /.container-fluid -->
-
         </div>
-        <!-- End of Main Content -->
-
-        <!-- Footer -->
-        <footer class="sticky-footer bg-white">
-            <div class="container my-auto">
-                <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; Fliq 2022</span>
-                </div>
-            </div>
-        </footer>
-        <!-- End of Footer -->
-
-    </div>
-    <!-- End of Content Wrapper -->
+    </section>
 
 </div>
 <!-- End of Page Wrapper -->
@@ -130,5 +247,290 @@
         justify-content: center;
         align-items: center;
         border-radius: 50%;
+    }
+</style>
+
+<script>
+    function changeShipmentStatus(orderId, status) {
+        $.ajax({
+            url: '/admin/change-order-status/' + orderId + '/' + status,
+            method: 'get',
+            success: (response) => {
+                if (response.status) {
+                    window.location.reload();
+                }
+            }
+        })
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    .order-card-info>h5 {
+        font-size: 18px;
+    }
+
+    .address-info-wrap>p {
+        font-size: 14px;
+    }
+
+    .cancel-btn {
+        background-color: #f5f4f4;
+        padding: 7px 25px;
+        border-radius: 3px;
+        color: black;
+        text-decoration: none;
+    }
+</style>
+
+
+<style>
+    @media (min-width:992px) {
+        .page-container {
+            max-width: 1140px;
+            margin: 0 auto
+        }
+
+        .page-sidenav {
+            display: block !important
+        }
+    }
+
+    .padding {
+        padding: 2rem
+    }
+
+    .w-32 {
+        width: 32px !important;
+        height: 32px !important;
+        font-size: .85em
+    }
+
+    .tl-item .avatar {
+        z-index: 2
+    }
+
+    .circle {
+        border-radius: 500px
+    }
+
+    .gd-warning {
+        color: #fff;
+        border: none;
+        background: #f4c414 linear-gradient(45deg, #f4c414, #f45414)
+    }
+
+    .timeline {
+        position: relative;
+        border-color: rgba(160, 175, 185, .15);
+        padding: 0;
+        margin: 0
+    }
+
+    .p-4 {
+        padding: 1.5rem !important
+    }
+
+    .block,
+    .card {
+        background: #fff;
+        border-width: 0;
+        border-radius: .25rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, .05);
+        margin-bottom: 1.5rem
+    }
+
+    .mb-4,
+    .my-4 {
+        margin-bottom: 1.5rem !important
+    }
+
+    .tl-item {
+        border-radius: 3px;
+        position: relative;
+        display: -ms-flexbox;
+        display: flex
+    }
+
+    .tl-item>* {
+        padding: 10px
+    }
+
+    .tl-item .avatar {
+        z-index: 2
+    }
+
+    .tl-item:last-child .tl-dot:after {
+        display: none
+    }
+
+    .tl-item.active .tl-dot:before {
+        border-color: #448bff;
+        box-shadow: 0 0 0 4px rgba(68, 139, 255, .2)
+    }
+
+    .tl-item:last-child .tl-dot:after {
+        display: none
+    }
+
+    .tl-item.active .tl-dot:before {
+        border-color: #26a541;
+        box-shadow: 0 0 0 4px rgb(201 239 209)
+    }
+
+    .tl-dot {
+        position: relative;
+        border-color: rgba(160, 175, 185, .15)
+    }
+
+    .tl-dot:after,
+    .tl-dot:before {
+        content: '';
+        position: absolute;
+        border-color: inherit;
+        border-width: 2px;
+        border-style: solid;
+        border-radius: 50%;
+        width: 10px;
+        height: 10px;
+        top: 15px;
+        left: 50%;
+        transform: translateX(-50%)
+    }
+
+    .tl-dot:after {
+        width: 0;
+        height: auto;
+        top: 25px;
+        bottom: -15px;
+        border-right-width: 0;
+        border-top-width: 0;
+        border-bottom-width: 0;
+        border-radius: 0
+    }
+
+    tl-item.active .tl-dot:before {
+        border-color: #26a541;
+        box-shadow: 0 0 0 4px rgba(68, 139, 255, .2)
+    }
+
+    .tl-dot {
+        position: relative;
+        border-color: rgba(160, 175, 185, .15)
+    }
+
+    .tl-dot:after,
+    .tl-dot:before {
+        content: '';
+        position: absolute;
+        border-color: inherit;
+        border-width: 2px;
+        border-style: solid;
+        border-radius: 50%;
+        width: 10px;
+        height: 10px;
+        top: 15px;
+        left: 50%;
+        transform: translateX(-50%)
+    }
+
+    .tl-dot:after {
+        width: 0;
+        height: auto;
+        top: 25px;
+        bottom: -15px;
+        border-right-width: 0;
+        border-top-width: 0;
+        border-bottom-width: 0;
+        border-radius: 0
+    }
+
+    .tl-content p:last-child {
+        margin-bottom: 0
+    }
+
+    .tl-date {
+        font-size: .85em;
+        margin-top: 2px;
+        min-width: 100px;
+        max-width: 100px
+    }
+
+    .avatar {
+        position: relative;
+        line-height: 1;
+        border-radius: 500px;
+        white-space: nowrap;
+        font-weight: 700;
+        border-radius: 100%;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -ms-flex-negative: 0;
+        flex-shrink: 0;
+        border-radius: 500px;
+        box-shadow: 0 5px 10px 0 rgba(50, 50, 50, .15)
+    }
+
+    .b-warning {
+        border-color: #f4c414 !important;
+    }
+
+    .b-primary {
+        border-color: #448bff !important;
+    }
+
+    .b-danger {
+        border-color: #f54394 !important;
+    }
+
+    .b-success {
+        border-color: #26a541 !important;
     }
 </style>

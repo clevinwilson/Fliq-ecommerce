@@ -44,7 +44,7 @@
                                         <th>Order Status</th>
                                         <th>Total Price</th>
                                         <th>Shipment Status</th>
-                                        <th>Action</th>
+                                        <th>More</th>
 
                                     </tr>
                                 </thead>
@@ -56,25 +56,40 @@
                                         <th>Order Status</th>
                                         <th>Total Price</th>
                                         <th>Shipment Status</th>
-                                        <th>Action</th>
+                                        <th>More</th>
                                     </tr>
                                 </tfoot>
                                 <tbody>
                                     {{#each orders}}
-                                    {{#each this.orders}}
+
                                     <tr>
-                                        <td>{{../this.fname}} {{../this.lname}} </td>
+                                        <td>{{this.deliveryDetails.firstName}} {{this.deliveryDetails.lastName}} </td>
                                         <td>{{this.deliveryDetails.firstName}} {{this.deliveryDetails.lastName}},
                                             <br>{{this.deliveryDetails.street}} {{this.deliveryDetails.AddressLine2}},
                                             <br>{{this.deliveryDetails.Landmark}} {{this.deliveryDetails.state}} ,
                                             <br>{{this.deliveryDetails.postalCode}} {{this.deliveryDetails.country}}
                                         </td>
                                         <td>{{this.paymentMethod}}</td>
-                                        <td>{{this.paymentstatus}}</td>
+                                        <td class="text-capitalize">{{this.orderStatus}}</td>
                                         <td>₹ {{this.totalAmount}}</td>
-                                        <td>{{this.shipmentStatus}}</td>
+                                        <td class="text-capitalize">
+                                            {{#if  this.orderStatus}}
+                                                 {{#if this.shipmentStatus.delivered.status}}
+                                                     <p class="text-success">Delivered</p>
+                                                 {{else if this.shipmentStatus.outForDelivery.status}}
+                                                    <p class="text-success">Out For Delivery</p>
+                                                 {{else if this.shipmentStatus.shipped.status}}
+                                                    <p class="text-success">Shipped</p>
+                                                 {{else if this.shipmentStatus.ordrePlaced.status}}
+                                                     <p class="text-success">Order Confirmed</p>
+                                                 {{/if}}
+                                            {{else}}
+                                                <p class="text-danger">Canceled</p>
+                                            {{/if}}
+                                        </td>
                                         <td class="d-flex justify-content-center align-items-center">
-                                            <a href="/admin/order-details/{{this.id}}/{{../this._id}}" class="btn btn-primary">View
+                                            <a href="/admin/order-details/{{this._id}}"
+                                                class="btn btn-primary">View
                                                 Details</a>
                                         </td>
 
@@ -88,7 +103,6 @@
 
                                         </td> --}}
                                     </tr>
-                                    {{/each}}
                                     {{/each}}
                                 </tbody>
                             </table>

@@ -325,9 +325,20 @@ router.get('/view-orders', (req, res) => {
     })
 })
 
-// router.get('/order-details/:orderId/:userId',(req,res)=>{
-//     productHelpers.getOrderDetails(req.params.orderId,req.params.userId)
-// })
+router.get('/order-details/:orderId',(req,res)=>{
+    productHelpers.getOrderDetails(req.params.orderId).then((response)=>{
+        console.log(response);
+        res.render('admin/order-details', {order:response,admin:true})
+    })
+})
+
+// change order status
+
+router.get('/change-order-status/:orderId/:status',(req,res)=>{
+    adminHelpers.changeOrderstatus(req.params.orderId,req.params.status).then((response)=>{
+        res.json({status:true})
+    })
+})
 
 
 module.exports = router;
