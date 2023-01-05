@@ -25,7 +25,14 @@
                             </div>
                             <div class=" col-8 col-md-5 align-items-center d-flex ">
                                 <div class="card-info-wrap ms-md-3">
-                                    <h6 class="mt-2 device-name text-capitalize">Order {{../this.orderStatus}}</h6>
+                                    {{#if ../this.orderStatus}}
+
+                                    <h6 class="mt-2 device-name text-capitalize text-success">Order
+                                        {{../this.orderStatus}}</h6>
+                                    {{else}}
+                                    <h6 class="mt-2 device-name text-capitalize text-danger">Order Canceled</h6>
+
+                                    {{/if}}
                                     <p style="font-size: 12px;" class="m-0">Orderd date: {{../this.date}}</p>
                                     <h6 class="mt-2">₹ {{../this.totalAmount}}</h6>
                                     <p style="font-size: 11px;">(incl. all Taxes)</p>
@@ -42,14 +49,14 @@
                 {{/each}}
                 <hr style="color: #b5b5b5;">
                 </hr>
-                <div class="d-flex justify-content-center align-items-center order-footer" >
+                <div class="d-flex justify-content-center align-items-center order-footer">
                     {{!-- <div class="order-cancel-wrap">
                         <a href="">Click</a>
                     </div> --}}
                     <div class="order-more-wrap d-flex justify-content-center ">
                         <a class="text-dark text-decoration-none" href="/order-details/{{this._id}}">View More</a>
                     </div>
-                    
+
                     {{!-- <div class="order-total-wrap">
                         <p class="m-0">Total: ₹{{this.totalAmount}}</p>
                     </div> --}}
@@ -86,5 +93,4 @@
         padding: 11px;
         border-radius: 10px;
     }
- 
 </style>

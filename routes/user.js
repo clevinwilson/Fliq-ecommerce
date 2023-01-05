@@ -255,6 +255,13 @@ router.get('/product-listing/:categoryId',(req,res)=>{
   })
 })
 
+// cancel order
+router.get("/cancel-order/:orderId", (req, res) => {
+  adminHelpers.cancelOrder(req.params.orderId).then((response) => {
+    res.json({ status: true })
+  })
+})
+
 
 
 module.exports = router;
