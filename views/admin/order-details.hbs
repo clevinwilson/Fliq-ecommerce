@@ -51,6 +51,8 @@
                         <hr style="color: #b5b5b5;">
                         </hr>
                         <div class="row">
+                        {{#if order.orderStatus}}
+
                             <div class="timeline p-3 ms-4 ">
                                 {{#if order.shipmentStatus.ordrePlaced.status}}
                                 <div class="tl-item ">
@@ -97,6 +99,27 @@
                                 {{/if}}
 
                             </div>
+                            {{else}}
+                            <div class="timeline p-3 ms-4 ">
+                                {{#if order.shipmentStatus.ordrePlaced.status}}
+                                <div class="tl-item ">
+                                    <div class="tl-dot b-success"></div>
+                                    <div class="tl-content">
+                                        <div class="">Order Confirmed</div>
+                                        <div class="tl-date text-muted mt-1">
+                                            {{order.shipmentStatus.ordrePlaced.lastUpdate.date}}</div>
+                                    </div>
+                                </div>
+                                {{/if}}
+                                <div class="tl-item ">
+                                    <div class="tl-dot b-danger"></div>
+                                    <div class="tl-content">
+                                        <div class="">Cancelled</div>
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                        {{/if}}
                         </div>
                     </div>
                 </div>
@@ -174,7 +197,7 @@
                     </div>
                     <div class="col-md-12 mt-2 col-lg-9">
                         {{#if order.orderStatus}}
-                        <div class="row mt-5 mt-md-0">
+                        <div class="row mt-5 mt-md-0 d-flex justify-content-end">
                             {{#if order.shipmentStatus.ordrePlaced.status}}
                             {{#if order.shipmentStatus.shipped.status}}
                             {{else}}
@@ -214,15 +237,19 @@
                             {{/if}}
 
                             {{#if order.shipmentStatus.delivered.status}}
-                            <div class="col-xl-3 col-lg-6 col-md-6 mt-2 d-flex justify-content-center">
+                            <div class="col-xl-3 col-lg-6 col-md-6 mt-2 d-flex justify-content-center ">
                                 <a onclick="changeShipmentStatus('{{order._id}}',2)"
                                     class="text-white btn btn-dark me-2 w-100">Back to Out</a>
                             </div>
+                            {{else}}
+                            <div class="col-xl-3 col-lg-6 mt-2 col-md-6 d-flex justify-content-center">
+                                <button type="button" class="text-white btn btn-danger me-2  w-100"
+                                    data-bs-toggle="modal" data-bs-target="#cancelModal" href="">Cancel</button>
+
+                            </div>
                             {{/if}}
 
-                            <div class="col-xl-3 col-lg-6 mt-2 col-md-6 d-flex justify-content-center">
-                                <a class="text-white btn btn-danger me-2  w-100">Cancel</a>
-                            </div>
+
                         </div>
                         {{/if}}
                     </div>
@@ -239,6 +266,27 @@
     <i class="fas fa-angle-up"></i>
 </a>
 
+
+<!-- Logout Modal-->
+<div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cancel</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Are you sure you want to cancle the order?</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-danger text-white" onclick="cancelOrder('{{order._id}}')">Yes</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <style>
     .table-btn {
         width: 40px;
@@ -254,6 +302,18 @@
     function changeShipmentStatus(orderId, status) {
         $.ajax({
             url: '/admin/change-order-status/' + orderId + '/' + status,
+            method: 'get',
+            success: (response) => {
+                if (response.status) {
+                    window.location.reload();
+                }
+            }
+        })
+    }
+
+    function cancelOrder(orderId) {
+        $.ajax({
+            url: '/admin/cancel-order/' + orderId,
             method: 'get',
             success: (response) => {
                 if (response.status) {

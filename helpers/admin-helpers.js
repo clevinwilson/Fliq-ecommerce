@@ -263,6 +263,17 @@ module.exports = {
                 }).then((response) => { resolve() })
             }
         })
+    },
+    cancelOrder:(orderId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.ORDER_COLLECTION).updateOne({_id:ObjectId(orderId)},{
+                $set:{
+                    orderStatus:false
+                }
+            }).then((response)=>{
+                resolve();
+            })
+        })
     }
 
 }

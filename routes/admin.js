@@ -5,6 +5,7 @@ const baseUrl = require('../controller/url');
 const { uploadProduct, uploadCategoryImage, uploadBannerImage } = require('../controller/image-upload');
 const productHelpers = require('../helpers/product-helpers');
 const deleteImages = require('../controller/delete-file');
+const { response } = require('express');
 
 
 
@@ -340,5 +341,12 @@ router.get('/change-order-status/:orderId/:status',(req,res)=>{
     })
 })
 
+// cancel order
+
+router.get("/cancel-order/:orderId",(req,res)=>{
+    adminHelpers.cancelOrder(req.params.orderId).then((response)=>{
+        res.json({status:true})
+    })
+})
 
 module.exports = router;
