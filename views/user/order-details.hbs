@@ -5,44 +5,77 @@
 
     </div>
     <div class="container">
-        <div class="row  justify-content-center p-2">
+        <div class="row order-card m-2">
+            <div class="col-md-5">
+                <div class=" order-card-info mb-3 mb-md-0">
+                    <h5 class="mt-2 ">Delivery Address</h5>
+                    <hr style="color: #b5b5b5;">
+                    </hr>
+                    <div class="address-info-wrap">
+                        <h6 class="font-weight-bold">{{order.deliveryDetails.firstName}}
+                            {{order.deliveryDetails.lastName}}</h6>
+                        <p class="font-weight-normal">
+                            {{order.deliveryDetails.street}},{{order.deliveryDetails.AddressLine2}},
+                            {{order.deliveryDetails.Landmark}}-{{order.deliveryDetails.postalCode}},
+                            {{order.deliveryDetails.state}} </p>
 
+                        <h6 class="font-weight-bold">Phone number</h6>
+                        <p>{{order.deliveryDetails.phone}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class=" order-card-info">
+                    <h5 class="mt-2 ">More actions</h5>
+                    <hr style="color: #b5b5b5;">
+                    </hr>
+                    <div>
+                        <h5 class="text-success text-capitalize">Order {{order.orderStatus}}</h5>
+                        <p style="font-size: 14px;" class="mt-3">Payment Method: {{order.paymentMethod}}</p>
+                        <p class="mt-3">Expected by Fri, 31st Jul '23
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row  justify-content-center p-2">
             <div class="col-md-4">
-                <div class="order-card">
-                    <p class="mt-2 ">Order Tracking</p>
+                <div class="order-card  order-card-info mb-3">
+                    <h5 class="mt-2 ">Order Tracking</h5>
                     <hr style="color: #b5b5b5;">
                     </hr>
                     <div class="row">
-                        <div class="timeline p-4  mb-4">
-                            <div class="tl-item active">
-                                <div class="tl-dot b-warning"></div>
+                        <div class="timeline p-3 ps-5 ">
+                            <div class="tl-item ">
+                                <div class="tl-dot b-success"></div>
                                 <div class="tl-content">
                                     <div class="">Order Confirmed</div>
                                     <div class="tl-date text-muted mt-1">13 june 18</div>
                                 </div>
                             </div>
-                            <div class="tl-item">
-                                <div class="tl-dot b-primary"></div>
+                            <div class="tl-item active">
+                                <div class="tl-dot b-success"></div>
                                 <div class="tl-content">
                                     <div class="">Shipped</div>
                                     <div class="tl-date text-muted mt-1">45 minutes ago</div>
                                 </div>
                             </div>
                             <div class="tl-item">
-                                <div class="tl-dot b-danger"></div>
+                                <div class="tl-dot b-success"></div>
                                 <div class="tl-content">
                                     <div class="">Out for delivery</div>
                                     <div class="tl-date text-muted mt-1">1 day ago</div>
                                 </div>
                             </div>
                             <div class="tl-item">
-                                <div class="tl-dot b-danger"></div>
+                                <div class="tl-dot b-success"></div>
                                 <div class="tl-content">
                                     <div class="">Delivered</div>
                                     <div class="tl-date text-muted mt-1">1 Week ago</div>
                                 </div>
                             </div>
-                           
+
                         </div>
                     </div>
                 </div>
@@ -67,11 +100,11 @@
                                 </div>
                                 <div class=" col-8 col-md-5 align-items-center d-flex ">
                                     <div class="card-info-wrap ms-md-3">
-                                        <h6 class="mt-2 device-name text-capitalize">Order {{../order.orderStatus}}</h6>
-                                        <p style="font-size: 12px;" class="m-0">Orderd date: {{../order.date}}</p>
-                                        <h6 class="mt-2">₹ {{../order.totalAmount}}</h6>
+                                        <h6 class="mt-2 device-name text-capitalize">{{this.name}}</h6>
+                                        <p style="font-size: 12px;" class="m-0">{{this.brand}}</p>
+                                        <h6 class="mt-2">₹ {{this.price}}</h6>
                                         <p style="font-size: 11px;">(incl. all Taxes)</p>
-                                        <h6 style="font-size: 13px;" class="mt-2">Standard Delivery by Wed, 4th Jan</h6>
+                                        <h6 style="font-size: 13px;" class="mt-2">{{this.color}}</h6>
 
                                     </div>
                                 </div>
@@ -85,17 +118,17 @@
                     {{/each}}
                     <hr style="color: #b5b5b5;">
                     </hr>
-                    <div class="d-flex justify-content-center align-items-center order-footer">
-                        {{!-- <div class="order-cancel-wrap">
-                            <a href="">Click</a>
-                        </div> --}}
-                        <div class="order-more-wrap d-flex justify-content-center ">
-                            <a class="text-dark text-decoration-none" href="/order-details/{{this._id}}">View More</a>
+                    <div class="d-flex justify-content-between align-items-center order-footer mb-2">
+                        <div class="order-cancel-wrap ms-2">
+                            <a class="cancel-btn text-capitalize " href="">cancel order</a>
                         </div>
-
-                        {{!-- <div class="order-total-wrap">
-                            <p class="m-0">Total: ₹{{this.totalAmount}}</p>
+                        {{!-- <div class="order-more-wrap d-flex justify-content-center ">
+                            <a class="text-dark text-decoration-none" href="/order-details/{{this._id}}">View More</a>
                         </div> --}}
+
+                        <div class="order-total-wrap">
+                            <h6 class="me-2 mb-0">Total: ₹{{order.totalAmount}}</h6>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -106,209 +139,227 @@
 
 {{>user-footer}}
 
+<style>
+    .order-card-info>h5 {
+        font-size: 18px;
+    }
+
+    .address-info-wrap>p {
+        font-size: 14px;
+    }
+    .cancel-btn{
+            background-color: #f5f4f4;
+    padding: 7px 25px;
+    border-radius: 3px;
+    color: black;
+    text-decoration: none;
+    }
+</style>
+
 
 <style>
+    @media (min-width:992px) {
+        .page-container {
+            max-width: 1140px;
+            margin: 0 auto
+        }
 
-
-@media (min-width:992px) {
-    .page-container {
-        max-width: 1140px;
-        margin: 0 auto
+        .page-sidenav {
+            display: block !important
+        }
     }
 
-    .page-sidenav {
-        display: block !important
+    .padding {
+        padding: 2rem
     }
-}
 
-.padding {
-    padding: 2rem
-}
+    .w-32 {
+        width: 32px !important;
+        height: 32px !important;
+        font-size: .85em
+    }
 
-.w-32 {
-    width: 32px !important;
-    height: 32px !important;
-    font-size: .85em
-}
+    .tl-item .avatar {
+        z-index: 2
+    }
 
-.tl-item .avatar {
-    z-index: 2
-}
+    .circle {
+        border-radius: 500px
+    }
 
-.circle {
-    border-radius: 500px
-}
+    .gd-warning {
+        color: #fff;
+        border: none;
+        background: #f4c414 linear-gradient(45deg, #f4c414, #f45414)
+    }
 
-.gd-warning {
-    color: #fff;
-    border: none;
-    background: #f4c414 linear-gradient(45deg, #f4c414, #f45414)
-}
+    .timeline {
+        position: relative;
+        border-color: rgba(160, 175, 185, .15);
+        padding: 0;
+        margin: 0
+    }
 
-.timeline {
-    position: relative;
-    border-color: rgba(160, 175, 185, .15);
-    padding: 0;
-    margin: 0
-}
+    .p-4 {
+        padding: 1.5rem !important
+    }
 
-.p-4 {
-    padding: 1.5rem !important
-}
+    .block,
+    .card {
+        background: #fff;
+        border-width: 0;
+        border-radius: .25rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, .05);
+        margin-bottom: 1.5rem
+    }
 
-.block,
-.card {
-    background: #fff;
-    border-width: 0;
-    border-radius: .25rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, .05);
-    margin-bottom: 1.5rem
-}
+    .mb-4,
+    .my-4 {
+        margin-bottom: 1.5rem !important
+    }
 
-.mb-4,
-.my-4 {
-    margin-bottom: 1.5rem !important
-}
+    .tl-item {
+        border-radius: 3px;
+        position: relative;
+        display: -ms-flexbox;
+        display: flex
+    }
 
-.tl-item {
-    border-radius: 3px;
-    position: relative;
-    display: -ms-flexbox;
-    display: flex
-}
+    .tl-item>* {
+        padding: 10px
+    }
 
-.tl-item>* {
-    padding: 10px
-}
+    .tl-item .avatar {
+        z-index: 2
+    }
 
-.tl-item .avatar {
-    z-index: 2
-}
+    .tl-item:last-child .tl-dot:after {
+        display: none
+    }
 
-.tl-item:last-child .tl-dot:after {
-    display: none
-}
+    .tl-item.active .tl-dot:before {
+        border-color: #448bff;
+        box-shadow: 0 0 0 4px rgba(68, 139, 255, .2)
+    }
 
-.tl-item.active .tl-dot:before {
-    border-color: #448bff;
-    box-shadow: 0 0 0 4px rgba(68, 139, 255, .2)
-}
+    .tl-item:last-child .tl-dot:after {
+        display: none
+    }
 
-.tl-item:last-child .tl-dot:after {
-    display: none
-}
+    .tl-item.active .tl-dot:before {
+        border-color: #26a541;
+        box-shadow: 0 0 0 4px rgb(201 239 209)
+    }
 
-.tl-item.active .tl-dot:before {
-    border-color: #448bff;
-    box-shadow: 0 0 0 4px rgba(68, 139, 255, .2)
-}
+    .tl-dot {
+        position: relative;
+        border-color: rgba(160, 175, 185, .15)
+    }
 
-.tl-dot {
-    position: relative;
-    border-color: rgba(160, 175, 185, .15)
-}
+    .tl-dot:after,
+    .tl-dot:before {
+        content: '';
+        position: absolute;
+        border-color: inherit;
+        border-width: 2px;
+        border-style: solid;
+        border-radius: 50%;
+        width: 10px;
+        height: 10px;
+        top: 15px;
+        left: 50%;
+        transform: translateX(-50%)
+    }
 
-.tl-dot:after,
-.tl-dot:before {
-    content: '';
-    position: absolute;
-    border-color: inherit;
-    border-width: 2px;
-    border-style: solid;
-    border-radius: 50%;
-    width: 10px;
-    height: 10px;
-    top: 15px;
-    left: 50%;
-    transform: translateX(-50%)
-}
+    .tl-dot:after {
+        width: 0;
+        height: auto;
+        top: 25px;
+        bottom: -15px;
+        border-right-width: 0;
+        border-top-width: 0;
+        border-bottom-width: 0;
+        border-radius: 0
+    }
 
-.tl-dot:after {
-    width: 0;
-    height: auto;
-    top: 25px;
-    bottom: -15px;
-    border-right-width: 0;
-    border-top-width: 0;
-    border-bottom-width: 0;
-    border-radius: 0
-}
+    tl-item.active .tl-dot:before {
+        border-color: #26a541;
+        box-shadow: 0 0 0 4px rgba(68, 139, 255, .2)
+    }
 
-tl-item.active .tl-dot:before {
-    border-color: #448bff;
-    box-shadow: 0 0 0 4px rgba(68, 139, 255, .2)
-}
+    .tl-dot {
+        position: relative;
+        border-color: rgba(160, 175, 185, .15)
+    }
 
-.tl-dot {
-    position: relative;
-    border-color: rgba(160, 175, 185, .15)
-}
+    .tl-dot:after,
+    .tl-dot:before {
+        content: '';
+        position: absolute;
+        border-color: inherit;
+        border-width: 2px;
+        border-style: solid;
+        border-radius: 50%;
+        width: 10px;
+        height: 10px;
+        top: 15px;
+        left: 50%;
+        transform: translateX(-50%)
+    }
 
-.tl-dot:after,
-.tl-dot:before {
-    content: '';
-    position: absolute;
-    border-color: inherit;
-    border-width: 2px;
-    border-style: solid;
-    border-radius: 50%;
-    width: 10px;
-    height: 10px;
-    top: 15px;
-    left: 50%;
-    transform: translateX(-50%)
-}
+    .tl-dot:after {
+        width: 0;
+        height: auto;
+        top: 25px;
+        bottom: -15px;
+        border-right-width: 0;
+        border-top-width: 0;
+        border-bottom-width: 0;
+        border-radius: 0
+    }
 
-.tl-dot:after {
-    width: 0;
-    height: auto;
-    top: 25px;
-    bottom: -15px;
-    border-right-width: 0;
-    border-top-width: 0;
-    border-bottom-width: 0;
-    border-radius: 0
-}
+    .tl-content p:last-child {
+        margin-bottom: 0
+    }
 
-.tl-content p:last-child {
-    margin-bottom: 0
-}
+    .tl-date {
+        font-size: .85em;
+        margin-top: 2px;
+        min-width: 100px;
+        max-width: 100px
+    }
 
-.tl-date {
-    font-size: .85em;
-    margin-top: 2px;
-    min-width: 100px;
-    max-width: 100px
-}
+    .avatar {
+        position: relative;
+        line-height: 1;
+        border-radius: 500px;
+        white-space: nowrap;
+        font-weight: 700;
+        border-radius: 100%;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -ms-flex-negative: 0;
+        flex-shrink: 0;
+        border-radius: 500px;
+        box-shadow: 0 5px 10px 0 rgba(50, 50, 50, .15)
+    }
 
-.avatar {
-    position: relative;
-    line-height: 1;
-    border-radius: 500px;
-    white-space: nowrap;
-    font-weight: 700;
-    border-radius: 100%;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-pack: center;
-    justify-content: center;
-    -ms-flex-align: center;
-    align-items: center;
-    -ms-flex-negative: 0;
-    flex-shrink: 0;
-    border-radius: 500px;
-    box-shadow: 0 5px 10px 0 rgba(50, 50, 50, .15)
-}
+    .b-warning {
+        border-color: #f4c414 !important;
+    }
 
-.b-warning {
-    border-color: #f4c414!important;
-}
+    .b-primary {
+        border-color: #448bff !important;
+    }
 
-.b-primary {
-    border-color: #448bff!important;
-}
-
-.b-danger {
-    border-color: #f54394!important;
-}
+    .b-danger {
+        border-color: #f54394 !important;
+    }
+    .b-success{
+        border-color: #26a541 !important;
+    }
 </style>

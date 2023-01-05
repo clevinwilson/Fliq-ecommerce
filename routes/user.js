@@ -239,6 +239,7 @@ router.get('/orders', verifyLogin, (req, res) => {
 
 router.get('/order-details/:orderId',(req,res)=>{
   userHelpers.getOrderDetails(req.params.orderId).then((response)=>{
+    console.log(response);
       res.render('user/order-details',{order:response});
   }).catch(() =>{ res.redirect('/orders')})
 })
