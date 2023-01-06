@@ -3,6 +3,7 @@ const db = require('../config/connection');
 const bcrypt = require('bcrypt');
 const verify = require('../controller/otp_verification');
 const { ObjectId } = require('mongodb');
+const {razorpay}=require('../controller/razorpay');
 const { response } = require('express');
 
 
@@ -285,7 +286,7 @@ module.exports = {
     //         })
     //     })
     // }
-    placeOrder: (phone, userDetails, cartTotal) => {
+    placeOrder: (phone, paymentMethod, userDetails, cartTotal) => {
         return new Promise((resolve, reject) => {
             userDetails.address.phone = phone;
             var date = new Date();
@@ -295,8 +296,8 @@ module.exports = {
             orderObj = {
                 userId: ObjectId(userDetails._id),
                 deliveryDetails:userDetails.address,
-                paymentMethod: 'COD',
-                orderStatus: "placed",
+                paymentMethod: paymentMethod,
+                orderStatus: paymentMethod==='COD'?"placed":'pending',
                 products: userDetails.cart,
                 totalAmount: cartTotal,
                 date:current_date,
@@ -308,7 +309,7 @@ module.exports = {
                         cart: []
                     }
                 })
-                resolve({ status: true })
+                resolve({ status: true,response })
             })
         })
     },
@@ -386,6 +387,30 @@ module.exports = {
                 }
             ]).toArray();
             resolve(orderDetails[0])
+        })
+    },
+    generateRazorpay: (orderId, totalAmount)=>{
+        return new Promise((resolve,reject)=>{
+            razorpay(orderId, totalAmount).then((order)=>{
+                resolve(order);
+            })
+            .catch((err)=>{
+                reject();
+            })
+        })
+    },
+    changeOrderStatus:(orderId)=>{
+        return new Promise((resolve,reject)=>{
+            console.log(orderId,">>>>>>>>>>>>>>>>>>>");
+            db.get().collection(collection.ORDER_COLLECTION).updateOne({_id:ObjectId(orderId)},{
+                $set:{
+                    orderStatus:"placed"
+                }
+            }).then((response)=>{
+                resolve();
+            }).catch((err)=>{
+                reject(err)
+            })
         })
     }
 }

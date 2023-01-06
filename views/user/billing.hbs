@@ -29,9 +29,9 @@
                             <label class="mt-3 model-container text-center w-100 ">
                                 <input type="radio" class="radio-btn" id="device" name="paymentMethod" value="RAZORPAY"
                                     required>
-                                <div style="height: 88px;" class=" model-select product-model d-flex align-items-center justify-content-center">
-                                    <img style="height: 32px;" class="w-100"
-                                        src="/images/Razorpay_logo.svg" alt="">
+                                <div style="height: 88px;"
+                                    class=" model-select product-model d-flex align-items-center justify-content-center">
+                                    <img style="height: 32px;" class="w-100" src="/images/Razorpay_logo.svg" alt="">
                                 </div>
                             </label>
                         </div>
@@ -145,6 +145,8 @@
 
 
 
+
+
 <script>
     function showNewAddress() {
         $('#addNewAddress').modal('show');
@@ -159,12 +161,67 @@
             method: 'post',
             data: $('#billing-form').serialize(),
             success: ((response) => {
-                if (response.status && response.address) {
+                if (response.codSuccess === true) {
                     location.href = "/orders"
-                } else if (!response.address) {
-                    addNewAddressDiv.style.borderColor = 'red'
+                } else if (!response.status) {
+
+                } else {
+                    razorpayPayment(response)
                 }
             })
         })
     })
+
+
+    function razorpayPayment(order) {
+        var options = {
+            "key": "rzp_test_deE2E1795zFmxy", // Enter the Key ID generated from the Dashboard
+            "amount": "order.amount", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "currency": "INR",
+            "name": "Acme Corp",
+            "description": "Test Transaction",
+            "image": "https://example.com/your_logo",
+            "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "handler": function (response) {
+                
+                verifyPayment(response,order);
+            },
+            "prefill": {
+                "name": "Gaurav Kumar",
+                "email": "gaurav.kumar@example.com",
+                "contact": "9999999999"
+            },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+
+        };
+
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+
+    }
+    
+    function verifyPayment(payment,order){
+        $.ajax({
+            url: '/verify-payment',
+            data:{
+                payment,
+                order
+            },
+            method:'post',
+            success: ((response) => {
+                if (response.status === true) {
+                    location.href = "/orders"
+                } else if (!response.status) {
+
+                } else {
+                    razorpayPayment(response)
+                }
+            })
+        })
+    }
 </script>

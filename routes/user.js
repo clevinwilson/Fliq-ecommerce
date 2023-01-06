@@ -3,7 +3,7 @@ var router = express.Router();
 const userHelpers = require('../helpers/user-helpers');
 const adminHelpers = require('../helpers/admin-helpers');
 const productHelpers = require('../helpers/product-helpers');
-const { response } = require('express');
+const {razorpayVerify}=require('../controller/razorpay');
 
 const verifyLogin = (req, res, next) => {
   if (req.session.loggedIn) {
@@ -142,8 +142,9 @@ router.get('/account-suspended', (req, res) => {
 })
 
 //account page
-router.get('/account', (req, res) => {
-  res.render('user/account', { user: req.session.user });
+router.get('/account',verifyLogin, async (req, res) => {
+  const cartCount = await userHelpers.getCartCount(req.session.user._id);
+  res.render('user/account', { user: req.session.user, cartCount });
 })
 
 
@@ -226,8 +227,9 @@ router.post('/confirm-address',async(req,res)=>{
 
 router.get('/billing/:addressId',async(req,res)=>{
   let cartTotal = await userHelpers.getCartTotal(req.session.user._id);
+  const cartCount = await userHelpers.getCartCount(req.session.user._id);
 
-  res.render('user/billing',{cartTotal,addressId:req.params.addressId})
+  res.render('user/billing', { cartTotal, addressId: req.params.addressId, user: req.session.user, cartCount })
 })
 
 
@@ -236,29 +238,54 @@ router.post('/place-order', verifyLogin, async (req, res) => {
   let user = await userHelpers.getAddress(req.body.addressId, req.session.user._id);
   if (user){
     let cartTotal = await userHelpers.getCartTotal(req.session.user._id);
-    userHelpers.placeOrder(req.body.phone, user, cartTotal).then((response) => {
-      if (response.status) {
-        res.json({ status: true,address:true })
-      } else {
-        res.json({ status: false,address:true })
-      }
+    userHelpers.placeOrder(req.body.phone, req.body.paymentMethod, user, cartTotal).then((details) => {
+
+      userHelpers.generateRazorpay(details.response.insertedId,cartTotal).then((response)=>{
+        console.log(req.body.paymentMethod);
+        if (req.body.paymentMethod =="COD"){
+          res.json({codSuccess:true})
+        }else{
+          console.log(response);
+          res.json(response)
+        }
+      }).catch(()=>{
+        res.json({status:false})
+      })
+      // if (details.status) {
+      //   res.json({ status: true,address:true })
+      // } else {
+      //   res.json({ status: false,address:true })
+      // }
     })
   }else{
-    res.json({address:false})
+    res.json({status:false})
   }
 })
 
+router.post('/verify-payment',async(req,res)=>{
+  razorpayVerify(req.body).then((response)=>{ 
+      userHelpers.changeOrderStatus(req.body['order[receipt]']).then((response)=>{
+        res.json({status:true})
+      }).catch(()=>{
+        res.json({status:false})
+      })
+  }).catch(()=>{
+    res.json({status:false})
+  })
+})
+
 router.get('/orders', verifyLogin, (req, res) => {
-  userHelpers.getAllOrders(req.session.user._id).then((response) => {
-    console.log(response);
-    res.render('user/orders', { orders: response, user: req.session.user });
+  userHelpers.getAllOrders(req.session.user._id).then(async(response) => {
+    const cartCount = await userHelpers.getCartCount(req.session.user._id);
+    res.render('user/orders', { orders: response, user: req.session.user, cartCount });
   })
 })
 
 router.get('/order-details/:orderId',(req,res)=>{
-  userHelpers.getOrderDetails(req.params.orderId).then((response)=>{
-    console.log(response);
-      res.render('user/order-details',{order:response});
+  userHelpers.getOrderDetails(req.params.orderId).then(async(response)=>{
+    const cartCount = await userHelpers.getCartCount(req.session.user._id);
+
+    res.render('user/order-details', { order: response, user: req.session.user, cartCount });
   }).catch(() =>{ res.redirect('/orders')})
 })
 
