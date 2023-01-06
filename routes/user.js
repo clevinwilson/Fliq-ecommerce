@@ -219,15 +219,18 @@ router.post('/add-new-address', verifyLogin, (req, res) => {
 router.post('/place-order', verifyLogin, async (req, res) => {
   
   let user = await userHelpers.getAddress(req.body.addressId, req.session.user._id);
-  let cartTotal = await userHelpers.getCartTotal(req.session.user._id);
-
-  userHelpers.placeOrder(req.body.phone, user, cartTotal).then((response) => {
-    if (response.status) {
-      res.json({ status: true })
-    } else {
-      res.json({ status: false })
-    }
-  })
+  if(user != undefined){
+    let cartTotal = await userHelpers.getCartTotal(req.session.user._id);
+    userHelpers.placeOrder(req.body.phone, user, cartTotal).then((response) => {
+      if (response.status) {
+        res.json({ status: true,address:true })
+      } else {
+        res.json({ status: false,address:true })
+      }
+    })
+  }else{
+    res.json({address:false})
+  }
 })
 
 router.get('/orders', verifyLogin, (req, res) => {

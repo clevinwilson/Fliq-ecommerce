@@ -283,6 +283,7 @@ module.exports = {
     // }
     placeOrder: (phone, details, cartTotal) => {
         return new Promise((resolve, reject) => {
+            console.log(details);
             details.address.phone = phone;
             var date = new Date();
             var current_date = date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear() ;

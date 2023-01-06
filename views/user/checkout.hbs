@@ -9,17 +9,17 @@
     <div class="container ">
         <div class="row checkout">
             <div class="col-lg-8 col-md-12 p-md-2">
-                <form action="/add-new-address" method="post" id="checkout-form">
+                <form action="" method="post" id="checkout-form">
                     <h4 class="mt-2">Contact information</h4>
                     <div class="row">
                         <div class="col-md-10 mt-3">
                             <div class="card-box d-flex">
-                                <p style="font-size: 17px;" class="m-0 p-0">clevinmwilson@gmail.com</p>
+                                <p style="font-size: 17px;" class="m-0 p-0">{{user.email}}</p>
                             </div>
                             <div class="number ">
                                 <input style="border-radius: 10px; padding: 19px;" type="text"
                                     class="mt-3 form-input-padding form-control" id="number" name="phone"
-                                    value="{{user.number}}" value="+919400251580" placeholder="Mobile Number" required>
+                                    value="{{user.phone}}" value="+919400251580" placeholder="Mobile Number" required>
                             </div>
                         </div>
                     </div>
@@ -51,7 +51,7 @@
                         {{/each}}
 
                         <div onclick="showNewAddress()" class="col-md-10 mt-3">
-                            <div class="add-address-wrap ">
+                            <div class="add-address-wrap " id="add-new-address">
                                 <i class="fa-solid fa-plus"></i>
                             </div>
                         </div>
@@ -172,6 +172,7 @@
 </script>
 
 <script>
+    let addNewAddressDiv=document.getElementById('add-new-address')
     $('#checkout-form').submit((e) => {
         e.preventDefault();
         $.ajax({
@@ -179,8 +180,10 @@
             method: 'post',
             data: $('#checkout-form').serialize(),
             success: ((response) => {
-                if (response.status) {
+                if (response.status && response.address) {
                     location.href="/orders"
+                }else if(!response.address){
+                    addNewAddressDiv.style.borderColor='red'
                 }
             })
         })
