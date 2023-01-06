@@ -8,66 +8,46 @@
 <section>
     <div class="container ">
         <div class="row checkout">
-            <div class="col-lg-8 col-md-12 p-md-2">
-                <form action="" method="post" id="checkout-form">
-                    <h4 class="mt-2">Contact information</h4>
-                    <div class="row">
-                        <div class="col-md-10 mt-3">
-                            <div class="card-box d-flex">
-                                <p style="font-size: 17px;" class="m-0 p-0">{{user.email}}</p>
-                            </div>
-                            <div class="number ">
-                                <input style="border-radius: 10px; padding: 19px;" type="text"
-                                    class="mt-3 form-input-padding form-control" id="number" name="phone"
-                                    value="{{user.phone}}" value="+919400251580" placeholder="Mobile Number" required>
-                            </div>
-                        </div>
-                    </div>
-                    <h4 class="mt-5">Select an address:</h4>
-                    <div class="row">
-                        {{#each userDetails.address}}
-                        <div class="col-md-10 mt-3">
-                            <label class="mt-3 model-container text-center w-100 ">
-                                <input type="radio" class="radio-btn" id="device" name="addressId" value="{{this.id}}"
-                                    required>
-                                <div style=" padding: 20px;" class="p-4 model-select product-model">
-                                    <div class="address-info d-flex ">
-                                        <div class="left-section d-flex flex-column align-items-start">
-                                            <span style="font-size: 17px; font-weight: 500;"
-                                                class="model-title">{{this.firstName}} {{this.lastName}}</span>
-                                            <span class="screen-size mt-1 ">{{this.street}}</span>
-                                        </div>
-                                        <div class="right-section justify-content-end">
-                                            {{#if this.default}}
-                                            <span class="device-price-right">Default</span>
-                                            {{/if}}
-                                        </div>
-                                    </div>
+            <div class="col-lg-6 col-md-12 p-md-2 mt-3">
+                <form action="" method="post" id="billing-form" class="p-4">
+                    <h1 class="mt-4">How do you want to pay?</h1>
 
+                    <h4 class="mt-5">Select a payment method.</h4>
+                    <div class="row">
+                        <div class="col-md-5 mt-3">
+                            <label class="mt-3 model-container text-center w-100 ">
+                                <input type="radio" class="radio-btn" id="device" name="paymentMethod" value="COD"
+                                    required>
+                                <div style="height: 88px;"
+                                    class="model-select product-model d-flex align-items-center justify-content-center">
+                                    <h4 class="model-title m-0">COD</h4>
                                 </div>
                             </label>
-
                         </div>
-                        {{/each}}
 
-                        <div onclick="showNewAddress()" class="col-md-10 mt-3">
-                            <div class="add-address-wrap " id="add-new-address">
-                                <i class="fa-solid fa-plus"></i>
-                            </div>
+                        <div class="col-md-5 mt-3">
+                            <label class="mt-3 model-container text-center w-100 ">
+                                <input type="radio" class="radio-btn" id="device" name="paymentMethod" value="RAZORPAY"
+                                    required>
+                                <div style="height: 88px;" class=" model-select product-model d-flex align-items-center justify-content-center">
+                                    <img style="height: 32px;" class="w-100"
+                                        src="/images/Razorpay_logo.svg" alt="">
+                                </div>
+                            </label>
                         </div>
                     </div>
-
+                    <input type="text" class="d-none" name="addressId" value="{{addressId}}">
                     <div class="row">
                         <div class="col-md-10 mt-4">
                             <div class="mt-2 bottem-checkout-btn-container ">
                                 <button class="text-white col-md-6  btn btn-primary  checkout-btn mt-4 "
-                                    type="submit">Continue to Payment</button>
+                                    type="submit">Place Order</button>
                             </div>
                         </div>
                     </div>
                 </form>
             </div>
-            <div class="col-lg-4 col-md-12 p-3 order-right-section">
+            {{!-- <div class="col-lg-4 col-md-12 p-3 order-right-section mt-5">
                 <div class="delivery-address-box mt-2">
                     <p>Delivery options for 670142</p>
                     <span><span class="me-2"><i class="bi bi-archive"></i></span> Standard Delivery by Wed, 4th
@@ -90,7 +70,7 @@
                     </div>
 
                 </div>
-            </div>
+            </div> --}}
         </div>
 
     </div>
@@ -172,18 +152,17 @@
 </script>
 
 <script>
-    let addNewAddressDiv=document.getElementById('add-new-address')
-    $('#checkout-form').submit((e) => {
+    $('#billing-form').submit((e) => {
         e.preventDefault();
         $.ajax({
-            url: '/confirm-address',
+            url: '/place-order',
             method: 'post',
-            data: $('#checkout-form').serialize(),
+            data: $('#billing-form').serialize(),
             success: ((response) => {
-                if (response.status && response.addressId) {
-                    location.href=`/billing/${response.addressId}`
-                }else if(!response.address){
-                    addNewAddressDiv.style.borderColor='red'
+                if (response.status && response.address) {
+                    location.href = "/orders"
+                } else if (!response.address) {
+                    addNewAddressDiv.style.borderColor = 'red'
                 }
             })
         })

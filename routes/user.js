@@ -214,12 +214,27 @@ router.post('/add-new-address', verifyLogin, (req, res) => {
   })
 })
 
+//billing
+router.post('/confirm-address',async(req,res)=>{
+  let user = await userHelpers.getAddress(req.body.addressId, req.session.user._id);
+  if (user.address) {
+    res.json({ status: true,addressId:req.body.addressId })
+  } else {
+    res.json({ address: false })
+  }
+})
+
+router.get('/billing/:addressId',async(req,res)=>{
+  let cartTotal = await userHelpers.getCartTotal(req.session.user._id);
+
+  res.render('user/billing',{cartTotal,addressId:req.params.addressId})
+})
+
 
 //order
 router.post('/place-order', verifyLogin, async (req, res) => {
-  
   let user = await userHelpers.getAddress(req.body.addressId, req.session.user._id);
-  if(user != undefined){
+  if (user){
     let cartTotal = await userHelpers.getCartTotal(req.session.user._id);
     userHelpers.placeOrder(req.body.phone, user, cartTotal).then((response) => {
       if (response.status) {

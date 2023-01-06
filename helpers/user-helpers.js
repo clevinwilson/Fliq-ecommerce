@@ -256,7 +256,11 @@ module.exports = {
                     $match: { 'address.id': addressId }
                 }
             ]).toArray();
-            resolve(user[0])
+            if(user[0]){
+                resolve(user[0])
+            }else{
+                resolve(false)
+            }
         })
     },
     // placeOrder: (phone, details, cartTotal) => {
@@ -281,26 +285,25 @@ module.exports = {
     //         })
     //     })
     // }
-    placeOrder: (phone, details, cartTotal) => {
+    placeOrder: (phone, userDetails, cartTotal) => {
         return new Promise((resolve, reject) => {
-            console.log(details);
-            details.address.phone = phone;
+            userDetails.address.phone = phone;
             var date = new Date();
             var current_date = date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear() ;
             var current_time = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
            
             orderObj = {
-                userId:ObjectId(details._id),
-                deliveryDetails: details.address,
+                userId: ObjectId(userDetails._id),
+                deliveryDetails:userDetails.address,
                 paymentMethod: 'COD',
                 orderStatus: "placed",
-                products: details.cart,
+                products: userDetails.cart,
                 totalAmount: cartTotal,
                 date:current_date,
                 shipmentStatus: {ordrePlaced:{ id: Date.now() + '-' + Math.round(Math.random() * 1E9), status: true,lastUpdate:{date:current_date,time:current_time,placeUpdates:[]} }}
             }
             db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response) => {
-                db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(details._id) }, {
+                db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userDetails._id) }, {
                     $set: {
                         cart: []
                     }
