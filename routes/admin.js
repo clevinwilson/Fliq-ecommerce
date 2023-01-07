@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const adminControllers = require('../controllers/adminControllers');
+const bannerControllers = require('../controllers/bannerController');
 const baseUrl = require('../helpers/url');
 const { uploadProduct, uploadCategoryImage, uploadBannerImage } = require('../middleware/image-upload');
 const productControllers = require('../controllers/productControllers');
@@ -186,46 +187,43 @@ router.get('/add-banner', verifyLogin, (req, res) => {
 
 router.post('/add-banner', verifyLogin, uploadBannerImage, (req, res) => {
     req.body.image = req.files.image[0];
-    adminControllers.addBanner(req.body)
+    bannerControllers.addBanner(req.body)
     res.redirect('/admin/view-banner')
 })
 
 router.get('/view-banner', verifyLogin, async (req, res) => {
-    let bannerList = await adminControllers.getBanner();
+    let bannerList = await bannerControllers.getBanner();
     res.render('admin/view-banner', { bannerList, admin: req.session.adminLogin })
 })
 
 router.get('/delete-banner/:bannerId', verifyLogin, async (req, res) => {
-    let banner = await adminControllers.getBannerDetails(req.params.bannerId)
-
+    let banner = await bannerControllers.getBannerDetails(req.params.bannerId)
     deleteImages(banner.image.path)
-
-    adminControllers.deleteBanner(req.params.bannerId).then((response) => {
+    bannerControllers.deleteBanner(req.params.bannerId).then((response) => {
         res.redirect('/admin/view-banner');
     })
 })
 
 router.get('/edit-banner/:bannerId', verifyLogin, (req, res) => {
-    adminControllers.getBannerDetails(req.params.bannerId).then((bannerDetails) => {
+    bannerControllers.getBannerDetails(req.params.bannerId).then((bannerDetails) => {
         res.render('admin/edit-banner', { bannerDetails, admin: req.session.adminLogin });
 
     })
 })
 
-router.post('/edit-banner', verifyLogin, uploadBannerImage, async (req, res) => {
-    let category = await adminControllers.getBannerDetails(req.body.bannerId)
-    console.log(req.files.image);
 
+router.post('/edit-banner', verifyLogin, uploadBannerImage, async (req, res) => {
+    let category = await bannerControllers.getBannerDetails(req.body.bannerId)
     if (req.files.image) {
-        console.log("haa");
         req.body.image = req.files.image[0];
         deleteImages(category.image.path)
     } else {
         {
-            req.body = category.image
+            req.body.image = category.image
         }
     }
-    adminControllers.editBanner(req.body).then((response) => {
+
+    bannerControllers.editBanner(req.body).then((response) => {
         res.redirect('/admin/view-banner');
     })
 })

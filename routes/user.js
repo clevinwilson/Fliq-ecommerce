@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const userControllers = require('../controllers/userControllers');
 const adminControllers = require('../controllers/adminControllers');
+const bannerControllers =require('../controllers/bannerController');
 const productControllers = require('../controllers/productControllers');
 const { razorpayVerify } = require('../helpers/razorpay');
 const verifyLogin = require('../middleware/userAuth');
@@ -10,7 +11,7 @@ const verifyLogin = require('../middleware/userAuth');
 router.get('/', async function (req, res) {
   let cartCount = false;
   let categoryList = await userControllers.getCategory();
-  let banner = await adminControllers.getBanner();
+  let banner = await bannerControllers.getBanner();
   if (req.session.user) {
     cartCount = await userControllers.getCartCount(req.session.user._id)
   }

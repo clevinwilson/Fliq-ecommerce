@@ -163,50 +163,6 @@ module.exports = {
                 })
         })
     },
-    addBanner: (data) => {
-        return new Promise((resolve, reject) => {
-            db.get().collection(collection.BANNER_COLLECTION).insertOne(data).then((response) => {
-                resolve(response)
-            })
-        })
-    },
-    getBanner: () => {
-        return new Promise((resolve, reject) => {
-            db.get().collection(collection.BANNER_COLLECTION).find().toArray().then((bannerList) => {
-                resolve(bannerList)
-            })
-        })
-    },
-    deleteBanner: (bannerId) => {
-        return new Promise((resolve, reject) => {
-            db.get().collection(collection.BANNER_COLLECTION).deleteOne({ _id: ObjectId(bannerId) }).then((response) => {
-                resolve(response)
-            })
-        })
-    },
-    getBannerDetails: (bannerId) => {
-        return new Promise((resolve, reject) => {
-            db.get().collection(collection.BANNER_COLLECTION).findOne({ _id: ObjectId(bannerId) }).then((response) => {
-                resolve(response)
-            })
-        })
-    },
-    editBanner: (data) => {
-        return new Promise((resolve, reject) => {
-            db.get().collection(collection.BANNER_COLLECTION).updateOne({ _id: ObjectId(data.bannerId) },
-                {
-                    $set: {
-                        title: data.title,
-                        subtitle: data.subtitle,
-                        text: data.text,
-                        color: data.color,
-                        image: data.image,
-                    }
-                }).then((response) => {
-                    resolve(response)
-                })
-        })
-    },
     getAllOrder: () => {
         return new Promise((resolve, reject) => {
             db.get().collection(collection.ORDER_COLLECTION).find().toArray().then((response) => {
