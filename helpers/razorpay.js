@@ -1,12 +1,13 @@
 const Razorpay = require('razorpay');
 const crypto = require("crypto");
-
+keyId = process.env.KEY_ID;
+keySecret = process.env.KEY_SECRET;
 
 
 
 const instance = new Razorpay({
-    key_id: "rzp_test_deE2E1795zFmxy",
-    key_secret: "zDZ8GFjzaxyncyKYdabslzOE",
+    key_id: keyId,
+    key_secret: keySecret,
 });
 
 function razorpay(orderId, totalAmount) {
@@ -29,7 +30,7 @@ function razorpay(orderId, totalAmount) {
 
 function razorpayVerify(details){
     return new Promise((resolve,reject)=>{
-        const hmac = crypto.createHmac('sha256', 'zDZ8GFjzaxyncyKYdabslzOE');
+        const hmac = crypto.createHmac('sha256', keySecret);
         hmac.update(details['payment[razorpay_order_id]'] + "|" + details['payment[razorpay_payment_id]']);
         generated_signature=hmac.digest('hex');
 

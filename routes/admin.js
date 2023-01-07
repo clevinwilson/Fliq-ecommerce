@@ -5,16 +5,7 @@ const baseUrl = require('../helpers/url');
 const { uploadProduct, uploadCategoryImage, uploadBannerImage } = require('../middleware/image-upload');
 const productControllers = require('../controllers/productControllers');
 const deleteImages = require('../helpers/delete-file');
-
-
-
-const verifyLogin = (req, res, next) => {
-    if (req.session.adminLogin) {
-        next();
-    } else {
-        res.redirect('/admin');
-    }
-}
+const verifyLogin = require('../middleware/adminAuth');
 
 
 //login page

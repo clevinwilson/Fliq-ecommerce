@@ -4,14 +4,7 @@ const userControllers = require('../controllers/userControllers');
 const adminControllers = require('../controllers/adminControllers');
 const productControllers = require('../controllers/productControllers');
 const { razorpayVerify } = require('../helpers/razorpay');
-
-const verifyLogin = (req, res, next) => {
-  if (req.session.loggedIn) {
-    next()
-  } else {
-    res.redirect('/')
-  }
-}
+const verifyLogin = require('../middleware/userAuth');
 
 /* GET users listing. */
 router.get('/', async function (req, res) {
