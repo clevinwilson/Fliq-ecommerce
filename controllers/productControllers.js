@@ -1,7 +1,6 @@
 const db=require('../config/connection');
 const collection=require('../config/collection');
 const { ObjectId } = require("mongodb");
-const { response } = require('express');
 
 
 module.exports={

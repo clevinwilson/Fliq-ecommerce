@@ -1,10 +1,9 @@
 const collection = require('../config/collection');
 const db = require('../config/connection');
 const bcrypt = require('bcrypt');
-const verify = require('./otp_verification');
+const verify = require('../helpers/otp_verification');
 const { ObjectId } = require('mongodb');
-const { razorpay } = require('./razorpay');
-const { response } = require('express');
+const { razorpay } = require('../helpers/razorpay');
 
 
 
@@ -401,7 +400,6 @@ module.exports = {
     },
     changeOrderStatus: (orderId) => {
         return new Promise((resolve, reject) => {
-            console.log(orderId, ">>>>>>>>>>>>>>>>>>>");
             db.get().collection(collection.ORDER_COLLECTION).updateOne({ _id: ObjectId(orderId) }, {
                 $set: {
                     orderStatus: "placed"
