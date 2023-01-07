@@ -174,7 +174,7 @@ router.get('/cart', verifyLogin, async (req, res) => {
 })
 
 router.post('/change-product-quantity', verifyLogin, (req, res) => {
-  userControllers.updateProductCount(req.body, req.session.user._id).then(async (response) => {
+  userControllers.updateCartProductCount(req.body, req.session.user._id).then(async (response) => {
     let cartTotal = await userControllers.getCartTotal(req.session.user._id);
 
     if (response) {
@@ -189,7 +189,7 @@ router.post('/change-product-quantity', verifyLogin, (req, res) => {
 
 
 router.get('/remove-product/:productId', verifyLogin, (req, res) => {
-  userControllers.deleteProduct(req.params.productId, req.session.user._id).then((response) => {
+  userControllers.deleteCartProduct(req.params.productId, req.session.user._id).then((response) => {
     res.redirect('/cart')
   })
 })

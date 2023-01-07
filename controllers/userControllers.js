@@ -148,7 +148,7 @@ module.exports = {
             resolve(cart)
         })
     },
-    updateProductCount: (data, userId) => {
+    updateCartProductCount: (data, userId) => {
         return new Promise((resolve, reject) => {
             console.log(data);
             if (data.count == -1 && data.quantity == 1) {
@@ -169,7 +169,7 @@ module.exports = {
             }
         })
     },
-    deleteProduct: (productId, userId) => {
+    deleteCartProduct: (productId, userId) => {
         return new Promise((resolve, reject) => {
             db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) }, {
                 $pull: { cart: { product: ObjectId(productId) } }
