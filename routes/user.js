@@ -4,13 +4,14 @@ const userControllers = require('../controllers/userControllers');
 const adminControllers = require('../controllers/adminControllers');
 const bannerControllers =require('../controllers/bannerController');
 const productControllers = require('../controllers/productControllers');
+const categoryControllers =require('../controllers/categoryController');
 const { razorpayVerify } = require('../helpers/razorpay');
 const verifyLogin = require('../middleware/userAuth');
 
 /* GET users listing. */
 router.get('/', async function (req, res) {
   let cartCount = false;
-  let categoryList = await userControllers.getCategory();
+  let categoryList = await categoryControllers.getCategory();
   let banner = await bannerControllers.getBanner();
   if (req.session.user) {
     cartCount = await userControllers.getCartCount(req.session.user._id)

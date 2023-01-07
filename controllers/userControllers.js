@@ -80,13 +80,7 @@ module.exports = {
             }
         })
     },
-    getCategory: () => {
-        return new Promise((resolve, reject) => {
-            db.get().collection(collection.CATEGORY_COLLECTION).find({ status: true }).toArray().then((response) => {
-                resolve(response)
-            })
-        })
-    },
+   
     addToCart: (productId, userId) => {
         const productObject = {
             product: ObjectId(productId),

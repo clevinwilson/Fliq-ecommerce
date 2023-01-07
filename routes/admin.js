@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const adminControllers = require('../controllers/adminControllers');
 const bannerControllers = require('../controllers/bannerController');
+const categoryControllers = require('../controllers/categoryController');
 const baseUrl = require('../helpers/url');
 const { uploadProduct, uploadCategoryImage, uploadBannerImage } = require('../middleware/image-upload');
 const productControllers = require('../controllers/productControllers');
@@ -114,7 +115,7 @@ router.get('/add-category', verifyLogin, (req, res) => {
 
 router.post('/add-category', verifyLogin, uploadCategoryImage, (req, res) => {
     req.body.image = req.files.image[0];
-    adminControllers.addCategory(req.body).then((response) => {
+    categoryControllers.addCategory(req.body).then((response) => {
         if (response.insertedId) {
             res.redirect('/admin/view-category')
         } else {
@@ -124,33 +125,33 @@ router.post('/add-category', verifyLogin, uploadCategoryImage, (req, res) => {
 })
 
 router.get('/view-category', verifyLogin, (req, res) => {
-    adminControllers.getCategoryList().then((response) => {
+    categoryControllers.getCategoryList().then((response) => {
         res.render('admin/view-category', { categoryList: response, admin: req.session.adminLogin, categoryUpdate: req.session.categoryUpdate })
         req.session.categoryUpdate = false;
     })
 })
 
 router.get('/edit-category/:categoryId', verifyLogin, (req, res) => {
-    adminControllers.getCategoryDetails(req.params.categoryId).then((categoryDetails) => {
+    categoryControllers.getCategoryDetails(req.params.categoryId).then((categoryDetails) => {
         res.render('admin/edit-category', { categoryDetails, admin: req.session.adminLogin });
     })
 })
 
 router.post('/edit-category', verifyLogin, uploadCategoryImage, async (req, res) => {
     if (req.files != null) {
-        let category = await adminControllers.getCategoryDetails(req.body.categoryId);
+        let category = await categoryControllers.getCategoryDetails(req.body.categoryId);
         if (req.files.image) {
             req.body.image = req.files.image[0];
             deleteImages(category.image.path);
         } else {
             req.body.image = category.image
         }
-        adminControllers.editCategoryWithImage(req.body).then((response) => {
+        categoryControllers.editCategoryWithImage(req.body).then((response) => {
             req.session.categoryUpdate = "Cateogry updated"
             res.redirect('/admin/view-category');
         })
     } else {
-        adminControllers.editCategory(req.body).then((response) => {
+        categoryControllers.editCategory(req.body).then((response) => {
             req.session.categoryUpdate = "Cateogry updated"
             res.redirect('/admin/view-category');
         })
@@ -159,9 +160,9 @@ router.post('/edit-category', verifyLogin, uploadCategoryImage, async (req, res)
 })
 
 router.get('/delete-category/:categoryId', verifyLogin, async (req, res) => {
-    let category = await adminControllers.getCategoryDetails(req.params.categoryId);
+    let category = await categoryControllers.getCategoryDetails(req.params.categoryId);
 
-    adminControllers.deleteCategory(req.params.categoryId).then((response) => {
+    categoryControllers.deleteCategory(req.params.categoryId).then((response) => {
         res.redirect('/admin/view-category');
         deleteImages(category.image.path);
 
@@ -169,13 +170,13 @@ router.get('/delete-category/:categoryId', verifyLogin, async (req, res) => {
 })
 
 router.get('/block-category/:categoryId', verifyLogin, (req, res) => {
-    adminControllers.changeStatus(req.params.categoryId, false).then((response) => {
+    categoryControllers.changeStatus(req.params.categoryId, false).then((response) => {
         res.redirect('/admin/view-category')
     })
 })
 
 router.get('/unblock-category/:categoryId', verifyLogin, (req, res) => {
-    adminControllers.changeStatus(req.params.categoryId, true).then((response) => {
+    categoryControllers.changeStatus(req.params.categoryId, true).then((response) => {
         res.redirect('/admin/view-category')
     })
 })
