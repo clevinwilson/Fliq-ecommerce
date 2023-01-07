@@ -80,7 +80,7 @@ module.exports = {
             }
         })
     },
-   
+
     addToCart: (productId, userId) => {
         const productObject = {
             product: ObjectId(productId),
@@ -279,8 +279,8 @@ module.exports = {
     //         })
     //     })
     // }
-   
-    
+
+
     // getOrderDetails:(userId)=>{
     //     return new Promise(async (resolve, reject) => {
     //         let orders = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
@@ -319,16 +319,15 @@ module.exports = {
     //         resolve(orders)
     //     })
     // }
-    
+
     generateRazorpay: (orderId, totalAmount) => {
         return new Promise((resolve, reject) => {
             razorpay(orderId, totalAmount).then((order) => {
                 resolve(order);
+            }).catch((err) => {
+                reject();
             })
-                .catch((err) => {
-                    reject();
-                })
         })
     },
-   
+
 }

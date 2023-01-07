@@ -9,7 +9,7 @@ const orderControllers = require('../controllers/orderController');
 const { razorpayVerify } = require('../helpers/razorpay');
 const verifyLogin = require('../middleware/userAuth');
 
-/* GET users listing. */
+
 router.get('/', async function (req, res) {
   let cartCount = false;
   let categoryList = await categoryControllers.getCategory();
@@ -22,7 +22,7 @@ router.get('/', async function (req, res) {
 });
 
 
-//user signup using phone
+//user signup using phone no
 router.get('/signup-phone', (req, res) => {
   if (req.session.loggedIn) {
     res.redirect('/')
@@ -76,7 +76,6 @@ router.post('/otp-verification', (req, res) => {
 
 
 //signup
-
 router.get('/signup', (req, res) => {
   if (req.session.loggedIn) {
     res.redirect('/')
@@ -144,6 +143,8 @@ router.get('/account', verifyLogin, async (req, res) => {
 })
 
 
+//product
+
 //product details page
 router.get('/product-details/:productId', async (req, res) => {
   let cartCount = false;
@@ -157,7 +158,6 @@ router.get('/product-details/:productId', async (req, res) => {
 
 
 //cart
-
 router.get('/add-to-cat/:productId', verifyLogin, (req, res) => {
   userControllers.addToCart(req.params.productId, req.session.user._id).then(async (response) => {
     let cartCount = await userControllers.getCartCount(req.session.user._id)
@@ -193,6 +193,7 @@ router.get('/remove-product/:productId', verifyLogin, (req, res) => {
     res.redirect('/cart')
   })
 })
+
 
 //checkout page
 router.get('/checkout', verifyLogin, async (req, res) => {
@@ -252,18 +253,6 @@ router.post('/place-order', verifyLogin, async (req, res) => {
   }
 })
 
-router.post('/verify-payment', async (req, res) => {
-  razorpayVerify(req.body).then((response) => {
-    orderControllers.changeOrderStatus(req.body['order[receipt]']).then((response) => {
-      res.json({ status: true })
-    }).catch(() => {
-      res.json({ status: false })
-    })
-  }).catch(() => {
-    res.json({ status: false })
-  })
-})
-
 router.get('/orders', verifyLogin, (req, res) => {
   orderControllers.getMyOrders(req.session.user._id).then(async (response) => {
     const cartCount = await userControllers.getCartCount(req.session.user._id);
@@ -292,6 +281,22 @@ router.get('/order-success', (req, res) => {
 })
 
 
+
+//payment
+router.post('/verify-payment', async (req, res) => {
+  razorpayVerify(req.body).then((response) => {
+    orderControllers.changeOrderStatus(req.body['order[receipt]']).then((response) => {
+      res.json({ status: true })
+    }).catch(() => {
+      res.json({ status: false })
+    })
+  }).catch(() => {
+    res.json({ status: false })
+  })
+})
+
+
+
 //category listing 
 router.get('/product-listing/:categoryId', (req, res) => {
   let cartCount = 0
@@ -302,11 +307,6 @@ router.get('/product-listing/:categoryId', (req, res) => {
     res.render('user/product-listing', { products: response, user: req.session.user, cartCount })
   })
 })
-
-
-
-
-
 
 
 module.exports = router;
