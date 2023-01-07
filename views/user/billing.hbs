@@ -162,7 +162,7 @@
             data: $('#billing-form').serialize(),
             success: ((response) => {
                 if (response.codSuccess === true) {
-                    location.href = "/orders"
+                    location.href = "/order-success"
                 } else if (!response.status) {
 
                 } else {
@@ -215,7 +215,7 @@
             method:'post',
             success: ((response) => {
                 if (response.status === true) {
-                    location.href = "/orders"
+                    location.href = "/order-success"
                 } else if (!response.status) {
 
                 } else {

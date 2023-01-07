@@ -308,5 +308,12 @@ router.get("/cancel-order/:orderId", (req, res) => {
 })
 
 
+//order success
+router.get('/order-success',(req,res)=>{
+  
+  res.render('user/order-success');
+})
+
+
 
 module.exports = router;
