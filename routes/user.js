@@ -2,9 +2,10 @@ var express = require('express');
 var router = express.Router();
 const userControllers = require('../controllers/userControllers');
 const adminControllers = require('../controllers/adminControllers');
-const bannerControllers =require('../controllers/bannerController');
+const bannerControllers = require('../controllers/bannerController');
 const productControllers = require('../controllers/productControllers');
-const categoryControllers =require('../controllers/categoryController');
+const categoryControllers = require('../controllers/categoryController');
+const orderControllers = require('../controllers/orderController');
 const { razorpayVerify } = require('../helpers/razorpay');
 const verifyLogin = require('../middleware/userAuth');
 
@@ -233,8 +234,7 @@ router.post('/place-order', verifyLogin, async (req, res) => {
   let user = await userControllers.getAddress(req.body.addressId, req.session.user._id);
   if (user) {
     let cartTotal = await userControllers.getCartTotal(req.session.user._id);
-    userControllers.placeOrder(req.body.phone, req.body.paymentMethod, user, cartTotal).then((details) => {
-
+    orderControllers.placeOrder(req.body.phone, req.body.paymentMethod, user, cartTotal).then((details) => {
       userControllers.generateRazorpay(details.response.insertedId, cartTotal).then((response) => {
         console.log(req.body.paymentMethod);
         if (req.body.paymentMethod == "COD") {
@@ -246,11 +246,6 @@ router.post('/place-order', verifyLogin, async (req, res) => {
       }).catch(() => {
         res.json({ status: false })
       })
-      // if (details.status) {
-      //   res.json({ status: true,address:true })
-      // } else {
-      //   res.json({ status: false,address:true })
-      // }
     })
   } else {
     res.json({ status: false })
@@ -259,7 +254,7 @@ router.post('/place-order', verifyLogin, async (req, res) => {
 
 router.post('/verify-payment', async (req, res) => {
   razorpayVerify(req.body).then((response) => {
-    userControllers.changeOrderStatus(req.body['order[receipt]']).then((response) => {
+    orderControllers.changeOrderStatus(req.body['order[receipt]']).then((response) => {
       res.json({ status: true })
     }).catch(() => {
       res.json({ status: false })
@@ -270,19 +265,32 @@ router.post('/verify-payment', async (req, res) => {
 })
 
 router.get('/orders', verifyLogin, (req, res) => {
-  userControllers.getAllOrders(req.session.user._id).then(async (response) => {
+  orderControllers.getMyOrders(req.session.user._id).then(async (response) => {
     const cartCount = await userControllers.getCartCount(req.session.user._id);
     res.render('user/orders', { orders: response, user: req.session.user, cartCount });
   })
 })
 
 router.get('/order-details/:orderId', (req, res) => {
-  userControllers.getOrderDetails(req.params.orderId).then(async (response) => {
+  orderControllers.getOrderDetails(req.params.orderId).then(async (response) => {
     const cartCount = await userControllers.getCartCount(req.session.user._id);
 
     res.render('user/order-details', { order: response, user: req.session.user, cartCount });
   }).catch(() => { res.redirect('/orders') })
 })
+
+// cancel order
+router.get("/cancel-order/:orderId", (req, res) => {
+  orderControllers.cancelOrder(req.params.orderId).then((response) => {
+    res.json({ status: true })
+  })
+})
+
+//order success
+router.get('/order-success', (req, res) => {
+  res.render('user/order-success');
+})
+
 
 //category listing 
 router.get('/product-listing/:categoryId', (req, res) => {
@@ -295,19 +303,9 @@ router.get('/product-listing/:categoryId', (req, res) => {
   })
 })
 
-// cancel order
-router.get("/cancel-order/:orderId", (req, res) => {
-  adminControllers.cancelOrder(req.params.orderId).then((response) => {
-    res.json({ status: true })
-  })
-})
 
 
-//order success
-router.get('/order-success', (req, res) => {
 
-  res.render('user/order-success');
-})
 
 
 

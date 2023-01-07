@@ -76,25 +76,6 @@ module.exports={
             })
         })
     },
-    getOrderDetails:(orderId)=>{
-        return new Promise(async(resolve,reject)=>{
-            let orders = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
-                {
-                    $match: { _id: ObjectId(orderId) }
-                },
-                {
-                    $lookup:
-                    {
-                        from: collection.PRODUCT_COLLECTION,
-                        localField: 'products.product',
-                        foreignField: '_id',
-                        as: 'products'
-                    }
-                }
-            ]).toArray();
-             resolve(orders[0]);
-        })
-    },
     getAllProducts:(categoryId)=>{
         return new Promise((resolve,reject)=>{
             db.get().collection(collection.PRODUCT_COLLECTION).find({ categoryId: ObjectId(categoryId) }).toArray().then((response)=>{

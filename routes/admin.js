@@ -3,6 +3,7 @@ const router = express.Router();
 const adminControllers = require('../controllers/adminControllers');
 const bannerControllers = require('../controllers/bannerController');
 const categoryControllers = require('../controllers/categoryController');
+const orderControllers = require('../controllers/orderController');
 const baseUrl = require('../helpers/url');
 const { uploadProduct, uploadCategoryImage, uploadBannerImage } = require('../middleware/image-upload');
 const productControllers = require('../controllers/productControllers');
@@ -181,6 +182,9 @@ router.get('/unblock-category/:categoryId', verifyLogin, (req, res) => {
     })
 })
 
+
+
+
 //banner
 router.get('/add-banner', verifyLogin, (req, res) => {
     res.render('admin/add-banner', { admin: req.session.adminLogin })
@@ -230,10 +234,12 @@ router.post('/edit-banner', verifyLogin, uploadBannerImage, async (req, res) => 
 })
 
 
+
+
 // product section
 
 router.get('/add-product', verifyLogin, async (req, res) => {
-    let categoryList = await adminControllers.getCategoryList();
+    let categoryList = await categoryControllers.getCategoryList();
 
     res.render('admin/add-product', { admin: req.session.adminLogin, categoryList })
 })
@@ -263,7 +269,7 @@ router.get('/delete-product/:productId', verifyLogin, async (req, res) => {
 
 router.get('/edit-product/:productId', async (req, res) => {
     let productDetails = await productControllers.getProductDetails(req.params.productId);
-    let categoryList = await adminControllers.getCategoryList();
+    let categoryList = await categoryControllers.getCategoryList();
 
     res.render('admin/edit-product', { categoryList, productDetails, admin: req.session.adminLogin });
 })
@@ -309,15 +315,16 @@ router.post('/edit-product', uploadProduct, async (req, res) => {
     })
 })
 
+
+//order
 router.get('/view-orders', (req, res) => {
-    adminControllers.getAllOrder().then((response) => {
+    orderControllers.getAllOrder().then((response) => {
         res.render('admin/view-orders', { orders: response, admin: req.session.adminLogin });
     })
 })
 
 router.get('/order-details/:orderId', (req, res) => {
-    productControllers.getOrderDetails(req.params.orderId).then((response) => {
-        console.log(response);
+    orderControllers.getOrderDetails(req.params.orderId).then((response) => {
         res.render('admin/order-details', { order: response, admin: true })
     })
 })
@@ -325,7 +332,7 @@ router.get('/order-details/:orderId', (req, res) => {
 // change order status
 
 router.get('/change-order-status/:orderId/:status', (req, res) => {
-    adminControllers.changeOrderstatus(req.params.orderId, req.params.status).then((response) => {
+    orderControllers.changeOrderstatus(req.params.orderId, req.params.status).then((response) => {
         res.json({ status: true })
     })
 })
@@ -333,7 +340,7 @@ router.get('/change-order-status/:orderId/:status', (req, res) => {
 // cancel order
 
 router.get("/cancel-order/:orderId", (req, res) => {
-    adminControllers.cancelOrder(req.params.orderId).then((response) => {
+    orderControllers.cancelOrder(req.params.orderId).then((response) => {
         res.json({ status: true })
     })
 })

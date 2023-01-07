@@ -95,72 +95,8 @@ module.exports = {
    
     
     
-    getAllOrder: () => {
-        return new Promise((resolve, reject) => {
-            db.get().collection(collection.ORDER_COLLECTION).find().toArray().then((response) => {
-                resolve(response);
-            })
-        })
-    },
-    changeOrderstatus: (orderId, status) => {
-        var date = new Date();
-        var current_date = date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
-        var current_time = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-        const obj = {
-            id: Date.now() + '-' + Math.round(Math.random() * 1E9),
-            status: true,
-            lastUpdate: { date: current_date, time: current_time, placeUpdates: [] }
-        }
-        return new Promise((resolve, reject) => {
-            if (status == 0) {
-                db.get().collection(collection.ORDER_COLLECTION).updateOne({ _id: ObjectId(orderId) }, {
-                    $set: {
-                        'shipmentStatus.ordrePlaced':obj,
-                        'shipmentStatus.shipped.status': false,
-                        'shipmentStatus.outForDelivery.status': false,
-                        'shipmentStatus.delivered.status': false,
-                    }
-                }).then((response) => { resolve() })
-            } else if(status ==1){
-                db.get().collection(collection.ORDER_COLLECTION).updateOne({ _id: ObjectId(orderId) }, {
-                    $set: {
-                        'shipmentStatus.ordrePlaced.status':true,
-                        'shipmentStatus.shipped': obj,
-                        'shipmentStatus.outForDelivery.status': false,
-                        'shipmentStatus.delivered.status': false,
-                    }
-                }).then((response)=>{resolve()})
-            }else if(status ==2){
-                db.get().collection(collection.ORDER_COLLECTION).updateOne({ _id: ObjectId(orderId) }, {
-                    $set: {
-                        'shipmentStatus.ordrePlaced.status': true,
-                        'shipmentStatus.shipped.status': true,
-                        'shipmentStatus.outForDelivery': obj,
-                        'shipmentStatus.delivered.status':false
-                    }
-                }).then((response) => { resolve() })
-            } else if (status == 3) {
-                db.get().collection(collection.ORDER_COLLECTION).updateOne({ _id: ObjectId(orderId) }, {
-                    $set: {
-                        'shipmentStatus.ordrePlaced.status': true,
-                        'shipmentStatus.shipped.status': true,
-                        'shipmentStatus.outForDelivery.status': true,
-                        'shipmentStatus.delivered': obj
-                    }
-                }).then((response) => { resolve() })
-            }
-        })
-    },
-    cancelOrder:(orderId)=>{
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collection.ORDER_COLLECTION).updateOne({_id:ObjectId(orderId)},{
-                $set:{
-                    orderStatus:false
-                }
-            }).then((response)=>{
-                resolve();
-            })
-        })
-    }
+    
+   
+
 
 }
