@@ -99,7 +99,7 @@ module.exports={
     //admin
     getAllOrder: () => {
         return new Promise((resolve, reject) => {
-            db.get().collection(collection.ORDER_COLLECTION).find().toArray().then((response) => {
+            db.get().collection(collection.ORDER_COLLECTION).find().sort({ date: -1 }).toArray().then((response) => {
                 resolve(response);
             })
         })
