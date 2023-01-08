@@ -57,6 +57,9 @@ module.exports={
                         foreignField: '_id',
                         as: 'products'
                     }
+                },
+                {
+                    $sort:{date:-1}
                 }
             ]).toArray();
             resolve(orders);
