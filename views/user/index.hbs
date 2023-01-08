@@ -65,7 +65,7 @@
             </div>
             <div class="category-right d-flex align-items-center justify-content-around">
                 {{#each categoryList}}
-                <a href="/product-listing/{{this._id}}">
+                <a href="/product-listing/{{this._id}}?page=1&limit=10">
                     <div class="category d-flex justify-content-center p-2">
                         <img class="category-icon-image" src="/images/category-images/{{this.image.filename}}" alt="">
                     </div>

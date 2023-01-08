@@ -8,7 +8,7 @@ const categoryControllers = require('../controllers/categoryController');
 const orderControllers = require('../controllers/orderController');
 const { razorpayVerify } = require('../helpers/razorpay');
 const verifyLogin = require('../middleware/userAuth');
-
+const paginatedResults = require('../middleware/paginatedResults');
 
 router.get('/', async function (req, res) {
   let cartCount = false;
@@ -298,15 +298,17 @@ router.post('/verify-payment', async (req, res) => {
 
 
 //category listing 
-router.get('/product-listing/:categoryId', (req, res) => {
+router.get('/product-listing/:categoryId', paginatedResults(), async (req, res) => {
+  console.log(res.paginatedResults,"<<<<<<<<<");
   let cartCount = 0
-  productControllers.getAllProducts(req.params.categoryId).then(async (response) => {
-    if (req.session.user) {
-      cartCount = await userControllers.getCartCount(req.session.user._id);
-    }
-    res.render('user/product-listing', { products: response, user: req.session.user, cartCount })
-  })
+
+  if (req.session.user) {
+    cartCount = await userControllers.getCartCount(req.session.user._id);
+  }
+  res.render('user/product-listing', { results: res.paginatedResults, user: req.session.user, cartCount });
 })
+
+
 
 
 module.exports = router;

@@ -37,7 +37,8 @@
                             <div class="toolbox">
                                 <div class="toolbox-left">
                                     <div class="toolbox-info">
-                                        Showing <span>9 of 56</span> Products
+                                        Showing <span>{{results.limit}} of {{results.categoryCount}}</span>
+                                        Products
                                     </div><!-- End .toolbox-info -->
                                 </div><!-- End .toolbox-left -->
 
@@ -58,7 +59,7 @@
 
                             <div class="products mb-3">
 
-                                {{#each products}}
+                                {{#each results.products}}
                                 <div class="product product-list">
                                     <div class="row">
                                         <div class="col-4 col-lg-3">
@@ -180,24 +181,38 @@
 
                             <nav aria-label="Page navigation">
                                 <ul class="pagination">
-                                    <li class="page-item disabled">
-                                        <a class="page-link page-link-prev" href="#" aria-label="Previous" tabindex="-1"
-                                            aria-disabled="true">
+                                    {{#if results.previous}}
+                                    <li class="page-item">
+                                        <a class="page-link page-link-prev"
+                                            href="/product-listing/{{results.categoryId}}?page={{results.previous.page}}&limit={{results.previous.limit}}"
+                                            aria-label="Previous" tabindex="-1" aria-disabled="true">
                                             <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
                                         </a>
                                     </li>
-                                    <li class="page-item active" aria-current="page"><a class="page-link" href="#">1</a>
+                                    <li class="page-item"><a class="page-link"
+                                            href="/product-listing/{{results.categoryId}}?page={{results.previous.page}}&limit={{results.previous.limit}}">{{results.previous.page}}</a>
                                     </li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item-total">of 6</li>
+                                    {{/if}}
+                                    <li class="page-item active" aria-current="page"><a class="page-link"
+                                            href="#">{{results.current}}</a>
+                                    </li>
+
+                                    {{#if results.next}}
+                                    <li class="page-item"><a class="page-link"
+                                            href="/product-listing/{{results.categoryId}}?page={{results.next.page}}&limit={{results.next.limit}}">{{results.next.page}}</a>
+                                    </li>
                                     <li class="page-item">
-                                        <a class="page-link page-link-next" href="#" aria-label="Next">
+                                        <a class="page-link page-link-next"
+                                            href="/product-listing/{{results.categoryId}}?page={{results.next.page}}&limit={{results.next.limit}}"
+                                            aria-label="Next">
                                             Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
                                         </a>
                                     </li>
+                                    {{/if}}
                                 </ul>
                             </nav>
+
+
                         </div><!-- End .col-lg-9 -->
                         <aside class="col-lg-3 order-lg-first" style="border-right: 1px solid #ebebeb;">
                             <div class="sidebar sidebar-shop">
@@ -502,10 +517,11 @@
         letter-spacing: -.01em;
         margin-left: 0.8rem;
     }
-     .product.product-list .product-body .btn-wishlist {
-            top: 0.1rem;
-            font-size: 22px;
-        }
+
+    .product.product-list .product-body .btn-wishlist {
+        top: 0.1rem;
+        font-size: 22px;
+    }
 
     @media screen and (max-width:768px) {
         .product-title {
@@ -516,7 +532,8 @@
             top: 0.1rem;
             font-size: 19px;
         }
-        .price{
+
+        .price {
             font-size: 17px;
         }
     }

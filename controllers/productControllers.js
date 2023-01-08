@@ -76,13 +76,6 @@ module.exports={
             })
         })
     },
-    getAllProducts:(categoryId)=>{
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collection.PRODUCT_COLLECTION).find({ categoryId: ObjectId(categoryId) }).toArray().then((response)=>{
-                resolve(response)
-            })
-        })
-    },
     fetchProductImage:(productId,imageNo)=>{
         return new Promise((resolve,reject)=>{
             db.get().collection(collection.PRODUCT_COLLECTION).findOne({_id:ObjectId(productId)}).then((response)=>{
