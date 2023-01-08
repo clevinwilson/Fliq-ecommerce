@@ -99,10 +99,6 @@
 <script>
     const searchCardTemplate = document.querySelector("[data-search-template]");
     const searchCardContainer = document.querySelector("[search-card-container]");
-    const card = searchCardTemplate.content.cloneNode(true).children[0];
-    const name = card.querySelector('[data-name]');
-    const category = card.querySelector('[data-category]');
-    const image = card.querySelector('[data-image]');
 
 
     function search() {
@@ -111,9 +107,14 @@
             url: "/search/" + key,
             method: 'get',
             success: ((response) => {
-                console.log(response)
+                searchCardContainer.textContent=""
                 response.searchResult.forEach((product) => {
-                    console.log(product)
+
+                    const card = searchCardTemplate.content.cloneNode(true).children[0];
+                    const name = card.querySelector('[data-name]');
+                    const category = card.querySelector('[data-category]');
+                    const image = card.querySelector('[data-image]');
+                    
                     name.href = `/product-details/${product._id}`
                     name.textContent = product.name;
                     image.src = `/images/product-images/${product.images[0].filename}`
