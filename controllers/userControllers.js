@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const verify = require('../helpers/otp_verification');
 const { ObjectId } = require('mongodb');
 const { razorpay } = require('../helpers/razorpay');
+const { response } = require('express');
 
 
 
@@ -329,5 +330,21 @@ module.exports = {
             })
         })
     },
+    getSearchResult:(key)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.PRODUCT_COLLECTION).find(
+                {
+                    $or:[
+                        { name: { $regex: key,$options: 'i' }},
+                        { type: { $regex: key, $options: 'i' }},
+                        { brand: { $regex: key, $options: 'i' }},
+                        { color: { $regex: key, $options: 'i' }},
+                    ]
+                }
+            ).limit(16).toArray().then((response)=>{
+                resolve(response);
+            })
+        })
+    }
 
 }

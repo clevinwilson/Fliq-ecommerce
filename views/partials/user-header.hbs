@@ -1,20 +1,26 @@
 <header>
     <nav class="user-header ">
-        <div class="left-section">
+        <div class="left-section ps-2">
             <div id="menu-icon-wrap" class="menu-icon-wrap p-2 " onclick="openNav()">
                 <i id="close-btn" style="width: 14px; padding-left:1px" class="fa-solid fa-x  ms-1 me-1 "></i>
                 <i id="open-btn" class="fa-solid fa-bars  ms-1 me-1 "></i>
                 <span class="me-2 ms-3 d-none d-md-block d-lg-block">Menu</span>
             </div>
-            <div class="search-wrap p-2">
-                <i class="fa-solid fa-magnifying-glass "></i>
+            <div onclick="openSearch()" class="search-wrap p-2">
+                <i class="fa-solid fa-magnifying-glass ms-md-1"></i>
                 <span class="ms-5 me-2 d-none d-md-block d-lg-block">Search</span>
             </div>
+            {{!-- <div class="d-flex  ms-2">
+                <div class="input-group-append"><button class="btn btn-primary search-btn border-rounded p"><i
+                            class="fas fa-search"></i></button></div>
+                <input type="text" placeholder="Search" class="form-control search-box d-none d-md-block d-lg-block">
+            </div> --}}
         </div>
+
         <div class="middle-section">
-           <a href="/">
-            <img style="width: 90px;" src="/images/logo.png" alt="">
-           </a>
+            <a href="/">
+                <img style="width: 90px;" src="/images/logo.png" alt="">
+            </a>
         </div>
         <div class="right-section">
 
@@ -32,7 +38,7 @@
                 <span class="text-decoration-none text-dark d-flex"><i
                         class="bi bi-person text-dark d-lg-block user-login-text"></i><span class="ms-2 mt-1"
                         style="font-size: 13px;">{{user.fname}}</span></span>
-                
+
             </button>
             <div class=" user-header-dorpdown-menu">
                 <a class="dropdown-item" href="/account">Account</a>
@@ -58,10 +64,199 @@
         <a href="#">Contact</a>
     </div>
 
+    {{!-- search --}}
 
+    <div class="container d-flex justify-content-center">
+        <div style="display: none;" id="search-box" class="card p-2 p-md-0 pb-0">
+            <div class="input-group search-input-group mb-3 mt-md-1">
+                <div class="input-group-append">
+                    <button class="btn btn-primary search-btn border-rounded p"><i class="fas fa-search"></i></button>
+                </div>
+                <input type="text" placeholder="Search" onkeyup="search()" id="search" class="form-control search-box">
+                <div onclick="closeSearch()"
+                    class="search-close-btn-wrap d-flex justify-content-start align-items-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </div>
+            </div>
+            <div search-card-container>
+                <template data-search-template>
+                    <div class="d-flex flex-row p-1  mx-3">
+                        <div class="img d-flex justify-content-center align-items-center">
+                            <img style="width: 25px;" class="" src="" alt="" data-image>
+                        </div>
+                        <div class="d-flex flex-column ms-3">
+                            <a class="m-0 text-dark text-decoration-none" href="" data-name></a>
+                            <p style="font-size: 12px; color: #0088d9;" class="m-0" data-category>in Phone</p>
+                        </div>
+                    </div>
+                </template>
+            </div>
 
-
-
-
-
+        </div>
+    </div>
 </header>
+
+<script>
+    const searchCardTemplate = document.querySelector("[data-search-template]");
+    const searchCardContainer = document.querySelector("[search-card-container]");
+    const card = searchCardTemplate.content.cloneNode(true).children[0];
+    const name = card.querySelector('[data-name]');
+    const category = card.querySelector('[data-category]');
+    const image = card.querySelector('[data-image]');
+
+
+    function search() {
+        let key = document.getElementById('search').value;
+        $.ajax({
+            url: "/search/" + key,
+            method: 'get',
+            success: ((response) => {
+                console.log(response)
+                response.searchResult.forEach((product) => {
+                    console.log(product)
+                    name.href = `/product-details/${product._id}`
+                    name.textContent = product.name;
+                    image.src = `/images/product-images/${product.images[0].filename}`
+                    category.textContent = 'in ' + product.type;
+                    searchCardContainer.append(card);
+
+                })
+
+            })
+        })
+    }
+
+    function openSearch() {
+        document.getElementById('search-box').style.display = "flex"
+    }
+
+    function closeSearch() {
+        document.getElementById('search-box').style.display = 'none';
+        name.textContent = " ";
+    }
+</script>
+
+
+
+
+
+<style>
+    /* .search-wrap */
+    @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@500&display=swap');
+
+
+    .card {
+        position: fixed;
+        z-index: 999;
+        top: 8px;
+        left: 15%;
+        width: 28%;
+        border: none;
+        border-radius: 20px;
+    }
+
+    .form-control {
+        border-radius: 7px;
+        border: 1.5px solid #E3E6ED;
+    }
+
+    input.form-control:focus {
+        box-shadow: none;
+        border: none;
+        background-color: #e7e9eb;
+    }
+
+    .search-btn {
+        background-color: #e7e9eb !important;
+        border-color: #e7e9eb;
+        color: black;
+        border-radius: 20px 1px 0px 22px;
+    }
+
+    .search-box {
+        background-color: #e7e9eb;
+        border: none;
+    }
+
+    .search-close-btn-wrap {
+        font-size: 21px;
+        background: #e7e9eb;
+        border-radius: 1px 20px 20px 1px;
+        padding: 8px;
+    }
+
+    .input-group-append>input {
+        border-radius: 1px 20px 22px 0px;
+    }
+
+    @media screen and (max-width:768px) {
+
+        .card {
+            position: fixed;
+            z-index: 999;
+            top: 8px;
+            left: auto;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 20px;
+            justify-content: flex-start !important;
+        }
+    }
+
+    @media screen and (min-width:1368px) {
+
+        .card {
+            position: fixed;
+            z-index: 999;
+            top: 8px;
+            left: 15%;
+            width: 28%;
+            border: none;
+            border-radius: 20px;
+        }
+    }
+
+    .text {
+        font-size: 13px;
+        color: #9CA1A4;
+    }
+
+    .price {
+        background: #F5F8FD;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        width: 97px;
+    }
+
+    .flex-row {
+        border-bottom: 2px solid #eeeeee;
+    }
+
+    .flex-column p {
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    span.mb-2 {
+        font-size: 12px;
+        color: #8896BD;
+    }
+
+    h5 span {
+        color: #869099;
+    }
+
+    @media screen and (max-width: 450px) {
+        .card {
+            display: flex;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .price {
+            border: none;
+            margin: 0 auto;
+        }
+    }
+</style>

@@ -70,7 +70,7 @@
                                         <label>Color:</label>
 
                                         <div class="product-nav product-nav-thumbs">
-                                           <p>{{product.color}}</p>
+                                            <p>{{product.color}}</p>
                                         </div><!-- End .product-nav -->
                                     </div><!-- End .details-filter-row -->
 
@@ -93,7 +93,8 @@
 
                                     <div class="product-details-action">
                                         <a href="#" class="btn-buynow me-3"><span class="text-white">Buy Now</span></a>
-                                        <a onclick="addToCart('{{product._id}}')" class="btn-product btn-cart"><span>add to cart</span></a>
+                                        <a onclick="addToCart('{{product._id}}')" class="btn-product btn-cart"><span>add
+                                                to cart</span></a>
 
                                         <div class="details-action-wrapper mt-0  d-none d-md-block  ">
                                             <a style="font-size: 24px;" href="#"
@@ -519,8 +520,7 @@
                 <div class="col-6">
                     <figure class="product-media">
                         <a style="background-color: white;" href="">
-                            <img src="/images/product-images/{{product.images.[0].filename}}"
-                                alt="Product image">
+                            <img src="/images/product-images/{{product.images.[0].filename}}" alt="Product image">
                         </a>
                     </figure><!-- End .product-media -->
                     <h4 class="product-title"><a href="">{{product.name}} ({{product.color}})</a></h4>
@@ -531,10 +531,11 @@
                     <div class="product-price text-dark">
                         <i class="fa-solid fa-indian-rupee-sign me-2"></i> {{product.price}}
                     </div><!-- End .product-price -->
-                 
+
 
                     <div class="product-details-action">
-                        <a onclick="addToCart('{{product._id}}')" class="btn-product btn-cart"><span>add to cart</span></a>
+                        <a onclick="addToCart('{{product._id}}')" class="btn-product btn-cart"><span>add to
+                                cart</span></a>
                         <a style="font-size: 24px;" href="#" class="wishlist btn-product btn-wishlist text-dark"
                             title="Wishlist"></a>
 
@@ -548,7 +549,7 @@
     <!-- Mobile Menu -->
     <div class="mobile-menu-overlay"></div><!-- End .mobil-menu-overlay -->
 
- 
+
 
 
 
@@ -586,17 +587,109 @@
 </body>
 
 
-    <script>
-        function addToCart(productId) {
-            $.ajax({
-                url: '/add-to-cat/' + productId,
-                method: 'get',
-                success: (response) => {
-                    if (response.status) {
-                        let count = $('#cartCount').html()
-                        $('#cartCount').html(response.cartCount)
-                    }
+<script>
+    function addToCart(productId) {
+        $.ajax({
+            url: '/add-to-cat/' + productId,
+            method: 'get',
+            success: (response) => {
+                if (response.status) {
+                    let count = $('#cartCount').html()
+                    $('#cartCount').html(response.cartCount)
                 }
-            })
+            }
+        })
+    }
+</script>
+
+
+<style>
+    .card {
+        position: fixed !important;
+        z-index: 999 !important;
+        top: 8px !important;
+        left: 15% !important;
+        width: 28% !important;
+        border: none !important;
+        border-radius: 20px !important;
+        margin-top: -8px;
+    }
+
+    .search-input-group{
+            margin-bottom: 0px !important;
+    }
+
+
+
+    .search-btn {
+        background-color: #e7e9eb !important;
+        border-color: #e7e9eb !important;
+        color: black !important;
+        border-radius: 20px 1px 0px 22px !important;
+        min-width: none !important;
+        min-width: 11px;
+        height: 40px;
+        width: 21px;
+    }
+
+    .search-box {
+        background-color: #e7e9eb !important;
+        border: none !important;
+        margin-bottom: 0px;
+    }
+
+    .search-close-btn-wrap {
+        font-size: 21px !important;
+        background: #e7e9eb !important;
+        border-radius: 1px 20px 20px 1px !important;
+        padding: 8px !important;
+        height: 40px;
+    }
+
+    .input-group-append>input {
+        border-radius: 1px 20px 22px 0px !important;
+    }
+
+    @media screen and (max-width:768px) {
+
+        .card {
+            position: fixed !important;
+            z-index: 999 !important;
+            top: 8px !important;
+            left: auto !important;
+            width: 100% !important;
+            height: 100% !important;
+            border: none !important;
+            border-radius: 20px !important;
+            justify-content: flex-start !important;
         }
-    </script>
+    }
+
+    @media screen and (min-width:1368px) {
+
+        .card {
+            position: fixed !important;
+            z-index: 999 !important;
+            top: 8px !important;
+            left: 15% !important;
+            width: 28% !important;
+            border: none !important;
+            border-radius: 20px !important;
+        }
+    }
+
+
+
+    @media screen and (max-width: 450px) {
+        .card {
+            display: flex;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .price {
+            border: none;
+            margin: 0 auto;
+        }
+    }
+</style>

@@ -161,6 +161,7 @@
             method: 'post',
             data: $('#billing-form').serialize(),
             success: ((response) => {
+                console.log(response)
                 if (response.codSuccess === true) {
                     location.href = "/order-success"
                 } else if (!response.status) {
@@ -176,26 +177,26 @@
     function razorpayPayment(order) {
         var options = {
             "key": "rzp_test_deE2E1795zFmxy", // Enter the Key ID generated from the Dashboard
-            "amount": "order.amount", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "amount":order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
             "currency": "INR",
-            "name": "Acme Corp",
+            "name": "Fliq",
             "description": "Test Transaction",
-            "image": "https://example.com/your_logo",
+            "image": "http://localhost:3000/images/logo.png",
             "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
             "handler": function (response) {
                 
                 verifyPayment(response,order);
             },
             "prefill": {
-                "name": "Gaurav Kumar",
-                "email": "gaurav.kumar@example.com",
-                "contact": "9999999999"
+                "name": `${order.user.fname}`,
+                "email": order.user.email,
+                "contact": order.user.phone
             },
             "notes": {
                 "address": "Razorpay Corporate Office"
             },
             "theme": {
-                "color": "#3399cc"
+                "color": "white"
             }
 
         };

@@ -16,7 +16,7 @@ module.exports={
     },
     getProducts:()=>{
         return new Promise(async(resolve,reject)=>{
-           let products=await db.get().collection(collection.PRODUCT_COLLECTION).find().toArray();
+            let products = await db.get().collection(collection.PRODUCT_COLLECTION).find().limit(12).toArray();
            resolve(products)
         })
     },

@@ -13,7 +13,7 @@ const instance = new Razorpay({
 function razorpay(orderId, totalAmount) {
     return new Promise((resolve, reject) => {
         const options = {
-            amount: totalAmount,  // amount in the smallest currency unit
+            amount: totalAmount*100,  // amount in the smallest currency unit
             currency: "INR",
             receipt: "" + orderId
         };

@@ -241,7 +241,7 @@ router.post('/place-order', verifyLogin, async (req, res) => {
         if (req.body.paymentMethod == "COD") {
           res.json({ codSuccess: true })
         } else {
-          console.log(response);
+          response.user=req.session.user;
           res.json(response)
         }
       }).catch(() => {
@@ -299,13 +299,20 @@ router.post('/verify-payment', async (req, res) => {
 
 //category listing 
 router.get('/product-listing/:categoryId', paginatedResults(), async (req, res) => {
-  console.log(res.paginatedResults,"<<<<<<<<<");
   let cartCount = 0
 
   if (req.session.user) {
     cartCount = await userControllers.getCartCount(req.session.user._id);
   }
   res.render('user/product-listing', { results: res.paginatedResults, user: req.session.user, cartCount });
+})
+
+//search
+
+router.get('/search/:key',async(req,res)=>{
+  console.log("search");
+  let searchResult=await userControllers.getSearchResult(req.params.key);
+  res.json({searchResult})
 })
 
 
