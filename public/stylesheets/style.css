@@ -973,3 +973,40 @@ span {
   }
 }
 
+
+/* //wish list */
+
+.wishlist-action-wrapper {
+  right: 14px;
+  top: 14px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  box-shadow: 1px 1px 11px 1px #cccccc;
+  padding: 9px;
+  border-radius: 50%;
+}
+
+.wishlist-action-wrapper>a {
+  font-family: "molla";
+}
+
+.wishlist-action-wrapper>a:before {
+  font-family: "molla";
+  margin-right: 0px;
+}
+
+.product-image-box {
+  width: 350px !important;
+  height: 350px !important;
+  object-fit: contain;
+}
+
+@media screen and (max-width:768px) {
+  .product-image-box {
+    width: 250px !important;
+    height: 250px !important;
+    object-fit: contain;
+  }
+}
