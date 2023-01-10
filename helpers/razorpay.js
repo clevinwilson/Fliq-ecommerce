@@ -19,6 +19,7 @@ function razorpay(orderId, totalAmount) {
         };
         instance.orders.create(options, function (err, order) {
             if (err) {
+                console.log(err);
                 reject(false);
             } else {
                 resolve(order);

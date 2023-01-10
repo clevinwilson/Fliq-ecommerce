@@ -235,34 +235,45 @@ router.post('/place-order', verifyLogin, async (req, res) => {
   try {
     let user = await userControllers.getAddress(req.body.addressId, req.session.user._id);
     if (user) {
-      if (user.activeOrder) {
-        const activeOrder = await orderControllers.getActiveOrder(user.activeOrder);
-        let cartTotal = await userControllers.getCartTotal(req.session.user._id);
-        if (!activeOrder) {
-          let details = await orderControllers.placeOrder(req.body.phone, req.body.paymentMethod, user, cartTotal);
-          userControllers.generateRazorpay(details.response.insertedId, cartTotal).then((response) => {
-            if (req.body.paymentMethod == "COD") {
+      const activeOrder = await orderControllers.getActiveOrder(user.activeOrder);
+      let cartTotal = await userControllers.getCartTotal(req.session.user._id);
+      if (!activeOrder) {
+        if (req.body.paymentMethod == "COD") {
+          orderControllers.placeOrder(req.body.phone, req.body.paymentMethod, user, cartTotal).then((details) => {
+            orderControllers.changeOrderStatus(details.response.insertedId, req.session.user._id).then((response) => {
               res.json({ codSuccess: true })
-            } else {
-              response.user = req.session.user;
-              res.json(response)
-            }
-          }).catch(() => {
-            res.json({ status: false })
+            })
           })
         } else {
-          userControllers.generateRazorpay(user.activeOrder, cartTotal).then((response) => {
-            if (req.body.paymentMethod == "COD") {
-              res.json({ codSuccess: true })
-            } else {
-              response.user = req.session.user;
-              res.json(response)
-            }
+          let details = await orderControllers.placeOrder(req.body.phone, req.body.paymentMethod, user, cartTotal);
+          userControllers.generateRazorpay(details.response.insertedId, cartTotal).then((response) => {
+
+            response.user = req.session.user;
+            res.json(response)
           }).catch(() => {
             res.json({ status: false })
           })
         }
       }
+
+
+      else {
+        if (req.body.paymentMethod == "COD") {
+          orderControllers.changeOrderStatus(user.activeOrder, req.session.user._id).then((response) => {
+            res.json({ codSuccess: true })
+          })
+        } else {
+          userControllers.generateRazorpay(user.activeOrder, cartTotal).then((response) => {
+            console.log("haaa");
+            response.user = req.session.user;
+            res.json(response)
+          }).catch(() => {
+            console.log("yesss");
+            res.json({ status: false })
+          })
+        }
+      }
+
     } else {
       res.json({ status: false })
     }
@@ -304,7 +315,7 @@ router.get('/order-success', (req, res) => {
 //payment
 router.post('/verify-payment', async (req, res) => {
   razorpayVerify(req.body).then((response) => {
-    orderControllers.changeOrderStatus(req.body['order[receipt]'],req.session.user._id).then((response) => {
+    orderControllers.changeOrderStatus(req.body['order[receipt]'], req.session.user._id).then((response) => {
       res.json({ status: true })
     }).catch(() => {
       res.json({ status: false })

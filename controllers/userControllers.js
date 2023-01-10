@@ -326,6 +326,7 @@ module.exports = {
             razorpay(orderId, totalAmount).then((order) => {
                 resolve(order);
             }).catch((err) => {
+                console.log(err);
                 reject();
             })
         })
