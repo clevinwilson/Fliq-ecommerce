@@ -97,13 +97,15 @@
 
 
 
+                                    {{#if product.status}}
                                     <div class="product-details-action mt-3">
                                         <a href="#" class="btn-buynow me-3"><span class="text-white">Buy Now</span></a>
                                         <a onclick="addToCart('{{product._id}}')" class="btn-product btn-cart"><span>add
                                                 to cart</span></a>
-
+                                    
                                         <!-- End .details-action-wrapper -->
-                                    </div><!-- End .product-details-action -->
+                                    </div>
+                                    {{/if}}
                                 </div><!-- End .product-details -->
                             </div><!-- End .col-md-6 -->
                         </div><!-- End .row -->
@@ -242,11 +244,11 @@
 
 
                     <div class="product-details-action">
+                        {{#if product.status}}
                         <a onclick="addToCart('{{product._id}}')" class="btn-product btn-cart"><span>add to
                                 cart</span></a>
-                        <a style="font-size: 24px;" href="#" class="wishlist btn-product btn-wishlist text-dark"
-                            title="Wishlist"></a>
-
+                        <a style="font-size: 24px;" href="#" class="wishlist btn-product btn-wishlist text-dark" title="Wishlist"></a>
+                        {{/if}}
                     </div><!-- End .product-details-action -->
                 </div><!-- End .col-6 -->
             </div><!-- End .row -->

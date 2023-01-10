@@ -50,7 +50,7 @@ module.exports={
                {
                    $project: {
 
-                       _id: 1, name: 1, type: 1, brand: 1, modelnumber: 1, color: 1, price: 1, quantity: 1, storage: 1, specification: 1, overview: 1, images:1, categoryDetails: { $arrayElemAt: ['$categoryDetails', 0] }
+                       _id: 1, name: 1, type: 1,status:1, brand: 1, modelnumber: 1, color: 1, price: 1, quantity: 1, storage: 1, specification: 1, overview: 1, images:1, categoryDetails: { $arrayElemAt: ['$categoryDetails', 0] }
                    }
                }
                 
