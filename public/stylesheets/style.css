@@ -1010,3 +1010,10 @@ span {
     object-fit: contain;
   }
 }
+
+/* features in product details */
+
+.key-fearures>p {
+  color: #484848 !important;
+  font-weight: 400;
+}

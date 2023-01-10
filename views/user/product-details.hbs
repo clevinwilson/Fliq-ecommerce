@@ -22,8 +22,7 @@
                                     <div class="row">
                                         <figure
                                             class="product-main-image mt-3 mt-md-0 d-flex align-items-center justify-content-center">
-                                            <img class="product-image-box"
-                                                id="product-zoom"
+                                            <img class="product-image-box" id="product-zoom"
                                                 src="/images/product-images/{{product.images.[0].filename}}"
                                                 data-zoom-image="/images/product-images/{{product.images.[0].filename}}"
                                                 alt="product image">
@@ -33,7 +32,7 @@
                                             </a>
                                         </figure><!-- End .product-main-image -->
 
-                                        <div style="height: 90px;"  id="product-zoom-gallery"
+                                        <div style="height: 90px;" id="product-zoom-gallery"
                                             class="product-image-gallery mt-3 mt-md-0">
                                             {{#each product.images}}
                                             <a class="product-gallery-item d-flex justify-content-center" href="#"
@@ -56,198 +55,164 @@
 
                             <div class="col-md-6">
                                 <div class="product-details">
-                                    <h1 class="product-title">{{product.name}}</h1>
-                                    <!-- End .product-title -->
+                                    <div class="ms-3">
+                                        <h1 style="font-weight: 500;" class="product-title">{{product.name}}</h1>
+                                        <!-- End .product-title -->
 
-                                    <div class="ratings-container">
-                                        <div class="ratings">
-                                            <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
-                                        </div><!-- End .ratings -->
-                                        <a class="ratings-text" href="#product-review-link" id="review-link">( 2 Reviews
-                                            )</a>
-                                    </div><!-- End .rating-container -->
+                                        <div class="ratings-container">
+                                            <div class="ratings">
+                                                <div class="ratings-val" style="width: 80%;"></div>
+                                                <!-- End .ratings-val -->
+                                            </div><!-- End .ratings -->
+                                            <a class="ratings-text" href="#product-review-link" id="review-link">( 2
+                                                Reviews
+                                                )</a>
+                                        </div><!-- End .rating-container -->
 
-                                    <div class="product-price text-dark">
-                                        <i class="fa-solid fa-indian-rupee-sign me-2"></i> {{product.price}}
-                                    </div><!-- End .product-price -->
+                                        <div class="product-price text-dark">
+                                            <i class="fa-solid fa-indian-rupee-sign me-2"></i> {{product.price}}
+                                        </div><!-- End .product-price -->
 
-                                    <div class="product-content">
-                                        <p>Super Savings (2 OFFERS)
-                                        </p>
-                                    </div><!-- End .product-content -->
-                                    <p class="my-4">Storage: {{product.storage}} GB</p>
-                                    <div class="details-filter-row details-row-size">
-                                        <label>Color:</label>
+                                        <div class="product-content">
+                                            <p class="text-dark">Super Savings (2 OFFERS)
+                                            </p>
+                                        </div><!-- End .product-content -->
+                                        <p class="my-4 text-dark">Memory: {{product.storage}} GB</p>
+                                        <div class="details-filter-row details-row-size">
+                                            <label>Color:</label>
 
-                                        <div class="product-nav product-nav-thumbs">
-                                            <p>{{product.color}}</p>
-                                        </div><!-- End .product-nav -->
-                                    </div><!-- End .details-filter-row -->
+                                            <div class="product-nav product-nav-thumbs">
+                                                <p class="text-dark">{{product.color}}</p>
+                                            </div><!-- End .product-nav -->
+                                        </div><!-- End .details-filter-row -->
+                                    </div>
 
-                                    <div class="details-filter-row details-row-size justify-content-between">
+                                    <div style="border: 2px solid #d5d5d5;border-radius: 10px;" class="text-dark p-3 key-fearures">
+                                        <h6>Key Features</h6>
+                                        <p>Display: 6.1 inches (15.4 cm), Super Retina XDR OLED</p>
+                                        <p>Memory: 128GB ROM</p>
+                                        <p>Processor: Apple A15 Bionic, Hexa Core</p>
+                                        <p>Camera: 12 MP + 12 MP Dual Rear & 12 MP Front Camera</p>
+                                    </div>
 
 
-                                        <!-- End .product-details-quantity -->
-                                    </div><!-- End .details-filter-row -->
 
-                                    <div class="product-details-action">
+                                    <div class="product-details-action mt-3">
                                         <a href="#" class="btn-buynow me-3"><span class="text-white">Buy Now</span></a>
                                         <a onclick="addToCart('{{product._id}}')" class="btn-product btn-cart"><span>add
                                                 to cart</span></a>
 
                                         <!-- End .details-action-wrapper -->
                                     </div><!-- End .product-details-action -->
-
-                                    <div class="product-details-footer">
-                                        {{!-- <div class="product-cat">
-                                            <span>Category:</span>
-                                            <a href="#">Women</a>,
-                                            <a href="#">Dresses</a>,
-                                            <a href="#">Yellow</a>
-                                        </div><!-- End .product-cat --> --}}
-
-                                        <div class="social-icons social-icons-sm">
-                                            <span class="social-label">Share:</span>
-                                            <a href="#" class="social-icon" title="Facebook" target="_blank"><i
-                                                    class="icon-facebook-f"></i></a>
-                                            <a href="#" class="social-icon" title="Twitter" target="_blank"><i
-                                                    class="icon-twitter"></i></a>
-                                            <a href="#" class="social-icon" title="Instagram" target="_blank"><i
-                                                    class="icon-instagram"></i></a>
-                                            <a href="#" class="social-icon" title="Pinterest" target="_blank"><i
-                                                    class="icon-pinterest"></i></a>
-                                        </div>
-                                    </div><!-- End .product-details-footer -->
                                 </div><!-- End .product-details -->
                             </div><!-- End .col-md-6 -->
                         </div><!-- End .row -->
                     </div><!-- End .product-details-top -->
 
-                    <div class="product-details-tab">
-                        <ul class="nav nav-pills justify-content-center" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="product-desc-link" data-toggle="tab"
-                                    href="#product-desc-tab" role="tab" aria-controls="product-desc-tab"
-                                    aria-selected="true">Overview</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="product-info-link" data-toggle="tab" href="#product-info-tab"
-                                    role="tab" aria-controls="product-info-tab" aria-selected="false">Additional
-                                    information</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="product-shipping-link" data-toggle="tab"
-                                    href="#product-shipping-tab" role="tab" aria-controls="product-shipping-tab"
-                                    aria-selected="false">Shipping & Returns</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="product-review-link" data-toggle="tab"
-                                    href="#product-review-tab" role="tab" aria-controls="product-review-tab"
-                                    aria-selected="false">Reviews (2)</a>
-                            </li>
-                        </ul>
-                        <div class="tab-content">
-                            <div class="tab-pane fade show active" id="product-desc-tab" role="tabpanel"
-                                aria-labelledby="product-desc-link">
-                                <div class="product-desc-content">
-                                    <h3>Specification</h3>
-                                    {{#each product.specification}}
-                                    <li>{{this}}</li>
-                                    {{/each}}
-                                    </ul>
 
-                                    <p>{{product.overview}}</p>
-                                </div><!-- End .product-desc-content -->
-                            </div><!-- .End .tab-pane -->
-                            <div class="tab-pane fade" id="product-info-tab" role="tabpanel"
-                                aria-labelledby="product-info-link">
-                                <div class="product-desc-content">
-                                    <h3>Information</h3>
-                                    <p>{{product.overview}} </p>
+                    <div class="product-details-wrap">
+                        <div style="border: 2px solid #d5d5d5;border-radius: 10px;" class="tab-pane fade show active"
+                            id="product-desc-tab" role="tabpanel" aria-labelledby="product-desc-link">
+                            <div class="product-desc-content">
+                                <h2>Specification</h2>
+                                {{#each product.specification}}
+                                <li>{{this}}</li>
+                                {{/each}}
+                                </ul>
+
+                                <p>{{product.overview}}</p>
+                            </div><!-- End .product-desc-content -->
+                        </div><!-- .End .tab-pane -->
+                        <div style="border: 2px solid #d5d5d5;border-radius: 10px;" class="tab-pane fade show mt-3"
+                            id="product-info-tab" role="tabpanel" aria-labelledby="product-info-link">
+                            <div class="product-desc-content">
+                                <h2>Information</h2>
+                                <p>{{product.overview}} </p>
 
 
-                                </div><!-- End .product-desc-content -->
-                            </div><!-- .End .tab-pane -->
-                            <div class="tab-pane fade" id="product-shipping-tab" role="tabpanel"
-                                aria-labelledby="product-shipping-link">
-                                <div class="product-desc-content">
-                                    <h3>Delivery & returns</h3>
-                                    <p>We deliver to over 100 countries around the world. For full details of the
-                                        delivery options we offer, please view our <a href="#">Delivery
-                                            information</a><br>
-                                        We hope you’ll love every purchase, but if you ever need to return an item you
-                                        can do so within a month of receipt. For full details of how to make a return,
-                                        please view our <a href="#">Returns information</a></p>
-                                </div><!-- End .product-desc-content -->
-                            </div><!-- .End .tab-pane -->
-                            <div class="tab-pane fade" id="product-review-tab" role="tabpanel"
-                                aria-labelledby="product-review-link">
-                                <div class="reviews">
-                                    <h3>Reviews (2)</h3>
-                                    <div class="review">
-                                        <div class="row no-gutters">
-                                            <div class="col-auto">
-                                                <h4><a href="#">Samanta J.</a></h4>
-                                                <div class="ratings-container">
-                                                    <div class="ratings">
-                                                        <div class="ratings-val" style="width: 80%;"></div>
-                                                        <!-- End .ratings-val -->
-                                                    </div><!-- End .ratings -->
-                                                </div><!-- End .rating-container -->
-                                                <span class="review-date">6 days ago</span>
-                                            </div><!-- End .col -->
-                                            <div class="col">
-                                                <h4>Good, perfect size</h4>
+                            </div><!-- End .product-desc-content -->
+                        </div><!-- .End .tab-pane -->
 
-                                                <div class="review-content">
-                                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus
-                                                        cum dolores assumenda asperiores facilis porro reprehenderit
-                                                        animi culpa atque blanditiis commodi perspiciatis doloremque,
-                                                        possimus, explicabo, autem fugit beatae quae voluptas!</p>
-                                                </div><!-- End .review-content -->
 
-                                                <div class="review-action">
-                                                    <a href="#"><i class="icon-thumbs-up"></i>Helpful (2)</a>
-                                                    <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
-                                                </div><!-- End .review-action -->
-                                            </div><!-- End .col-auto -->
-                                        </div><!-- End .row -->
-                                    </div><!-- End .review -->
+                        <div style="border: 2px solid #d5d5d5;border-radius: 10px;" class="tab-pane show mt-3"
+                            id="product-review-tab" role="tabpanel" aria-labelledby="product-review-link">
+                            <div class="reviews">
+                                <h3>Reviews (2)</h3>
+                                <div class="review">
+                                    <div class="row no-gutters">
+                                        <div class="col-auto">
+                                            <h4><a href="#">Samanta J.</a></h4>
+                                            <div class="ratings-container">
+                                                <div class="ratings">
+                                                    <div class="ratings-val" style="width: 80%;"></div>
+                                                    <!-- End .ratings-val -->
+                                                </div><!-- End .ratings -->
+                                            </div><!-- End .rating-container -->
+                                            <span class="review-date">6 days ago</span>
+                                        </div><!-- End .col -->
+                                        <div class="col">
+                                            <h4>Good, perfect size</h4>
 
-                                    <div class="review">
-                                        <div class="row no-gutters">
-                                            <div class="col-auto">
-                                                <h4><a href="#">John Doe</a></h4>
-                                                <div class="ratings-container">
-                                                    <div class="ratings">
-                                                        <div class="ratings-val" style="width: 100%;"></div>
-                                                        <!-- End .ratings-val -->
-                                                    </div><!-- End .ratings -->
-                                                </div><!-- End .rating-container -->
-                                                <span class="review-date">5 days ago</span>
-                                            </div><!-- End .col -->
-                                            <div class="col">
-                                                <h4>Very good</h4>
+                                            <div class="review-content">
+                                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus
+                                                    cum dolores assumenda asperiores facilis porro reprehenderit
+                                                    animi culpa atque blanditiis commodi perspiciatis doloremque,
+                                                    possimus, explicabo, autem fugit beatae quae voluptas!</p>
+                                            </div><!-- End .review-content -->
 
-                                                <div class="review-content">
-                                                    <p>Sed, molestias, tempore? Ex dolor esse iure hic veniam laborum
-                                                        blanditiis laudantium iste amet. Cum non voluptate eos enim, ab
-                                                        cumque nam, modi, quas iure illum repellendus, blanditiis
-                                                        perspiciatis beatae!</p>
-                                                </div><!-- End .review-content -->
+                                            <div class="review-action">
+                                                <a href="#"><i class="icon-thumbs-up"></i>Helpful (2)</a>
+                                                <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
+                                            </div><!-- End .review-action -->
+                                        </div><!-- End .col-auto -->
+                                    </div><!-- End .row -->
+                                </div><!-- End .review -->
 
-                                                <div class="review-action">
-                                                    <a href="#"><i class="icon-thumbs-up"></i>Helpful (0)</a>
-                                                    <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
-                                                </div><!-- End .review-action -->
-                                            </div><!-- End .col-auto -->
-                                        </div><!-- End .row -->
-                                    </div><!-- End .review -->
-                                </div><!-- End .reviews -->
-                            </div><!-- .End .tab-pane -->
-                        </div><!-- End .tab-content -->
-                    </div><!-- End .product-details-tab -->
+                                <div class="review">
+                                    <div class="row no-gutters">
+                                        <div class="col-auto">
+                                            <h4><a href="#">John Doe</a></h4>
+                                            <div class="ratings-container">
+                                                <div class="ratings">
+                                                    <div class="ratings-val" style="width: 100%;"></div>
+                                                    <!-- End .ratings-val -->
+                                                </div><!-- End .ratings -->
+                                            </div><!-- End .rating-container -->
+                                            <span class="review-date">5 days ago</span>
+                                        </div><!-- End .col -->
+                                        <div class="col">
+                                            <h4>Very good</h4>
 
+                                            <div class="review-content">
+                                                <p>Sed, molestias, tempore? Ex dolor esse iure hic veniam laborum
+                                                    blanditiis laudantium iste amet. Cum non voluptate eos enim, ab
+                                                    cumque nam, modi, quas iure illum repellendus, blanditiis
+                                                    perspiciatis beatae!</p>
+                                            </div><!-- End .review-content -->
+
+                                            <div class="review-action">
+                                                <a href="#"><i class="icon-thumbs-up"></i>Helpful (0)</a>
+                                                <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
+                                            </div><!-- End .review-action -->
+                                        </div><!-- End .col-auto -->
+                                    </div><!-- End .row -->
+                                </div><!-- End .review -->
+                            </div><!-- End .reviews -->
+                        </div><!-- .End .tab-pane -->
+
+                        <div style="border: 2px solid #d5d5d5;border-radius: 10px;" class="tab-pane fade show mt-3"
+                            id="product-shipping-tab" role="tabpanel" aria-labelledby="product-shipping-link">
+                            <div class="product-desc-content">
+                                <h2>Delivery & returns</h2>
+                                <p>We deliver to over 100 countries around the world. For full details of the
+                                    delivery options we offer, please view our <a href="#">Delivery
+                                        information</a><br>
+                                    We hope you’ll love every purchase, but if you ever need to return an item you
+                                    can do so within a month of receipt. For full details of how to make a return,
+                                    please view our <a href="#">Returns information</a></p>
+                            </div><!-- End .product-desc-content -->
+                        </div><!-- .End .tab-pane -->
+                    </div>
 
                 </div><!-- End .container -->
             </div><!-- End .page-content -->
