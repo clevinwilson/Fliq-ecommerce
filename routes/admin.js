@@ -127,8 +127,9 @@ router.post('/add-category', verifyLogin, uploadCategoryImage, (req, res) => {
 
 router.get('/view-category', verifyLogin, (req, res) => {
     categoryControllers.getCategoryList().then((response) => {
-        res.render('admin/view-category', { categoryList: response, admin: req.session.adminLogin, categoryUpdate: req.session.categoryUpdate })
+        res.render('admin/view-category', { categoryList: response, admin: req.session.adminLogin, categoryUpdate: req.session.categoryUpdate, categoryError: req.session.categoryError })
         req.session.categoryUpdate = false;
+        req.session.categoryError=false;
     })
 })
 
@@ -164,9 +165,13 @@ router.get('/delete-category/:categoryId', verifyLogin, async (req, res) => {
     let category = await categoryControllers.getCategoryDetails(req.params.categoryId);
 
     categoryControllers.deleteCategory(req.params.categoryId).then((response) => {
-        res.redirect('/admin/view-category');
-        deleteImages(category.image.path);
-
+        if(response){
+            res.redirect('/admin/view-category');
+            deleteImages(category.image.path);
+        }else{
+            req.session.categoryError ="Please delete all products under this category"
+            res.redirect('/admin/view-category')
+        }
     })
 })
 

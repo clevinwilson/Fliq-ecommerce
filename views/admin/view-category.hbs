@@ -121,6 +121,20 @@
     <i class="fas fa-angle-up"></i>
 </a>
 
+
+
+{{#if categoryError}}
+<script>
+    swal({
+            title: "Error",
+            text: "Please delete all products under this category !",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            
+</script>
+{{/if}}
 <style>
     .table-btn {
         width: 40px;

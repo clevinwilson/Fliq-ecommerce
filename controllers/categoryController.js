@@ -58,10 +58,16 @@ module.exports={
     },
 
     deleteCategory: (categoryId) => {
-        return new Promise((resolve, reject) => {
-            db.get().collection(collection.CATEGORY_COLLECTION).deleteOne({ _id: ObjectId(categoryId) }).then((response) => {
-                resolve(response);
-            })
+        return new Promise(async(resolve, reject) => {
+            let product=await db.get().collection(collection.PRODUCT_COLLECTION).findOne({categoryId:ObjectId(categoryId)});
+            if(!product){
+                db.get().collection(collection.CATEGORY_COLLECTION).deleteOne({ _id: ObjectId(categoryId) }).then((response) => {
+                    resolve(response);
+                })
+            }else{
+                resolve(false)
+            }
+            
         })
     },
     changeStatus: (categoryId, status) => {
