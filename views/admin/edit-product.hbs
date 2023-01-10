@@ -118,38 +118,28 @@
 
                                     </div>
 
-                                    <div class="row">
+                                     <div style="border-color: #d4d4d4 !important" class="row border border-info rounded">
+                                        <label class="mt-3" for="">Features</label>
+                                        {{#each productDetails.feature}}
                                         <div class="col-md-6">
-                                            <div class="form-group mt-3 ">
-                                                <label for="">Specification</label>
-                                                <input style="border-color:#b4e3eb;" value="{{productDetails.specification}}" type="text"
-                                                    class="form-control col-md-12 mt-2" id="specification"
-                                                    name="specification" required>
+                                            <div class="form-group mt-1 ">
+                                                <input style="border-color:#b4e3eb;" value="{{this}}" type="text" class="form-control col-md-12 mt-3"
+                                                    id="feature" name="feature" required>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group mt-3 ">
-                                                <input style="border-color:#b4e3eb;" value="{{productDetails.specification.[1]}}" type="text"
-                                                    class="form-control col-md-12 mt-5" id="specification"
-                                                    name="specification" required>
-                                            </div>
-                                        </div>
+                                        {{/each}}
                                     </div>
-                                    <div class="row">
+
+                                    <div style="border-color: #d4d4d4 !important" class="row border border-info mt-4 rounded">
+                                         <label class="mt-3" for="">Specification</label>
+                                        {{#each productDetails.specification}}
                                         <div class="col-md-6">
-                                            <div class="form-group mt-3 ">
-                                                <input style="border-color:#b4e3eb;" value="{{productDetails.specification.[2]}}" type="text"
-                                                    class="form-control col-md-12 mt-2" id="specification"
-                                                    name="specification" required>
+                                            <div class="form-group mt-1 ">
+                                                <input style="border-color:#b4e3eb;" value="{{this}}" type="text" class="form-control col-md-12 mt-3"
+                                                    id="specification" name="specification" required>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group mt-3 ">
-                                                <input style="border-color:#b4e3eb;" value="{{productDetails.specification.[3]}}" type="text"
-                                                    class="form-control col-md-12 mt-2" id="specification"
-                                                    name="specification" required>
-                                            </div>
-                                        </div>
+                                        {{/each}}
                                     </div>
 
 
