@@ -35,7 +35,6 @@ module.exports={
         })
     },
     editBanner: (data) => {
-        console.log(data,">>>>>>>>>>>");
         return new Promise((resolve, reject) => {
             db.get().collection(collection.BANNER_COLLECTION).updateOne({ _id: ObjectId(data.bannerId) },
                 {

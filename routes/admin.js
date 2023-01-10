@@ -270,7 +270,7 @@ router.get('/view-products', verifyLogin, async (req, res) => {
 
 router.get('/delete-product/:productId', verifyLogin, async (req, res) => {
     productControllers.deleteProduct(req.params.productId).then((response) => {
-        res.redirect('/admin/view-products');
+        res.json(true)
     })
 })
 

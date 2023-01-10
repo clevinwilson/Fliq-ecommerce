@@ -69,8 +69,8 @@
                                         <td>{{this.color}}</td>
 
                                         <td class="d-flex">
-                                            <a title="Delete" class="table-btn btn btn-danger p-2"
-                                                href="/admin/delete-product/{{this._id}}"><i
+                                            <a title="Delete" class="table-btn btn btn-danger text-white p-2"
+                                               onclick="deleteProduct('{{this._id}}')"><i
                                                     class="fa-solid fa-trash"></i></a>
                                             <a title="Edit" href="/admin/edit-product/{{this._id}}"
                                                 class="table-btn ml-2 text-white btn btn-warning p-2"><i
@@ -122,3 +122,41 @@
         border-radius: 50%;
     }
 </style>
+
+<script>
+    function deleteProduct(productId) {
+        swal({
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        url: "/admin/delete-product/" + productId,
+                        method: 'get',
+                        success: ((response) => {
+                            if (response) {
+                                swal("Product has been deleted!", {
+                                    icon: "success",
+                                }).then(() => {
+                                    window.location.reload();
+                                })
+                            } else {
+                                swal({
+                                    title: "Error",
+                                    text: "Something went wrong !",
+                                    icon: "warning",
+                                    buttons: true,
+                                    dangerMode: true,
+                                })
+                            }
+                        })
+                    })
+
+                } 
+            });
+    }
+</script>

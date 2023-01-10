@@ -28,7 +28,7 @@ module.exports={
                     status:false
                 }
             }).then((response)=>{
-                resolve();
+                resolve(response);
             })
         })
     },
