@@ -89,10 +89,9 @@
 
                                     <div style="border: 2px solid #d5d5d5;border-radius: 10px;" class="text-dark p-3 key-fearures">
                                         <h6>Key Features</h6>
-                                        <p>Display: 6.1 inches (15.4 cm), Super Retina XDR OLED</p>
-                                        <p>Memory: 128GB ROM</p>
-                                        <p>Processor: Apple A15 Bionic, Hexa Core</p>
-                                        <p>Camera: 12 MP + 12 MP Dual Rear & 12 MP Front Camera</p>
+                                        {{#each product.feature}}
+                                        <p>{{this}}</p>
+                                        {{/each}}
                                     </div>
 
 
