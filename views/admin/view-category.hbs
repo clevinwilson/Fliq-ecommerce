@@ -68,8 +68,8 @@
                                         <td class="text-danger">{{this.status}}</td>
                                         {{/if}}
                                         <td class="d-flex">
-                                            <a title="Delete" class="table-btn btn btn-danger p-2"
-                                                href="/admin/delete-category/{{this._id}}"><i
+                                            <a title="Delete" class="table-btn btn btn-danger text-white p-2"
+                                              onclick="deleteCategory('{{this._id}}')" ><i
                                                     class="fa-solid fa-trash"></i></a>
                                             <a title="Edit" href="/admin/edit-category/{{this._id}}"
                                                 class="table-btn ml-2 text-white btn btn-warning p-2"><i
@@ -125,16 +125,51 @@
 
 {{#if categoryError}}
 <script>
-    swal({
-            title: "Error",
-            text: "Please delete all products under this category !",
+   
+            
+</script>
+{{/if}}
+
+<script>
+    function deleteCategory(categoryId){
+        swal({
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover this imaginary file!",
             icon: "warning",
             buttons: true,
             dangerMode: true,
         })
-            
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        url:"/admin/delete-category/"+ categoryId,
+                        method:'get',
+                        success:((response)=>{
+                            if(response.status){
+                               
+                                swal("Poof! Your imaginary file has been deleted!", {
+                                    icon: "success",
+                                }).then(()=>{
+                                       window.location.reload();
+                                })
+                            }else{
+                                 swal({
+                                    title: "Error",
+                                    text: "Please delete all products under this category !",
+                                    icon: "warning",
+                                    buttons: true,
+                                    dangerMode: true,
+                                })
+                            }
+                        })
+                    })
+                    
+                } else {
+                    swal("Your imaginary file is safe!");
+                }
+            });
+    }
 </script>
-{{/if}}
 <style>
     .table-btn {
         width: 40px;
