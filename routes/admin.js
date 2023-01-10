@@ -258,12 +258,8 @@ router.get('/view-products', verifyLogin, async (req, res) => {
 })
 
 router.get('/delete-product/:productId', verifyLogin, async (req, res) => {
-    let productDetails = await productControllers.getProductDetails(req.params.productId)
     productControllers.deleteProduct(req.params.productId).then((response) => {
         res.redirect('/admin/view-products');
-        productDetails.images.forEach(obj => {
-            deleteImages(obj.path);
-        });
     })
 })
 

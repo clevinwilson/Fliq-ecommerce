@@ -7,6 +7,7 @@ module.exports={
     addProduct:(data)=>{
         data.categoryId=ObjectId(data.categoryId)
         data.price=parseInt(data.price);
+        data.status=true;
         return new Promise((resolve,reject)=>{
             db.get().collection(collection.PRODUCT_COLLECTION).insertOne(data).then((response)=>{
                 console.log(response);
@@ -16,13 +17,17 @@ module.exports={
     },
     getProducts:()=>{
         return new Promise(async(resolve,reject)=>{
-            let products = await db.get().collection(collection.PRODUCT_COLLECTION).find().limit(12).toArray();
+            let products = await db.get().collection(collection.PRODUCT_COLLECTION).find({status:true}).toArray();
            resolve(products)
         })
     },
     deleteProduct:(productId)=>{
         return new Promise((resolve,reject)=>{
-            db.get().collection(collection.PRODUCT_COLLECTION).deleteOne({_id:ObjectId(productId)}).then((response)=>{
+            db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:ObjectId(productId)},{
+                $set:{
+                    status:false
+                }
+            }).then((response)=>{
                 resolve();
             })
         })
