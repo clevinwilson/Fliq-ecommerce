@@ -165,7 +165,15 @@
                 if (response.codSuccess === true) {
                     location.href = "/order-success"
                 } else if (!response.status) {
-
+                    swal({
+                        title: "Error",
+                        text: "Something went wrong",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    }).then(() => {
+                            location.href = "/checkout"
+                        });
                 } else {
                     razorpayPayment(response)
                 }

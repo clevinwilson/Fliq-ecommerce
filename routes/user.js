@@ -232,24 +232,43 @@ router.get('/billing/:addressId', async (req, res) => {
 
 //order
 router.post('/place-order', verifyLogin, async (req, res) => {
-  let user = await userControllers.getAddress(req.body.addressId, req.session.user._id);
-  if (user) {
-    let cartTotal = await userControllers.getCartTotal(req.session.user._id);
-    orderControllers.placeOrder(req.body.phone, req.body.paymentMethod, user, cartTotal).then((details) => {
-      userControllers.generateRazorpay(details.response.insertedId, cartTotal).then((response) => {
-        console.log(req.body.paymentMethod);
-        if (req.body.paymentMethod == "COD") {
-          res.json({ codSuccess: true })
+  try {
+    let user = await userControllers.getAddress(req.body.addressId, req.session.user._id);
+    if (user) {
+      if (user.activeOrder) {
+        const activeOrder = await orderControllers.getActiveOrder(user.activeOrder);
+        let cartTotal = await userControllers.getCartTotal(req.session.user._id);
+        if (!activeOrder) {
+          let details = await orderControllers.placeOrder(req.body.phone, req.body.paymentMethod, user, cartTotal);
+          userControllers.generateRazorpay(details.response.insertedId, cartTotal).then((response) => {
+            if (req.body.paymentMethod == "COD") {
+              res.json({ codSuccess: true })
+            } else {
+              response.user = req.session.user;
+              res.json(response)
+            }
+          }).catch(() => {
+            res.json({ status: false })
+          })
         } else {
-          response.user=req.session.user;
-          res.json(response)
+          userControllers.generateRazorpay(user.activeOrder, cartTotal).then((response) => {
+            if (req.body.paymentMethod == "COD") {
+              res.json({ codSuccess: true })
+            } else {
+              response.user = req.session.user;
+              res.json(response)
+            }
+          }).catch(() => {
+            res.json({ status: false })
+          })
         }
-      }).catch(() => {
-        res.json({ status: false })
-      })
-    })
-  } else {
+      }
+    } else {
+      res.json({ status: false })
+    }
+  } catch (err) {
     res.json({ status: false })
+
   }
 })
 
@@ -285,7 +304,7 @@ router.get('/order-success', (req, res) => {
 //payment
 router.post('/verify-payment', async (req, res) => {
   razorpayVerify(req.body).then((response) => {
-    orderControllers.changeOrderStatus(req.body['order[receipt]']).then((response) => {
+    orderControllers.changeOrderStatus(req.body['order[receipt]'],req.session.user._id).then((response) => {
       res.json({ status: true })
     }).catch(() => {
       res.json({ status: false })
@@ -309,12 +328,15 @@ router.get('/product-listing/:categoryId', paginatedResults(), async (req, res) 
 
 //search
 
-router.get('/search/:key',async(req,res)=>{
-  console.log("search");
-  let searchResult=await userControllers.getSearchResult(req.params.key);
-  res.json({searchResult})
+router.get('/search/:key', async (req, res) => {
+  let searchResult = await userControllers.getSearchResult(req.params.key);
+  res.json({ searchResult })
 })
 
+
+router.get('/update-val', (req, res) => {
+  userControllers.upval();
+})
 
 
 

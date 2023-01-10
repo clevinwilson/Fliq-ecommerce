@@ -1,8 +1,9 @@
 const collection = require('../config/collection');
 const db = require('../config/connection');
 const { ObjectId } = require("mongodb");
+const { response } = require('express');
 
-module.exports={
+module.exports = {
     placeOrder: (phone, paymentMethod, userDetails, cartTotal) => {
         return new Promise((resolve, reject) => {
             userDetails.address.phone = phone;
@@ -18,26 +19,41 @@ module.exports={
                 products: userDetails.cart,
                 totalAmount: cartTotal,
                 date: current_date,
+                cartId: userDetails._id,
                 shipmentStatus: { ordrePlaced: { id: Date.now() + '-' + Math.round(Math.random() * 1E9), status: true, lastUpdate: { date: current_date, time: current_time, placeUpdates: [] } } }
             }
             db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response) => {
                 db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userDetails._id) }, {
                     $set: {
-                        cart: []
+                        activeOrder: ObjectId(response.insertedId)
                     }
                 })
                 resolve({ status: true, response })
             })
         })
     },
-    changeOrderStatus: (orderId) => {
+    getActiveOrder: (activeOderId) => {
         return new Promise((resolve, reject) => {
-            db.get().collection(collection.ORDER_COLLECTION).updateOne({ _id: ObjectId(orderId) }, {
-                $set: {
-                    orderStatus: "placed"
+            db.get().collection(collection.ORDER_COLLECTION).findOne({ _id: ObjectId(activeOderId) }).then((response) => {
+                if (response) {
+                    resolve(response);
+                } else {
+                    resolve(false);
                 }
-            }).then((response) => {
-                resolve();
+            })
+        })
+    },
+    changeOrderStatus: (orderId, userId) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.ORDER_COLLECTION).updateOne({ _id: ObjectId(orderId) }, { $set: { orderStatus: "placed" } }).then((response) => {
+                db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) },
+                    {
+                        $set: { cart: [] },
+                        $unset: { activeOrder: "" }
+
+                    }).then((response) => {
+                        resolve();
+                    })
             }).catch((err) => {
                 reject(err)
             })
@@ -59,7 +75,7 @@ module.exports={
                     }
                 },
                 {
-                    $sort:{date:-1}
+                    $sort: { date: -1 }
                 }
             ]).toArray();
             resolve(orders);
