@@ -333,7 +333,7 @@ body {
 }
 
 .proudct-image-wrap>.product-image {
-  max-width: 86px;
+  max-width: 110px;
 }
 
 .product-box-wrap>.product-name,
@@ -998,8 +998,8 @@ span {
 }
 
 .product-image-box {
-  width: 350px !important;
-  height: 350px !important;
+  width: 400px !important;
+  height: 400px !important;
   object-fit: contain;
 }
 

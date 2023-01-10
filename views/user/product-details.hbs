@@ -35,10 +35,10 @@
                                         <div style="height: 90px;" id="product-zoom-gallery"
                                             class="product-image-gallery mt-3 mt-md-0">
                                             {{#each product.images}}
-                                            <a class="product-gallery-item d-flex justify-content-center" href="#"
+                                            <a style="border: 1px solid #bcbcbc;" class="product-gallery-item d-flex justify-content-center" href="#"
                                                 data-image="/images/product-images/{{this.filename}}"
                                                 data-zoom-image="/images/product-images/{{this.filename}}">
-                                                <img style="    width: 80px;height: 80px; object-fit: contain;"
+                                                <img style="    width: 90px;height: 90px; object-fit: contain;"
                                                     src="/images/product-images/{{this.filename}}" alt="product side">
                                             </a>
                                             {{/each}}
