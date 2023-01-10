@@ -206,11 +206,18 @@ router.get('/view-banner', verifyLogin, async (req, res) => {
 })
 
 router.get('/delete-banner/:bannerId', verifyLogin, async (req, res) => {
-    let banner = await bannerControllers.getBannerDetails(req.params.bannerId)
-    deleteImages(banner.image.path)
-    bannerControllers.deleteBanner(req.params.bannerId).then((response) => {
-        res.redirect('/admin/view-banner');
-    })
+    try{
+        let banner = await bannerControllers.getBannerDetails(req.params.bannerId)
+        deleteImages(banner.image.path)
+        bannerControllers.deleteBanner(req.params.bannerId).then((response) => {
+            res.json({status:true})
+        }).catch(()=>{
+            res.json({status:false})
+        })
+    }catch(err){
+        console.log(err);
+        res.json({status:false})
+    }
 })
 
 router.get('/edit-banner/:bannerId', verifyLogin, (req, res) => {

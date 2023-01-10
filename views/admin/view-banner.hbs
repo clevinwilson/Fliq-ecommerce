@@ -65,8 +65,8 @@
                                         <td>{{this.text}}</td>
                                 
                                         <td class="d-flex">
-                                            <a title="Delete" class="table-btn btn btn-danger p-2"
-                                                href="/admin/delete-banner/{{this._id}}"><i
+                                            <a title="Delete" class="table-btn btn btn-danger text-white p-2"
+                                               onclick="deleteBanner('{{this._id}}')"><i
                                                     class="fa-solid fa-trash"></i></a>
                                             <a title="Edit" href="/admin/edit-banner/{{this._id}}"
                                                 class="table-btn ml-2 text-white btn btn-warning p-2"><i
@@ -107,6 +107,46 @@
 <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
 </a>
+<script>
+    function deleteBanner(bannerId) {
+        swal({
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover this imaginary file!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        url: "/admin/delete-banner/" + bannerId,
+                        method: 'get',
+                        success: ((response) => {
+                            if (response.status) {
+
+                                swal("Poof! Your imaginary file has been deleted!", {
+                                    icon: "success",
+                                }).then(() => {
+                                    window.location.reload();
+                                })
+                            } else {
+                                swal({
+                                    title: "Error",
+                                    text: "Something went wrong !",
+                                    icon: "warning",
+                                    buttons: true,
+                                    dangerMode: true,
+                                })
+                            }
+                        })
+                    })
+
+                } else {
+                    swal("Your imaginary file is safe!");
+                }
+            });
+    }
+</script>
 
 <style>
     .table-btn {
