@@ -1,20 +1,20 @@
 {{>user-header}}
 
 <section>
-    <div class="container p-3">
+    <div class="container p-3 ">
         {{#if cartItems}}
-        <div class="row">
+        <div class="row mb-5 mb-sm-0" >
             <div class="col-lg-8 col-md-12 p-md-2">
                 <div class="row">
                     {{#each cartItems}}
 
                     <div class="col-md-12 mt-3">
-                        <div class="card-box d-flex">
+                        <div class="card-box cart-box">
                             <div class="left-section card-box-img-wrap d-flex flex-column m-3">
-                                <img src="/images/product-images/{{this.product.images.[0].filename}}" alt="">
+                                <img class="cart-image" src="/images/product-images/{{this.product.images.[0].filename}}" alt="">
                                 <div class="qty-wrap mt-2">
                                     <div class="cart-product-quantity">
-                                        <div class="wrapper">
+                                        <div class="wrapper mt-2">
                                             <span id="{{this.product._id}}minus"
                                                 onclick="changeQuantity(-1,'{{this.product._id}}')"
                                                 class="minus">-</span>
@@ -25,21 +25,27 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="right-section  flex-column p-3 align-items-md-start justify-content-start">
+                            <div class="right-section  flex-column p-0 p-sm-3 align-items-md-start justify-content-center">
                                 <div class="card-info-wrap ms-md-3">
-                                    <h3 style="font-size: 24px;" class="mt-2 ">{{this.product.name}}</h3>
-                                    <h5 class="mt-2">₹ {{this.product.price}}</h5>
-                                    <p style="font-size: 11px;">(incl. all Taxes)</p>
-                                    <h6 style="font-size: 13px;" class="mt-2">Standard Delivery by Wed, 4th Jan</h6>
+                                    <h3  class="mt-2 cart-product-name">{{this.product.name}}</h3>
+                                    <h5 class="mt-2 cart-price">₹ {{this.product.price}}</h5>
+                                    <p class="cart-tax-info">(incl. all Taxes)</p>
+                                    <h6 class="mt-2 cart-delivery-info">Standard Delivery by Wed, 4th Jan</h6>
 
                                 </div>
-                                <div class="mt-2 d-lg-flex box-card-btn-wrap">
+                                <div class="mt-2 box-card-btn-wrap d-none d-lg-flex">
                                     <a href="" class="w-100  btn btn-outline-dark m-2 rounded border-dark ">Move to
                                         Wishlist</a>
                                     <a href="/remove-product/{{this.product._id}}" class="w-100 m-2 btn btn-outline-dark rounded border-dark">Remove</a>
 
                                 </div>
                             </div>
+                        </div>
+                        <div class="mt-2 box-card-btn-wrap cart-sm-btn-wrap d-flex d-lg-none">
+                            <a href="" class="w-100  btn btn-outline-dark m-2 rounded border-dark ">Move to
+                                Wishlist</a>
+                            <a href="/remove-product/{{this.product._id}}" class="w-100 m-2 btn btn-outline-dark rounded border-dark">Remove</a>
+                        
                         </div>
                     </div>
                     {{/each}}
@@ -71,7 +77,7 @@
                         <span >₹ <span class="cart-total-price2">{{cartTotal}}</span></span>
                     </div>
                     <div class="mt-4 order-btn-wrap d-flex justify-content-center">
-                        <a style="padding: 6px 55px;" href="/checkout"  class="btn btn-primary rounded">CHECKOUT</a>
+                        <a  href="/checkout"  class="cart-btn btn text-white rounded">CHECKOUT</a>
                     </div>
                 </div>
             </div>
