@@ -89,5 +89,6 @@ module.exports={
                 resolve(response.images[imageNo])
             })
         })
-    }
+    },
+   
 }

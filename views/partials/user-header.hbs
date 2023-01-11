@@ -25,9 +25,11 @@
         <div class="right-section">
 
             {{#if user}}
-            <div class="wishlist-wrap">
-                <i class="bi bi-heart d-none d-md-block d-lg-block "></i>
-            </div>
+            <a href="/wishlist" class="text-dark">
+                <div class="wishlist-wrap">
+                    <i class="bi bi-heart d-none d-md-block d-lg-block "></i>
+                </div>
+            </a>
             <a href="/cart" class="text-dark">
                 <div class=" d-none d-md-block cart-wrap  position-relative ">
                     <i class="bi bi-cart2 "></i><span id="cartCount"

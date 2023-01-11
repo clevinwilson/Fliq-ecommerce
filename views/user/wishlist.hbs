@@ -1,0 +1,107 @@
+{{>user-header}}
+
+<section>
+    <div class="headerhny-title text-center mt-1 mb-1">
+        <h3 style="font-weight: 600;" class="hny-title mb-0 p-1 ">My Wishlist</h3>
+    
+    </div>
+</section>
+
+<section>
+    <div class="container p-3 ">
+        {{#if wishList}}
+        <div class="row mb-5 mb-sm-0 justify-content-center">
+            <div class="col-lg-10 col-md-12 p-md-2">
+                <div class="row">
+                    {{#each wishList}}
+
+                    <div class="col-md-12 mt-3">
+                        <div class="card-box cart-box">
+                            <div class="left-section card-box-img-wrap d-flex flex-column m-3">
+                                <img class="cart-image"
+                                    src="/images/product-images/{{this.images.[0].filename}}" alt="">
+                            </div>
+                            <div
+                                class="right-section  flex-column p-0 p-sm-3 align-items-md-start justify-content-center">
+                                <div class="card-info-wrap ms-md-3">
+                                    <h3 class="mt-2 cart-product-name">{{this.name}}</h3>
+                                    <h5 class="mt-2 cart-price">₹ {{this.price}}</h5>
+                                    <p class="cart-tax-info">(incl. all Taxes)</p>
+
+                                </div>
+                                <div class="mt-2 box-card-btn-wrap d-none d-lg-flex">
+                                    <a onclick="addToCart('{{this._id}}')" class="w-100  btn btn-outline-dark m-2 rounded border-dark ">Add to
+                                        Cart</a>
+                                    <a href="/deleteWishList/{{this._id}}"
+                                        class="w-100 m-2 btn btn-outline-dark rounded border-dark">Remove</a>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-2 box-card-btn-wrap cart-sm-btn-wrap d-flex d-lg-none">
+                            <a onclick="addToCart('{{this._id}}')" class="w-100  btn btn-outline-dark m-2 rounded border-dark ">Add to
+                                Cart</a>
+                            <a href="/deleteWishList/{{this._id}}" class="w-100 m-2 btn btn-outline-dark rounded border-dark">Remove</a>
+
+                        </div>
+                    </div>
+                    {{/each}}
+
+
+
+
+                </div>
+            </div>
+           
+         {{else}} 
+        <div class="container-fluid  mt-100">
+            <div class="row">
+
+                <div class="col-md-12">
+
+                    <div class="cart-card border-0 my-5">
+                        <div class="card-body  cart">
+                            <div class="col-sm-12 empty-cart-cls text-center">
+                                <img style="width: 200px;"
+                                    src="/images/wishlist-icon.jpg"
+                                    width="130" height="130" class="img-fluid mb-4 mr-3">
+                                <h4><strong>Your Wishlist is Empty</strong></h4>
+                                <h6 class="mt-4">Explore our wide selection and find something you like</h6>
+                                <a href="/" class="btn btn-primary cart-btn-transform m-3 mt-4 bg-dark border-dark"
+                                    style=" padding: 9px 11px;" data-abc="true">Continue Shopping</a>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+        {{/if}} 
+    </div>
+</section>
+
+
+{{>user-footer}}
+
+
+
+
+<script>
+    function addToCart(productId) {
+        $.ajax({
+            url: '/add-to-cat/' + productId,
+            method: 'get',
+            success: (response) => {
+                if (response.status) {
+                    let count = $('#cartCount').html()
+                    $('#cartCount').html(response.cartCount)
+                }
+            }
+        })
+    }
+</script>

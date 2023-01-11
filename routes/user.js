@@ -9,6 +9,7 @@ const orderControllers = require('../controllers/orderController');
 const { razorpayVerify } = require('../helpers/razorpay');
 const verifyLogin = require('../middleware/userAuth');
 const paginatedResults = require('../middleware/paginatedResults');
+const { response } = require('express');
 
 router.get('/', async function (req, res) {
   let cartCount = false;
@@ -148,11 +149,13 @@ router.get('/account', verifyLogin, async (req, res) => {
 //product details page
 router.get('/product-details/:productId', async (req, res) => {
   let cartCount = false;
+  let wishListStatus =false;
   if (req.session.user) {
+    wishListStatus = await userControllers.productExistWishlist(req.params.productId);
     cartCount = await userControllers.getCartCount(req.session.user._id);
   }
   productControllers.getProductDetails(req.params.productId).then((product) => {
-    res.render('user/product-details', { product, user: req.session.user, cartCount })
+    res.render('user/product-details', { product, user: req.session.user, cartCount ,wishListStatus})
   })
 })
 
@@ -345,9 +348,35 @@ router.get('/search/:key', async (req, res) => {
 })
 
 
+//wishlist 
+router.get('/wishlist',verifyLogin,(req,res)=>{
+  userControllers.getWishList(req.session.user._id).then(async(response)=>{
+    let cartCount = await userControllers.getCartCount(req.session.user._id);
+    res.render('user/wishlist', { user: req.session.user, wishList: response, cartCount });
+  })
+})
+
+router.get('/add-to-wishList/:productId',(req,res)=>{
+  userControllers.addToWishlist(req.params.productId,req.session.user._id).then((response)=>{
+    if(response){
+      res.json({status:true})
+    }else{
+      res.json({status:false})
+    }
+  })
+})
+
+router.get('/deleteWishList/:productId',verifyLogin,(req,res)=>{
+  userControllers.deleteFromWishList(req.params.productId,req.session.user._id).then((response)=>{
+    res.redirect('/wishlist');
+  })
+})
+
+
 router.get('/update-val', (req, res) => {
   userControllers.upval();
 })
+
 
 
 
