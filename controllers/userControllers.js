@@ -363,9 +363,9 @@ module.exports = {
             }
         })
     },
-    productExistWishlist: (productId) => {
+    productExistWishlist: (userId,productId) => {
         return new Promise(async (resolve, reject) => {
-            let isProductExits = await db.get().collection(collection.USER_COLLECTION).findOne({ wishlist: ObjectId(productId) });
+            let isProductExits = await db.get().collection(collection.USER_COLLECTION).findOne({_id:ObjectId(userId), wishlist: ObjectId(productId) });
             if (isProductExits) {
                 resolve(true);
             } else {
@@ -417,6 +417,16 @@ module.exports = {
                     resolve();
                 })
             })
+        })
+    },
+    productExistCart:(userId,productId)=>{
+        return new Promise(async (resolve, reject) => {
+            let isProductExits = await db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(userId), 'cart.product': ObjectId(productId) });
+            if (isProductExits) {
+                resolve(true);
+            } else {
+                resolve(false);
+            }
         })
     }
 

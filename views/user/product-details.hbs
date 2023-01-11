@@ -125,8 +125,12 @@
                                     {{#if product.status}}
                                     <div class="product-details-action mt-3">
                                         <a href="#" class="btn-buynow me-3"><span class="text-white">Buy Now</span></a>
-                                        <a onclick="addToCart('{{product._id}}')" class="btn-product btn-cart"><span>add
+                                        {{#unless productinCart}}
+                                        <a onclick="addToCart('{{product._id}}')" id="add-to-cart" class="btn-product btn-cart"><span>Add
                                                 to cart</span></a>
+                                        {{/unless}}
+
+                                        <a {{#if productinCart}} style="display: block;" {{else}} style="display: none;" {{/if}}  href="/cart" class="btn-product btn-cart" id="go-to-cart"><span  class="ms-4">Go To Cart</span></a>
 
                                         <!-- End .details-action-wrapper -->
                                     </div>
@@ -322,6 +326,8 @@
     <script src="/stylesheets/assets/js/main.js"></script>
 </body>
 <script>
+    let addToCartBtn=document.getElementById('add-to-cart');
+    let goToCartBtn=document.getElementById('go-to-cart');
     function addToCart(productId) {
         $.ajax({
             url: '/add-to-cat/' + productId,
@@ -330,6 +336,8 @@
                 if (response.status) {
                     let count = $('#cartCount').html()
                     $('#cartCount').html(response.cartCount)
+                   addToCartBtn.style.display='none';
+                   goToCartBtn.style.display='block';
                 }
             }
         })

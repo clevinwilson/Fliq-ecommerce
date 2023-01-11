@@ -150,12 +150,14 @@ router.get('/account', verifyLogin, async (req, res) => {
 router.get('/product-details/:productId', async (req, res) => {
   let cartCount = false;
   let wishListStatus =false;
+  let productinCart=false;
   if (req.session.user) {
-    wishListStatus = await userControllers.productExistWishlist(req.params.productId);
+    wishListStatus = await userControllers.productExistWishlist(req.session.user._id,req.params.productId);
     cartCount = await userControllers.getCartCount(req.session.user._id);
+    productinCart=await userControllers.productExistCart(req.session.user._id,req.params.productId);
   }
   productControllers.getProductDetails(req.params.productId).then((product) => {
-    res.render('user/product-details', { product, user: req.session.user, cartCount ,wishListStatus})
+    res.render('user/product-details', { product, user: req.session.user, cartCount, wishListStatus, productinCart })
   })
 })
 

@@ -8,6 +8,7 @@ module.exports={
         data.categoryId=ObjectId(data.categoryId)
         data.price=parseInt(data.price);
         data.status=true;
+        data.quantity = parseInt(data.quantity);
         return new Promise((resolve,reject)=>{
             db.get().collection(collection.PRODUCT_COLLECTION).insertOne(data).then((response)=>{
                 console.log(response);
