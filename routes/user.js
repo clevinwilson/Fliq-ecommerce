@@ -378,9 +378,7 @@ router.get('/move-to-wishlist/:productId',verifyLogin,(req,res)=>{
   })
 })
 
-router.get('/update-val', (req, res) => {
-  userControllers.upval();
-})
+
 
 
 

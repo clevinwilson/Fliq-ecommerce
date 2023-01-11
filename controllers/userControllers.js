@@ -347,17 +347,6 @@ module.exports = {
             })
         })
     },
-    upval: () => {
-        db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId("63ad13b60ac2da2b2b33b5e5") }).then((response) => {
-            console.log(response.cart);
-            const cart = response.cart;
-            db.get().collection(collection.PRODUCT_COLLECTION).updateMany({ _id: { $in: cart.map(x => ObjectId(x.product)) } }, {
-                $inc: { quantity: 1 }
-            }).then((response) => {
-                console.log(response, ">>>>>>>>>>>>>>>");
-            })
-        })
-    },
     addToWishlist: (productId, userId) => {
         return new Promise(async (resolve, reject) => {
             let isProductExits = await db.get().collection(collection.USER_COLLECTION).findOne({ wishlist: ObjectId(productId) });

@@ -44,16 +44,16 @@ module.exports = {
         })
     },
     changeOrderStatus: (orderId, userId) => {
-        return new Promise(async (resolve, reject) => {
-            let order = await db.get().collection(collection.ORDER_COLLECTION).findOne({ _id: ObjectId(orderId) });
+        return new Promise( (resolve, reject) => {
             db.get().collection(collection.ORDER_COLLECTION).updateOne({ _id: ObjectId(orderId) }, { $set: { orderStatus: "placed" } }).then((response) => {
                 db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) },
                     {
                         $set: { cart: [] },
                         $unset: { activeOrder: "" }
 
-                    }).then((response) => {
+                    }).then(async(response) => {
                         resolve()
+                        let order = await db.get().collection(collection.ORDER_COLLECTION).findOne({ _id: ObjectId(orderId) });
                         let orderProducts = order.products
                         orderProducts.forEach(obj => {
                             db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ _id: ObjectId(obj.product) }, {
@@ -113,8 +113,15 @@ module.exports = {
                 $set: {
                     orderStatus: false
                 }
-            }).then((response) => {
+            }).then(async(response) => {
                 resolve();
+                let order = await db.get().collection(collection.ORDER_COLLECTION).findOne({ _id: ObjectId(orderId) });
+                let orderProducts = order.products
+                orderProducts.forEach(obj => {
+                    db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ _id: ObjectId(obj.product) }, {
+                        $inc: { quantity: Number(obj.quantity) }
+                    })
+                });
             })
         })
     },
