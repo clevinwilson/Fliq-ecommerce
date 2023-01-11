@@ -372,6 +372,11 @@ router.get('/deleteWishList/:productId',verifyLogin,(req,res)=>{
   })
 })
 
+router.get('/move-to-wishlist/:productId',verifyLogin,(req,res)=>{
+  userControllers.moveToWishlist(req.params.productId,req.session.user._id).then((response)=>{
+    res.redirect('/wishList')
+  })
+})
 
 router.get('/update-val', (req, res) => {
   userControllers.upval();

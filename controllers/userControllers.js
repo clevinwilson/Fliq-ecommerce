@@ -416,6 +416,19 @@ module.exports = {
                 resolve();
             })
         })
+    },
+    moveToWishlist:(productId,userId)=>{
+        console.log(productId,userId);
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) },
+                {$pull: { cart: { product: ObjectId(productId) } }}
+            ).then((response) => {
+                db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) }, 
+                    { $push: { wishlist: ObjectId(productId) } }, { upsert: true }).then((response)=>{
+                    resolve();
+                })
+            })
+        })
     }
 
 }
