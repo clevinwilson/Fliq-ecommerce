@@ -1051,15 +1051,17 @@ span {
 /* //wish list */
 
 .wishlist-action-wrapper {
-  right: 14px;
+  right: 12px;
   top: 14px !important;
   display: flex;
   justify-content: center;
   align-items: center;
   background: white;
   box-shadow: 1px 1px 11px 1px #cccccc;
-  padding: 9px;
+  height: 40px;
+  width: 41px;
   border-radius: 50%;
+  z-index: 99;
 }
 
 .wishlist-action-wrapper>a {
@@ -1091,3 +1093,514 @@ span {
   color: #484848 !important;
   font-weight: 400;
 }
+
+
+
+/* wish list icon */
+@import url("https://fonts.googleapis.com/css?family=Open+Sans");
+
+*,
+:before,
+:after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Open Sans", sans-serif;
+  font-size: 13px;
+}
+
+.button--secondary,
+.button--secondary:visited {
+  border-radius: 3px;
+  cursor: pointer;
+  display: inline-block;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: 15px;
+  outline: none;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: none;
+  transition: background 0.1s linear;
+  font-weight: 400;
+  color: #0090e3;
+  background: #fff;
+  box-shadow: none;
+  transition-property: border;
+  transition-timing-function: ease-in-out;
+  transition-duration: 0.15s;
+}
+
+.button--full-width {
+  min-width: 385px;
+}
+
+.icon-with-text {
+  display: inline-flex;
+  align-items: flex-start;
+}
+
+.icon-with-text__icon {
+  flex-shrink: 0;
+  margin-right: 8px;
+  margin-top: -2px;
+}
+
+.icon-svg--color-silver {
+  fill: #cccccc;
+  color: #cccccc;
+}
+
+.icon-svg--color-blue {
+  fill: #0090e3;
+  color: #0090e3;
+}
+
+.icon-svg {
+  display: inline-block;
+  vertical-align: middle;
+  height: 16px;
+  width: 16px;
+}
+
+.heart-full {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
+
+.btn__effect {
+  display: inline-block;
+  position: relative;
+}
+
+.effect-group {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(25deg);
+}
+
+.effect-group .effect {
+  display: block;
+  position: absolute;
+  top: 38%;
+  left: 50%;
+  width: 20px;
+  transform-origin: 0px 2px;
+}
+
+.effect-group .effect:nth-child(2) {
+  transform: rotate(72deg);
+}
+
+.effect-group .effect:nth-child(3) {
+  transform: rotate(144deg);
+}
+
+.effect-group .effect:nth-child(4) {
+  transform: rotate(216deg);
+}
+
+.effect-group .effect:nth-child(5) {
+  transform: rotate(288deg);
+}
+
+.effect-group .effect:before {
+  content: "";
+  display: block;
+  position: absolute;
+  right: 0;
+  border-radius: 1.5px;
+  height: 3px;
+  background: #0090e3;
+}
+
+.effect-group .effect:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 10px;
+  right: 10%;
+  border-radius: 50%;
+  width: 3px;
+  height: 3px;
+  background: #ff6600;
+  transform: scale(0, 0);
+}
+
+.active .heart-stroke {
+  opacity: 0;
+}
+
+.active .heart-full {
+  opacity: 1;
+}
+
+.active .icon-svg {
+  -webkit-animation: bounceIn 0.5s linear;
+  animation: bounceIn 0.5s linear;
+}
+
+.active .effect:before {
+  -webkit-animation: fireworkLine 0.5s linear 0.1s;
+  animation: fireworkLine 0.5s linear 0.1s;
+}
+
+.active .effect:after {
+  -webkit-animation: fireworkPoint 0.5s linear 0.1s;
+  animation: fireworkPoint 0.5s linear 0.1s;
+}
+
+.broken-heart {
+  position: absolute;
+  left: -16px;
+  top: 0;
+  opacity: 0;
+}
+
+.broken-heart--left {
+  transform: rotate(0deg);
+  transform-origin: 60% 200%;
+}
+
+.broken-heart--right {
+  transform: rotate(0deg);
+  transform-origin: 63% 200%;
+}
+
+.broken-heart--crack {
+  stroke-dasharray: 15;
+  stroke-dashoffset: 15;
+}
+
+.deactivate .broken-heart {
+  opacity: 1;
+}
+
+.deactivate .broken-heart--left {
+  -webkit-animation: crackLeft 0.35s cubic-bezier(0.68, -0.55, 0.265, 2.85) 0.15s forwards, hide 0.25s ease-in 0.55s forwards;
+  animation: crackLeft 0.35s cubic-bezier(0.68, -0.55, 0.265, 2.85) 0.15s forwards, hide 0.25s ease-in 0.55s forwards;
+}
+
+.deactivate .broken-heart--right {
+  -webkit-animation: crackRight 0.35s cubic-bezier(0.68, -0.55, 0.265, 2.85) 0.15s forwards, hide 0.25s ease-in 0.55s forwards;
+  animation: crackRight 0.35s cubic-bezier(0.68, -0.55, 0.265, 2.85) 0.15s forwards, hide 0.25s ease-in 0.55s forwards;
+}
+
+.deactivate .broken-heart--crack {
+  -webkit-animation: crack 0.2s ease-in forwards;
+  animation: crack 0.2s ease-in forwards;
+}
+
+.button.one.desktop:not(.active):hover .heart-stroke {
+  -webkit-animation: pulse 1s ease-out infinite;
+  animation: pulse 1s ease-out infinite;
+}
+
+.button.two.desktop:not(.active):hover .heart-stroke {
+  -webkit-animation: pulseBlue 1s ease-out infinite;
+  animation: pulseBlue 1s ease-out infinite;
+}
+
+@-webkit-keyframes pulse {
+  0% {
+    opacity: 1;
+    transform-origin: center center;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.6;
+    transform: scale(1.15);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+    transform-origin: center center;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.6;
+    transform: scale(1.15);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@-webkit-keyframes pulseBlue {
+  0% {
+    transform-origin: center center;
+    transform: scale(1);
+    fill: #cccccc;
+  }
+
+  50% {
+    transform: scale(1.15);
+    fill: #0090e3;
+  }
+
+  100% {
+    transform: scale(1);
+    fill: #cccccc;
+  }
+}
+
+@keyframes pulseBlue {
+  0% {
+    transform-origin: center center;
+    transform: scale(1);
+    fill: #cccccc;
+  }
+
+  50% {
+    transform: scale(1.15);
+    fill: #0090e3;
+  }
+
+  100% {
+    transform: scale(1);
+    fill: #cccccc;
+  }
+}
+
+@-webkit-keyframes fireworkLine {
+  0% {
+    right: 20%;
+    transform: scale(0, 0);
+  }
+
+  25% {
+    right: 20%;
+    width: 6px;
+    transform: scale(1, 1);
+  }
+
+  35% {
+    right: 0;
+    width: 35%;
+  }
+
+  70% {
+    right: 0;
+    width: 4px;
+    transform: scale(1, 1);
+  }
+
+  100% {
+    right: 0;
+    transform: scale(0, 0);
+  }
+}
+
+@keyframes fireworkLine {
+  0% {
+    right: 20%;
+    transform: scale(0, 0);
+  }
+
+  25% {
+    right: 20%;
+    width: 6px;
+    transform: scale(1, 1);
+  }
+
+  35% {
+    right: 0;
+    width: 35%;
+  }
+
+  70% {
+    right: 0;
+    width: 4px;
+    transform: scale(1, 1);
+  }
+
+  100% {
+    right: 0;
+    transform: scale(0, 0);
+  }
+}
+
+@-webkit-keyframes fireworkPoint {
+  30% {
+    transform: scale(0, 0);
+  }
+
+  60% {
+    transform: scale(1, 1);
+  }
+
+  100% {
+    transform: scale(0, 0);
+  }
+}
+
+@keyframes fireworkPoint {
+  30% {
+    transform: scale(0, 0);
+  }
+
+  60% {
+    transform: scale(1, 1);
+  }
+
+  100% {
+    transform: scale(0, 0);
+  }
+}
+
+@-webkit-keyframes bounceIn {
+  0% {
+    transform: scale(0);
+  }
+
+  30% {
+    transform: scale(1.25);
+  }
+
+  50% {
+    transform: scale(0.9);
+  }
+
+  70% {
+    transform: scale(1.1);
+  }
+
+  80% {
+    transform: scale(1);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0);
+  }
+
+  30% {
+    transform: scale(1.25);
+  }
+
+  50% {
+    transform: scale(0.9);
+  }
+
+  70% {
+    transform: scale(1.1);
+  }
+
+  80% {
+    transform: scale(1);
+  }
+}
+
+@-webkit-keyframes crackLeft {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(-45deg);
+  }
+}
+
+@keyframes crackLeft {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(-45deg);
+  }
+}
+
+@-webkit-keyframes crackRight {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(45deg);
+  }
+}
+
+@keyframes crackRight {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(45deg);
+  }
+}
+
+@-webkit-keyframes crack {
+  0% {
+    stroke-dasharray: 15;
+    stroke-dashoffset: 15;
+  }
+
+  80% {
+    stroke-dasharray: 15;
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes crack {
+  0% {
+    stroke-dasharray: 15;
+    stroke-dashoffset: 15;
+  }
+
+  80% {
+    stroke-dasharray: 15;
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@-webkit-keyframes hide {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes hide {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+/*# sourceMappingURL=style.css.map */
