@@ -157,7 +157,7 @@ router.get('/product-details/:productId', async (req, res) => {
     productinCart=await userControllers.productExistCart(req.session.user._id,req.params.productId);
   }
   productControllers.getProductDetails(req.params.productId).then((product) => {
-    res.render('user/product-details', { product, user: req.session.user, cartCount, wishListStatus, productinCart })
+    res.render('user/product-details', { product, user: req.session.user, cartCount ,wishListStatus,productinCart})
   })
 })
 
@@ -182,7 +182,9 @@ router.post('/change-product-quantity', verifyLogin, (req, res) => {
   userControllers.updateCartProductCount(req.body, req.session.user._id).then(async (response) => {
     let cartTotal = await userControllers.getCartTotal(req.session.user._id);
 
-    if (response) {
+    if (response.quantityError){
+      res.json({ quantityError: true, cartTotal })
+    }else if (response) {
       res.json({ status: true, cartTotal })
     } else {
       res.json({ status: false, cartTotal })

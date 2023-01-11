@@ -150,23 +150,28 @@ module.exports = {
         })
     },
     updateCartProductCount: (data, userId) => {
-        return new Promise((resolve, reject) => {
-            console.log(data);
-            if (data.count == -1 && data.quantity == 1) {
-                db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) }, {
-                    $pull: { cart: { product: ObjectId(data.productId) } }
-                }).then((response) => {
-                    resolve(false)
-                })
-            } else {
-                db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId), 'cart.product': ObjectId(data.productId) },
-                    {
-                        $inc: { 'cart.$.quantity': parseInt(data.count) }
+        return new Promise(async (resolve, reject) => {
+            let productQuantity = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ _id: ObjectId(data.productId) });
+            if (data.quantity < productQuantity.quantity || data.count == -1) {
+                if (data.count == -1 && data.quantity == 1) {
+                    db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) }, {
+                        $pull: { cart: { product: ObjectId(data.productId) } }
                     }).then((response) => {
-                        resolve(true);
-                    }).catch((err) => {
-                        reject();
+                        resolve(false)
                     })
+                } else {
+                    db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId), 'cart.product': ObjectId(data.productId) },
+                        {
+                            $inc: { 'cart.$.quantity': parseInt(data.count) }
+                        }).then((response) => {
+                            resolve(true);
+                        }).catch((err) => {
+                            reject();
+                        })
+                }
+            }
+            else {
+                resolve({quantityError:true})
             }
         })
     },
@@ -363,9 +368,9 @@ module.exports = {
             }
         })
     },
-    productExistWishlist: (userId,productId) => {
+    productExistWishlist: (userId, productId) => {
         return new Promise(async (resolve, reject) => {
-            let isProductExits = await db.get().collection(collection.USER_COLLECTION).findOne({_id:ObjectId(userId), wishlist: ObjectId(productId) });
+            let isProductExits = await db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(userId), wishlist: ObjectId(productId) });
             if (isProductExits) {
                 resolve(true);
             } else {
@@ -395,31 +400,31 @@ module.exports = {
             resolve(wishList[0].products);
         })
     },
-    deleteFromWishList: (productId,userId) => {
+    deleteFromWishList: (productId, userId) => {
         return new Promise((resolve, reject) => {
             db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) },
                 {
                     $pull: { wishlist: ObjectId(productId) }
                 }
-            ).then((response)=>{
+            ).then((response) => {
                 resolve();
             })
         })
     },
-    moveToWishlist:(productId,userId)=>{
-        console.log(productId,userId);
-        return new Promise((resolve,reject)=>{
+    moveToWishlist: (productId, userId) => {
+        console.log(productId, userId);
+        return new Promise((resolve, reject) => {
             db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) },
-                {$pull: { cart: { product: ObjectId(productId) } }}
+                { $pull: { cart: { product: ObjectId(productId) } } }
             ).then((response) => {
-                db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) }, 
-                    { $push: { wishlist: ObjectId(productId) } }, { upsert: true }).then((response)=>{
-                    resolve();
-                })
+                db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) },
+                    { $push: { wishlist: ObjectId(productId) } }, { upsert: true }).then((response) => {
+                        resolve();
+                    })
             })
         })
     },
-    productExistCart:(userId,productId)=>{
+    productExistCart: (userId, productId) => {
         return new Promise(async (resolve, reject) => {
             let isProductExits = await db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(userId), 'cart.product': ObjectId(productId) });
             if (isProductExits) {

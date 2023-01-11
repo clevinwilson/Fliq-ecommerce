@@ -146,7 +146,15 @@
                             document.querySelector('.cart-total-price1').innerText=response.cartTotal;
                             document.querySelector('.cart-total-price2').innerText = response.cartTotal;
 
-                        } else {
+                        } else if(response.quantityError){
+                            swal({
+                                title: "Warning",
+                                text: "Quantity Limit Exceeded",
+                                icon: "info",
+                                dangerMode: true,
+                            })
+                        }
+                        else {
                             location.reload();
                         }
                     }
