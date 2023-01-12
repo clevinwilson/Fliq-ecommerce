@@ -2,6 +2,7 @@ const db = require('../config/connection');
 const collection = require('../config/collection');
 const bcrypt = require('bcrypt');
 const { ObjectId } = require("mongodb");
+const { response } = require('express');
 
 module.exports = {
     doLogin: (data) => {
@@ -91,6 +92,34 @@ module.exports = {
             })
         })
     },
+    addCoupon:(data)=>{
+        data.status=true;
+        data.date=new Date();
+
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.COUPON_COLLECTION).insertOne(data).then((response)=>{
+                resolve()
+            })
+        })
+    },
+    getCoupons:()=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.COUPON_COLLECTION).find().toArray().then((response)=>{
+                resolve(response)
+            })
+        })
+    },
+    checkCoupon:(data)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.CATEGORY_COLLECTION).findOne({ couponCode: data.couponCode }).then((response)=>{
+                if(response){
+                    resolve(true);
+                }else{
+                    resolve(false);
+                }
+            })
+        })
+    }
     
    
     

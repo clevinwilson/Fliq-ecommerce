@@ -9,6 +9,7 @@ const { uploadProduct, uploadCategoryImage, uploadBannerImage } = require('../mi
 const productControllers = require('../controllers/productControllers');
 const deleteImages = require('../helpers/delete-file');
 const verifyLogin = require('../middleware/adminAuth');
+const { response } = require('express');
 
 
 //login page
@@ -127,7 +128,7 @@ router.post('/add-category', verifyLogin, uploadCategoryImage, (req, res) => {
 
 router.get('/view-category', verifyLogin, (req, res) => {
     categoryControllers.getCategoryList().then((response) => {
-        res.render('admin/view-category', { categoryList: response, admin: req.session.adminLogin, categoryUpdate: req.session.categoryUpdate})
+        res.render('admin/view-category', { categoryList: response, admin: req.session.adminLogin, categoryUpdate: req.session.categoryUpdate })
         req.session.categoryUpdate = false;
     })
 })
@@ -164,12 +165,12 @@ router.get('/delete-category/:categoryId', verifyLogin, async (req, res) => {
     let category = await categoryControllers.getCategoryDetails(req.params.categoryId);
 
     categoryControllers.deleteCategory(req.params.categoryId).then((response) => {
-        if(response){
-            
-            res.json({status:true})
+        if (response) {
+
+            res.json({ status: true })
             deleteImages(category.image.path);
-        }else{
-            res.json({status:false})
+        } else {
+            res.json({ status: false })
         }
     })
 })
@@ -206,17 +207,17 @@ router.get('/view-banner', verifyLogin, async (req, res) => {
 })
 
 router.get('/delete-banner/:bannerId', verifyLogin, async (req, res) => {
-    try{
+    try {
         let banner = await bannerControllers.getBannerDetails(req.params.bannerId)
         deleteImages(banner.image.path)
         bannerControllers.deleteBanner(req.params.bannerId).then((response) => {
-            res.json({status:true})
-        }).catch(()=>{
-            res.json({status:false})
+            res.json({ status: true })
+        }).catch(() => {
+            res.json({ status: false })
         })
-    }catch(err){
+    } catch (err) {
         console.log(err);
-        res.json({status:false})
+        res.json({ status: false })
     }
 })
 
@@ -332,7 +333,7 @@ router.get('/view-orders', (req, res) => {
 
 router.get('/order-details/:orderId', (req, res) => {
     orderControllers.getOrderDetails(req.params.orderId).then((response) => {
-        res.render('admin/order-details', { order: response, admin: true })
+        res.render('admin/order-details', { order: response, admin: req.session.adminLogin })
     })
 })
 
@@ -350,6 +351,36 @@ router.get("/cancel-order/:orderId", (req, res) => {
     orderControllers.cancelOrder(req.params.orderId).then((response) => {
         res.json({ status: true })
     })
+})
+
+// coupon
+router.get('/coupon',async (req, res) => {
+    try{
+        let coupons = await adminControllers.getCoupons();
+        res.render('admin/coupon', { admin: req.session.adminLogin,coupons });
+    }catch(err){
+        console.log(err);
+    }
+})
+
+router.post('/add-coupon', async(req, res) => {
+    console.log(req.body);
+    try {
+        let couponExists=await adminControllers.checkCoupon(req.body)
+        console.log(couponExists);
+        if(!couponExists){
+            adminControllers.addCoupon(req.body).then(async (response) => {
+                res.redirect('/admin/coupon');
+
+            })
+        }else{
+            res.redirect('/admin/coupon');
+
+        }
+        
+    } catch (err) {
+        res.redirect('/admin/coupon');
+    }
 })
 
 module.exports = router;

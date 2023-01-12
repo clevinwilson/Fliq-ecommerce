@@ -395,7 +395,6 @@ router.get('/profile',verifyLogin,async(req,res)=>{
 })
 
 router.post('/update-profile',(req,res)=>{
-  console.log(req.body);
   userControllers.updateUserProfile(req.body).then((response)=>{
     res.json({status:true});
   })

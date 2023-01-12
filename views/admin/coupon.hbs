@@ -1,0 +1,150 @@
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    {{>admin-header}}
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+
+
+                <div class="row">
+
+                    <div class="col-lg-12">
+
+                        <!-- Circle Buttons -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Coupon</h6>
+                            </div>
+                            <form action="/admin/add-coupon" method="post" class="p-5" >
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group mt-3 ">
+                                                <label for="">Category Code</label>
+                                                <input style="border-color:#b4e3eb;" value="" type="text" maxlength="8" minlength="8"
+                                                    class="form-control col-md-12 mt-2" id="couponCode" name="couponCode" required>
+                                            </div>
+                                            <div class="form-group mt-3 ">
+                                                <label for="category-image">Coupon expiry date</label>
+                                                <input style="border-color:#b4e3eb;" value="" type="date" class="form-control col-md-12 mt-2" id="couponCode"
+                                                    name="ExpiryDate" required>
+                                            </div>
+                                            <div class="form-group mt-3 ">
+                                                <label for="category-image">Coupon discount</label>
+                                                <input style="border-color:#b4e3eb;" value="" type="number" class="form-control col-md-12 mt-2" id="couponDiscount"
+                                                    name="couponDiscount" required>
+                                            </div>
+                                            <div class="form-group mt-3 ">
+                                                <label for="category-image">Minimum purchase </label>
+                                                <input style="border-color:#b4e3eb;" value="" type="number" class="form-control col-md-12 mt-2" id="minimumPurchase"
+                                                    name="minimumPurchase" required>
+                                            </div>
+                                            <div class="form-group mt-3 ">
+                                                <label for="category-image">Maximum purchase </label>
+                                                <input style="border-color:#b4e3eb;" value="" type="number" class="form-control col-md-12 mt-2" id="maximumPurchase"
+                                                    name="maximumPurchase" required>
+                                            </div>
+                                            <div class="col-md-12  bottom-0 mb-4">
+                                                <center class="mt-1">
+                                                    <a href="/admin/dashboard" class="btn btn-black  mt-3 mr-4 ">Back</a>
+                                                    <button type="submit" id="submit" class="btn btn-success  mt-3">Submit</button>
+                                            
+                                                </center>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8 position-relative">
+                                            <div class="card-body">
+                                                {{#if categoryUpdate}}
+                                                <div class="alert alert-success" role="alert">
+                                                    {{categoryUpdate}}
+                                                </div>
+                                                {{/if}}
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Coupon Code</th>
+                                                                    <th>Status</th>
+                                                                    <th>Expiry Date</th>
+                                                                    <th>Coupon discount</th>
+                                                                    <th>Min purchase</th>
+                                                                    <th>Max purchase</th>
+                                                                    <th>Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tfoot>
+                                                            <tr>
+                                                                <tr>
+                                                                    <th>Coupon Code</th>
+                                                                    <th>Status</th>
+                                                                    <th>Expiry Date</th>
+                                                                    <th>Coupon discount</th>
+                                                                    <th>Min purchase</th>
+                                                                    <th>Max purchase</th>
+                                                                    <th>Action</th>
+                                                                </tr>
+                                                            </tr>
+                                                        </tfoot>
+                                                        <tbody>
+                                                            {{#each coupons}}
+                                            
+                                                            <tr>
+                                                                <td>{{this.couponCode}}</td>
+                                                                
+                                                                <td>{{this.status}}</td>
+                                                                <td>{{this.ExpiryDate}}</td>
+                                                                <td>{{this.couponDiscount}}</td>
+                                                                <td>{{this.minimumPurchase}}</td>
+                                                                <td>{{this.maximumPurchase}}</td>
+                                            
+                                                                <td class="d-flex">
+                                                                    <a title="Delete" class="table-btn btn btn-danger p-2"
+                                                                        href="/admin/delete-product/{{this._id}}"><i class="fa-solid fa-trash"></i></a>
+                                                                    <a title="Edit" href="/admin/edit-product/{{this._id}}"
+                                                                        class="table-btn ml-2 text-white btn btn-warning p-2"><i class="fa-solid fa-pen"></i></a>
+                                            
+                                                                </td>
+                                                            </tr>
+                                                            {{/each}}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                           
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    function viewImage(event) {
+        document.getElementById('category-image').style = 'display:block'
+        document.getElementById('category-image').src = URL.createObjectURL(event.target.files[0])
+    }
+</script>
+
+<style>
+    #category-image {
+        height: 160px;
+        width: 160px;
+        object-fit: contain;
+
+    }
+</style>
