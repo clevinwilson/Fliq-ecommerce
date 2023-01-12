@@ -207,9 +207,9 @@ router.get('/checkout', verifyLogin, async (req, res) => {
   let userDetails = await userControllers.getUserAdress(req.session.user._id);
   let cartTotal = await userControllers.getCartTotal(req.session.user._id);
   const cartCount = await userControllers.getCartCount(req.session.user._id);
-  let discountedPriceDetails=false;
-  if (userDetails.cart.discountedPrice){
-      discountedPriceDetails=await  userControllers.applyCoupon(userDetails.cart.coupon, cartTotal, req.session.user._id)
+  let discountedPriceDetails = false;
+  if (userDetails.cart.discountedPrice) {
+    discountedPriceDetails = await userControllers.applyCoupon(userDetails.cart.coupon, cartTotal, req.session.user._id)
   }
   res.render('user/checkout', { userDetails, cartTotal, user: req.session.user, cartCount, discountedPriceDetails: discountedPriceDetails });
 })
@@ -246,10 +246,10 @@ router.post('/place-order', verifyLogin, async (req, res) => {
     let user = await userControllers.getAddress(req.body.addressId, req.session.user._id);
     if (user) {
       const activeOrder = await orderControllers.getActiveOrder(user.activeOrder);
-     let  totalPrice = await userControllers.getCartTotal(req.session.user._id);
-     user.originalPrice=totalPrice;
-      if (user.cart.discountedPrice){
-         totalPrice = user.cart.discountedPrice;
+      let totalPrice = await userControllers.getCartTotal(req.session.user._id);
+      user.originalPrice = totalPrice;
+      if (user.cart.discountedPrice) {
+        totalPrice = user.cart.discountedPrice;
       }
       if (!activeOrder) {
         if (req.body.paymentMethod == "COD") {
@@ -407,18 +407,32 @@ router.post('/update-profile', (req, res) => {
   })
 })
 
+
+// coupon
 router.post('/apply-coupon/', async (req, res) => {
   let cartTotal = await userControllers.getCartTotal(req.session.user._id);
-  userControllers.applyCoupon(req.body.coupon, cartTotal,req.session.user._id).then((response)=>{
+  userControllers.applyCoupon(req.body.coupon, cartTotal, req.session.user._id).then((response) => {
     console.log(response);
-    if(response){
-      res.json({status:true,response})
-    }else{
-      res.json({status:false})
+    if (response) {
+      res.json({ status: true, response })
+    } else {
+      res.json({ status: false })
     }
   })
 
 })
+
+router.get('/remove-coupon',(req,res)=>{
+  userControllers.removeCoupon(req.session.user._id).then((response)=>{
+    if(response){
+      res.json({status:true})
+    }else{
+      res.json({status:false})
+    }
+  })
+})
+
+
 
 
 

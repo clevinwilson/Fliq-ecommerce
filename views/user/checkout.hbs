@@ -74,8 +74,13 @@
                                 style="border-bottom-right-radius: 0px; border-top-right-radius: 0px;"
                                 placeholder="Enter Coupon Code">
                         </div>
+                        {{#if discountedPriceDetails}}
+                        <a onclick="removerCoupon()" style="border-top-left-radius: 0px; border-bottom-left-radius: 0px;" type="submit"
+                            class="btn btn-dark h-100">Remove</a>
+                        {{else}}
                         <button style="border-top-left-radius: 0px; border-bottom-left-radius: 0px;" type="submit"
                             class="btn btn-dark h-100">Apply</button>
+                        {{/if}}
                     </form>
                 </div>
 
@@ -221,14 +226,34 @@
             data: $('#apply-coupon').serialize(),
             success: ((response) => {
                 if (response.status) {
-                    document.querySelector('.coupon-savings').innerText = "-" + response.response.savingPrice;
-                    document.querySelector('.cart-total').innerText = response.response.discountedPrice;
+                    location.reload();
                 } else {
                     document.getElementById('coupon-invalid-response').style.display = 'block'
                 }
             })
         })
     })
+</script>
+
+<script>
+    function removerCoupon(){
+        $.ajax({
+            url: '/remove-coupon',
+            method: 'get',
+            success: ((response) => {
+                if (response.status) {
+                    location.reload();
+                } else {
+                    swal({
+                        title: "Error",
+                        text: "something went wrong!",
+                        icon: "warning",
+                        dangerMode: true,
+                    })
+                }
+            })
+        })
+    }
 </script>
 
 <style>

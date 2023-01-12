@@ -17,7 +17,7 @@ module.exports = {
             userData.status = true;
             userData.wishlist = [];
             userData.orders = [];
-            userData.cart = [];
+            userData.cart = { products: [] };
 
             const user = await db.get().collection(collection.USER_COLLECTION).findOne({ email: userData.email })
             if (user) {
@@ -478,6 +478,17 @@ module.exports = {
                 }else{
                     resolve(false)
                 }
+            })
+        })
+    },
+    removeCoupon:(userId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.USER_COLLECTION).updateOne({_id:ObjectId(userId)},{
+                $unset: { 'cart.discountedPrice': "",'cart.savingPrice':"",'cart.coupon':"" }
+            }).then((response)=>{
+                resolve(true)
+            }).catch(()=>{
+                resolve(false)
             })
         })
     }

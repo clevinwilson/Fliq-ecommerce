@@ -49,7 +49,7 @@ module.exports = {
             db.get().collection(collection.ORDER_COLLECTION).updateOne({ _id: ObjectId(orderId) }, { $set: { orderStatus: "placed" } }).then((response) => {
                 db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) },
                     {
-                        $set: { 'cart.products': [] },
+                        $set: { cart: {products:[]} },
                         $unset: { activeOrder: "" }
 
                     }).then(async(response) => {
