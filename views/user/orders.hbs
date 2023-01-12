@@ -5,6 +5,7 @@
 
     </div>
     <div class="container">
+        {{#if orders}}
         <div class="row  justify-content-center">
             {{#each orders}}
             <div class="orders-wrap col-11 col-md-9 m-3">
@@ -64,6 +65,35 @@
             </div>
             {{/each}}
         </div>
+        {{else}}
+        <div class="container-fluid ">
+            <div class="row">
+        
+                <div class="col-md-12">
+        
+                    <div class="cart-card border-0 my-2">
+                        <div class="card-body  cart">
+                            <div class="col-sm-12 empty-cart-cls text-center">
+                                <img style="width: 200px;"
+                                    src="/images/1e5a9b6fb55fd9e51a390aa8f355d3bc.jpg"
+                                    width="130" height="130" class="img-fluid mb-4 mr-3">
+                                <h4><strong>No Order History Available</strong></h4>
+                                <h6 class="mt-4">Explore our wide selection and find something you like</h6>
+                                <a href="/" class="btn btn-primary cart-btn-transform m-3 mt-4 bg-dark border-dark"
+                                    style=" padding: 9px 11px;" data-abc="true">Continue Shopping</a>
+        
+        
+                            </div>
+                        </div>
+                    </div>
+        
+        
+                </div>
+        
+            </div>
+        
+        </div>
+        {{/if}}
     </div>
 </section>
 

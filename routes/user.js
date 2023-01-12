@@ -149,15 +149,15 @@ router.get('/account', verifyLogin, async (req, res) => {
 //product details page
 router.get('/product-details/:productId', async (req, res) => {
   let cartCount = false;
-  let wishListStatus =false;
-  let productinCart=false;
+  let wishListStatus = false;
+  let productinCart = false;
   if (req.session.user) {
-    wishListStatus = await userControllers.productExistWishlist(req.session.user._id,req.params.productId);
+    wishListStatus = await userControllers.productExistWishlist(req.session.user._id, req.params.productId);
     cartCount = await userControllers.getCartCount(req.session.user._id);
-    productinCart=await userControllers.productExistCart(req.session.user._id,req.params.productId);
+    productinCart = await userControllers.productExistCart(req.session.user._id, req.params.productId);
   }
   productControllers.getProductDetails(req.params.productId).then((product) => {
-    res.render('user/product-details', { product, user: req.session.user, cartCount ,wishListStatus,productinCart})
+    res.render('user/product-details', { product, user: req.session.user, cartCount, wishListStatus, productinCart })
   })
 })
 
@@ -182,9 +182,9 @@ router.post('/change-product-quantity', verifyLogin, (req, res) => {
   userControllers.updateCartProductCount(req.body, req.session.user._id).then(async (response) => {
     let cartTotal = await userControllers.getCartTotal(req.session.user._id);
 
-    if (response.quantityError){
+    if (response.quantityError) {
       res.json({ quantityError: true, cartTotal })
-    }else if (response) {
+    } else if (response) {
       res.json({ status: true, cartTotal })
     } else {
       res.json({ status: false, cartTotal })
@@ -353,33 +353,38 @@ router.get('/search/:key', async (req, res) => {
 
 
 //wishlist 
-router.get('/wishlist',verifyLogin,(req,res)=>{
-  userControllers.getWishList(req.session.user._id).then(async(response)=>{
+router.get('/wishlist', verifyLogin, (req, res) => {
+  userControllers.getWishList(req.session.user._id).then(async (response) => {
     let cartCount = await userControllers.getCartCount(req.session.user._id);
     res.render('user/wishlist', { user: req.session.user, wishList: response, cartCount });
   })
 })
 
-router.get('/add-to-wishList/:productId',(req,res)=>{
-  userControllers.addToWishlist(req.params.productId,req.session.user._id).then((response)=>{
-    if(response){
-      res.json({status:true})
-    }else{
-      res.json({status:false})
+router.get('/add-to-wishList/:productId', (req, res) => {
+  userControllers.addToWishlist(req.params.productId, req.session.user._id).then((response) => {
+    if (response) {
+      res.json({ status: true })
+    } else {
+      res.json({ status: false })
     }
   })
 })
 
-router.get('/deleteWishList/:productId',verifyLogin,(req,res)=>{
-  userControllers.deleteFromWishList(req.params.productId,req.session.user._id).then((response)=>{
+router.get('/deleteWishList/:productId', verifyLogin, (req, res) => {
+  userControllers.deleteFromWishList(req.params.productId, req.session.user._id).then((response) => {
     res.redirect('/wishlist');
   })
 })
 
-router.get('/move-to-wishlist/:productId',verifyLogin,(req,res)=>{
-  userControllers.moveToWishlist(req.params.productId,req.session.user._id).then((response)=>{
+router.get('/move-to-wishlist/:productId', verifyLogin, (req, res) => {
+  userControllers.moveToWishlist(req.params.productId, req.session.user._id).then((response) => {
     res.redirect('/wishList')
   })
+})
+
+//profile
+router.get('/profile',verifyLogin,(req,res)=>{
+  res.render('user/profile',{user:req.session.user})
 })
 
 
