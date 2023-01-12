@@ -246,17 +246,21 @@ router.post('/place-order', verifyLogin, async (req, res) => {
     let user = await userControllers.getAddress(req.body.addressId, req.session.user._id);
     if (user) {
       const activeOrder = await orderControllers.getActiveOrder(user.activeOrder);
-      let cartTotal = await userControllers.getCartTotal(req.session.user._id);
+     let  totalPrice = await userControllers.getCartTotal(req.session.user._id);
+     user.originalPrice=totalPrice;
+      if (user.cart.discountedPrice){
+         totalPrice = user.cart.discountedPrice;
+      }
       if (!activeOrder) {
         if (req.body.paymentMethod == "COD") {
-          orderControllers.placeOrder(req.body.phone, req.body.paymentMethod, user, cartTotal).then((details) => {
+          orderControllers.placeOrder(req.body.phone, req.body.paymentMethod, user, totalPrice).then((details) => {
             orderControllers.changeOrderStatus(details.response.insertedId, req.session.user._id).then((response) => {
               res.json({ codSuccess: true })
             })
           })
         } else {
-          let details = await orderControllers.placeOrder(req.body.phone, req.body.paymentMethod, user, cartTotal);
-          userControllers.generateRazorpay(details.response.insertedId, cartTotal).then((response) => {
+          let details = await orderControllers.placeOrder(req.body.phone, req.body.paymentMethod, user, totalPrice);
+          userControllers.generateRazorpay(details.response.insertedId, totalPrice).then((response) => {
 
             response.user = req.session.user;
             res.json(response)
@@ -273,7 +277,7 @@ router.post('/place-order', verifyLogin, async (req, res) => {
             res.json({ codSuccess: true })
           })
         } else {
-          userControllers.generateRazorpay(user.activeOrder, cartTotal).then((response) => {
+          userControllers.generateRazorpay(user.activeOrder, totalPrice).then((response) => {
             console.log("haaa");
             response.user = req.session.user;
             res.json(response)

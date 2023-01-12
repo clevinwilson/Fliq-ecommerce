@@ -4,7 +4,7 @@ const { ObjectId } = require("mongodb");
 const { response } = require('express');
 
 module.exports = {
-    placeOrder: (phone, paymentMethod, userDetails, cartTotal) => {
+    placeOrder: (phone, paymentMethod, userDetails, price) => {
         return new Promise((resolve, reject) => {
             userDetails.address.phone = phone;
             var date = new Date();
@@ -17,7 +17,8 @@ module.exports = {
                 paymentMethod: paymentMethod,
                 orderStatus: paymentMethod === 'COD' ? "placed" : 'pending',
                 products: userDetails.cart.products,
-                totalAmount: cartTotal,
+                totalAmount: price,
+                originalPrice: userDetails.originalPrice,
                 date: current_date,
                 cartId: userDetails._id,
                 shipmentStatus: { ordrePlaced: { id: Date.now() + '-' + Math.round(Math.random() * 1E9), status: true, lastUpdate: { date: current_date, time: current_time, placeUpdates: [] } } }
