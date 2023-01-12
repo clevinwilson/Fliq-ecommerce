@@ -207,8 +207,11 @@ router.get('/checkout', verifyLogin, async (req, res) => {
   let userDetails = await userControllers.getUserAdress(req.session.user._id);
   let cartTotal = await userControllers.getCartTotal(req.session.user._id);
   const cartCount = await userControllers.getCartCount(req.session.user._id);
-
-  res.render('user/checkout', { userDetails, cartTotal, user: req.session.user, cartCount });
+  let discountedPriceDetails=false;
+  if (userDetails.cart.discountedPrice){
+      discountedPriceDetails=await  userControllers.applyCoupon(userDetails.cart.coupon, cartTotal, req.session.user._id)
+  }
+  res.render('user/checkout', { userDetails, cartTotal, user: req.session.user, cartCount, discountedPriceDetails: discountedPriceDetails });
 })
 
 
@@ -383,21 +386,34 @@ router.get('/move-to-wishlist/:productId', verifyLogin, (req, res) => {
 })
 
 //profile
-router.get('/profile',verifyLogin,async(req,res)=>{
-  try{
+router.get('/profile', verifyLogin, async (req, res) => {
+  try {
     let cartCount = await userControllers.getCartCount(req.session.user._id);
     userControllers.getUserDetails(req.session.user._id).then((userDetails) => {
       res.render('user/profile', { user: userDetails, cartCount })
     })
-  }catch(err){
+  } catch (err) {
     res.redirect('/accoutn')
   }
 })
 
-router.post('/update-profile',(req,res)=>{
-  userControllers.updateUserProfile(req.body).then((response)=>{
-    res.json({status:true});
+router.post('/update-profile', (req, res) => {
+  userControllers.updateUserProfile(req.body).then((response) => {
+    res.json({ status: true });
   })
+})
+
+router.post('/apply-coupon/', async (req, res) => {
+  let cartTotal = await userControllers.getCartTotal(req.session.user._id);
+  userControllers.applyCoupon(req.body.coupon, cartTotal,req.session.user._id).then((response)=>{
+    console.log(response);
+    if(response){
+      res.json({status:true,response})
+    }else{
+      res.json({status:false})
+    }
+  })
+
 })
 
 

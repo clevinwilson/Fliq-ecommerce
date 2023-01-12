@@ -65,12 +65,17 @@
             <div class="col-lg-4 col-md-12 p-3 mb-5 mb-md-0 order-right-section">
                 <div class="delivery-address-box mt-2">
                     <p>APPLY COUPON</p>
-                    <form action="" class="form-inline d-flex justify-content-center align-items-center ">
-                        <div class="form-group mb-0">
-                            <input type="email" class="form-control " id="exampleInputEmail1" style="    border-bottom-right-radius: 0px; border-top-right-radius: 0px;"
-                                aria-describedby="emailHelp" placeholder="Enter Coupon Code">
+                    <p style="font-size: 11px; display: none;" id="coupon-invalid-response" class="text-danger">Invalid
+                        coupon code</p>
+                    <form action="" id="apply-coupon"
+                        class="form-inline d-flex justify-content-center align-items-center ">
+                        <div class="form-group mb-0 w-100">
+                            <input type="text" class="form-control " {{#if discountedPriceDetails}} value="{{userDetails.cart.coupon}}"{{else}} value="" {{/if}} id="coupon" name="coupon"
+                                style="border-bottom-right-radius: 0px; border-top-right-radius: 0px;"
+                                placeholder="Enter Coupon Code">
                         </div>
-                        <button style="border-top-left-radius: 0px; border-bottom-left-radius: 0px;" type="submit" class="btn btn-dark h-100">Apply</button>
+                        <button style="border-top-left-radius: 0px; border-bottom-left-radius: 0px;" type="submit"
+                            class="btn btn-dark h-100">Apply</button>
                     </form>
                 </div>
 
@@ -80,13 +85,29 @@
                         <p>Original Price</p>
                         <span>₹ <span class="cart-total-price1">{{cartTotal}}</span></span>
                     </div>
+                    {{#if discountedPriceDetails.discountedPrice}}
+                    <div class="original-price-wrap d-flex justify-content-between">
+                        <p>Coupon Savings</p>
+                        <span>₹ <span class="coupon-savings text-success">-{{discountedPriceDetails.savingPrice}}</span></span>
+                    </div>
+                    {{else}}
+                    <div class="original-price-wrap d-flex justify-content-between">
+                        <p>Coupon Savings</p>
+                        <span>₹ <span class="coupon-savings text-success">0</span></span>
+                    </div>
+                    {{/if}}
                     <div class="delivery-price-wrap mt-2 d-flex justify-content-between">
                         <p>Delivery</p>
                         <span>Free</span>
                     </div>
                     <div class="total-wrap d-flex mt-2 justify-content-between">
                         <p>Total</p>
-                        <span>₹ <span class="cart-total-price2">{{cartTotal}}</span></span>
+                        {{#if discountedPriceDetails.discountedPrice}}
+                        <span>₹ <span class="cart-total">{{discountedPriceDetails.discountedPrice}}</span></span>
+
+                        {{else}}
+                        <span>₹ <span class="cart-total">{{cartTotal}}</span></span>
+                        {{/if}}
                     </div>
 
                 </div>
@@ -190,12 +211,32 @@
     })
 </script>
 
+<script>
+    let coupon = document.getElementById('coupon')
+    $('#apply-coupon').submit((e) => {
+        e.preventDefault();
+        $.ajax({
+            url: '/apply-coupon',
+            method: 'post',
+            data: $('#apply-coupon').serialize(),
+            success: ((response) => {
+                if (response.status) {
+                    document.querySelector('.coupon-savings').innerText = "-" + response.response.savingPrice;
+                    document.querySelector('.cart-total').innerText = response.response.discountedPrice;
+                } else {
+                    document.getElementById('coupon-invalid-response').style.display = 'block'
+                }
+            })
+        })
+    })
+</script>
+
 <style>
-        .form-control:focus {
-            color: #212529;
-            background-color: #fff;
-            border-color: #858585;
-            outline: 0;
-            box-shadow: 0 0 0 0.25rem rgb(255 255 255 / 25%);
-        }
+    .form-control:focus {
+        color: #212529;
+        background-color: #fff;
+        border-color: #858585;
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgb(255 255 255 / 25%);
+    }
 </style>

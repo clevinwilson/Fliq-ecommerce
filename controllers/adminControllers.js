@@ -95,6 +95,7 @@ module.exports = {
     addCoupon:(data)=>{
         data.status=true;
         data.date=new Date();
+        data.couponDiscount = parseInt(couponDiscount);
 
         return new Promise((resolve,reject)=>{
             db.get().collection(collection.COUPON_COLLECTION).insertOne(data).then((response)=>{

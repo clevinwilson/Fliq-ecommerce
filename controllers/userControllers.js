@@ -456,6 +456,30 @@ module.exports = {
                 resolve(response)
             })
         })
+    },
+    applyCoupon:(coupon,cartTotal,userId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.COUPON_COLLECTION).findOne({ couponCode :coupon}).then((couponDetails)=>{
+                if (couponDetails && cartTotal >= parseInt(couponDetails.minimumPurchase) && cartTotal <= parseInt(couponDetails.maximumPurchase)){
+                    let savingPrice = (cartTotal * (parseInt(couponDetails.couponDiscount) /100));
+                    let discountedPrice = cartTotal- savingPrice;
+                    db.get().collection(collection.USER_COLLECTION).updateOne({_id:ObjectId(userId)},{
+                        $set: { 
+                            'cart.discountedPrice':discountedPrice ,
+                            'cart.savingPrice':savingPrice,
+                            'cart.coupon':coupon,
+                        }
+                    }).then((response)=>{
+                        console.log(response,">dsfsdfsdf");
+                        resolve({savingPrice,discountedPrice});
+                    }).catch((response)=>{
+                        resolve(false);
+                    })
+                }else{
+                    resolve(false)
+                }
+            })
+        })
     }
 
 }
