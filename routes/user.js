@@ -383,8 +383,22 @@ router.get('/move-to-wishlist/:productId', verifyLogin, (req, res) => {
 })
 
 //profile
-router.get('/profile',verifyLogin,(req,res)=>{
-  res.render('user/profile',{user:req.session.user})
+router.get('/profile',verifyLogin,async(req,res)=>{
+  try{
+    let cartCount = await userControllers.getCartCount(req.session.user._id);
+    userControllers.getUserDetails(req.session.user._id).then((userDetails) => {
+      res.render('user/profile', { user: userDetails, cartCount })
+    })
+  }catch(err){
+    res.redirect('/accoutn')
+  }
+})
+
+router.post('/update-profile',(req,res)=>{
+  console.log(req.body);
+  userControllers.updateUserProfile(req.body).then((response)=>{
+    res.json({status:true});
+  })
 })
 
 

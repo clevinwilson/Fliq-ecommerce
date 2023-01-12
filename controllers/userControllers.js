@@ -433,6 +433,28 @@ module.exports = {
                 resolve(false);
             }
         })
+    },
+    getUserDetails:(userId)=>{
+       return new Promise((resolve,reject)=>{
+           db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(userId) }).then((response) => {
+               resolve(response)
+           })
+       })
+    },
+    updateUserProfile:(userDetails)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.USER_COLLECTION).updateOne({_id:ObjectId(userDetails.userId)},{
+                $set:{
+                    fname:userDetails.fname,
+                    lname:userDetails.lname,
+                    email:userDetails.email,
+                    phone:userDetails.phone,
+                    dateOfbirth:userDetails.dateOfbirth
+                }
+            }).then((response)=>{
+                resolve(response)
+            })
+        })
     }
 
 }

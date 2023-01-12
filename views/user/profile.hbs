@@ -1,6 +1,5 @@
 {{>user-header}}
-    <link rel="stylesheet" type="text/css"
-        href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
 <body>
     <section class="py-5 my-5">
@@ -10,7 +9,9 @@
                 <div class="profile-tab-nav border-right">
                     <div class="p-4">
                         <div class="img-circle text-center mb-3">
-                            <img style="object-fit: cover;" src="https://e7.pngegg.com/pngimages/799/987/png-clipart-computer-icons-avatar-icon-design-avatar-heroes-computer-wallpaper.png" alt="Image" class="shadow">
+                            <img style="object-fit: cover;"
+                                src="https://e7.pngegg.com/pngimages/799/987/png-clipart-computer-icons-avatar-icon-design-avatar-heroes-computer-wallpaper.png"
+                                alt="Image" class="shadow">
                         </div>
                         <h4 class="text-center">{{user.fname}} {{user.lname}}</h4>
                     </div>
@@ -44,44 +45,49 @@
                 </div>
                 <div class="tab-content p-4 p-md-5" id="v-pills-tabContent">
                     <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
-                        <h3 class="mb-4">Account Settings</h3>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>First Name</label>
-                                    <input type="text" class="form-control" value="{{user.fname}}">
+                        <form action="" method="post"  id="account-details">
+                            <h3 class="mb-4">Account Settings</h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>First Name</label>
+                                        <input type="text" name="fname" class="form-control" value="{{user.fname}}">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Last Name</label>
-                                    <input type="text" class="form-control" value="{{user.lname}}">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Last Name</label>
+                                        <input type="text" name="lname" class="form-control" value="{{user.lname}}">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Email</label>
-                                    <input type="text" class="form-control" value="{{user.email}}">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <input type="text" name="email" class="form-control" value="{{user.email}}">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Phone number</label>
-                                    <input type="text" class="form-control" value="+91 {{user.phone}}">
+                                <input type="text" value="{{user._id}}" name="userId" class="d-none">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Phone number</label>
+                                        <input type="text" name="phone" class="form-control" value="{{user.phone}}">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Date of Birth</label>
-                                    <input type="date"  class="form-control"  placeholder="DD/MM/YY">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Date of Birth</label>
+                                        <input type="date" value="{{user.dateOfbirth}}"  name="dateOfbirth" class="form-control"
+                                            placeholder="DD/MM/YY">
+                                    </div>
                                 </div>
+
                             </div>
-                            
-                        </div>
-                        <div>
-                            <button class="btn btn-primary">Update</button>
-                            <button class="btn btn-light">Cancel</button>
-                        </div>
+                            <div>
+                                <button type="submit" onclick="updateAccoutDetails()"
+                                    class="btn btn-primary">Update</button>
+                                <button class="btn btn-light">Cancel</button>
+                            </div>
+                        </form>
                     </div>
                     <div class="tab-pane fade" id="password" role="tabpanel" aria-labelledby="password-tab">
                         <h3 class="mb-4">Password Settings</h3>
@@ -205,5 +211,30 @@
         </div>
     </section>
 
-{{>user-footer}}
+    {{>user-footer}}
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+
+
+    <script>
+        $('#account-details').submit((e) => {
+            e.preventDefault();
+            $.ajax({
+                url: '/update-profile',
+                method: 'post',
+                data: $('#account-details').serialize(),
+                success: ((response) => {
+                    if(response){
+                        swal({
+                            title: "Good job!",
+                            text: "You clicked the button!",
+                            icon: "success",
+                            button: "OK",
+                        }).then(()=>{
+                            location.reload();
+                        })
+                    }
+                })
+            })
+        })
+    </script>
