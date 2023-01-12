@@ -89,18 +89,19 @@ module.exports = {
         }
         return new Promise(async (resolve, reject) => {
             const user = await db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(userId) });
-            const productExists = user.cart.findIndex(products => products.product == productId);
+            console.log(user);
+            const productExists = user.cart.products.findIndex(products => products.product == productId);
             if (productExists != -1) {
-                db.get().collection(collection.USER_COLLECTION).updateOne({ 'cart.product': ObjectId(productId) },
+                db.get().collection(collection.USER_COLLECTION).updateOne({_id:ObjectId(userId), 'cart.products.product': ObjectId(productId) },
                     {
-                        $inc: { 'cart.$.quantity': 1 }
+                        $inc: { 'cart.products.$.quantity': 1 }
                     }).then((response) => {
                         resolve();
                     })
             }
             else {
                 db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) }, {
-                    $push: { cart: productObject }
+                    $push: { 'cart.products': productObject }
                 }).then((response) => {
                     resolve();
                 })
@@ -112,7 +113,7 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             let user = await db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(userId) });
             if (user) {
-                resolve(user.cart.length ?? 0)
+                resolve(user.cart.products.length ?? 0)
             }
         })
     },
@@ -123,12 +124,12 @@ module.exports = {
                     $match: { _id: ObjectId(userId) }
                 },
                 {
-                    $unwind: '$cart'
+                    $unwind: '$cart.products'
                 },
                 {
                     $project: {
-                        item: '$cart.product',
-                        quantity: '$cart.quantity'
+                        item: '$cart.products.product',
+                        quantity: '$cart.products.quantity'
                     }
                 },
                 {
@@ -155,14 +156,14 @@ module.exports = {
             if (data.quantity < productQuantity.quantity || data.count == -1) {
                 if (data.count == -1 && data.quantity == 1) {
                     db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) }, {
-                        $pull: { cart: { product: ObjectId(data.productId) } }
+                        $pull: { 'cart.products': { product: ObjectId(data.productId) } }
                     }).then((response) => {
                         resolve(false)
                     })
                 } else {
-                    db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId), 'cart.product': ObjectId(data.productId) },
+                    db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId), 'cart.products.product': ObjectId(data.productId) },
                         {
-                            $inc: { 'cart.$.quantity': parseInt(data.count) }
+                            $inc: { 'cart.products.$.quantity': parseInt(data.count) }
                         }).then((response) => {
                             resolve(true);
                         }).catch((err) => {
@@ -178,7 +179,7 @@ module.exports = {
     deleteCartProduct: (productId, userId) => {
         return new Promise((resolve, reject) => {
             db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) }, {
-                $pull: { cart: { product: ObjectId(productId) } }
+                $pull: { 'cart.products': { product: ObjectId(productId) } }
             }).then((response) => {
                 resolve()
             })
@@ -191,12 +192,12 @@ module.exports = {
                     $match: { _id: ObjectId(userId) }
                 },
                 {
-                    $unwind: '$cart'
+                    $unwind: '$cart.products'
                 },
                 {
                     $project: {
-                        product: '$cart.product',
-                        quantity: '$cart.quantity'
+                        product: '$cart.products.product',
+                        quantity: '$cart.products.quantity'
                     }
                 },
                 {
@@ -415,7 +416,7 @@ module.exports = {
         console.log(productId, userId);
         return new Promise((resolve, reject) => {
             db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) },
-                { $pull: { cart: { product: ObjectId(productId) } } }
+                { $pull: { 'cart.products': { product: ObjectId(productId) } } }
             ).then((response) => {
                 db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) },
                     { $push: { wishlist: ObjectId(productId) } }, { upsert: true }).then((response) => {
@@ -426,7 +427,7 @@ module.exports = {
     },
     productExistCart: (userId, productId) => {
         return new Promise(async (resolve, reject) => {
-            let isProductExits = await db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(userId), 'cart.product': ObjectId(productId) });
+            let isProductExits = await db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(userId), 'cart.products.product': ObjectId(productId) });
             if (isProductExits) {
                 resolve(true);
             } else {

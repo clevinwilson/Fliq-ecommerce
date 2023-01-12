@@ -16,7 +16,7 @@ module.exports = {
                 deliveryDetails: userDetails.address,
                 paymentMethod: paymentMethod,
                 orderStatus: paymentMethod === 'COD' ? "placed" : 'pending',
-                products: userDetails.cart,
+                products: userDetails.cart.products,
                 totalAmount: cartTotal,
                 date: current_date,
                 cartId: userDetails._id,
@@ -48,7 +48,7 @@ module.exports = {
             db.get().collection(collection.ORDER_COLLECTION).updateOne({ _id: ObjectId(orderId) }, { $set: { orderStatus: "placed" } }).then((response) => {
                 db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) },
                     {
-                        $set: { cart: [] },
+                        $set: { 'cart.products': [] },
                         $unset: { activeOrder: "" }
 
                     }).then(async(response) => {
