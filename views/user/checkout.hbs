@@ -8,10 +8,10 @@
 <section>
     <div class="container ">
         <div class="row checkout">
-            <div class="col-lg-8 col-md-12 p-md-2">
+            <div class="col-lg-8 col-md-12 p-md-2 ">
                 <form action="" method="post" id="checkout-form">
-                    <h4 class="mt-2">Contact information</h4>
-                    <div class="row">
+                    <h4 class="mt-sm-2 mt-5 ms-md-5 ms-0 ">Contact information</h4>
+                    <div class="row justify-content-center">
                         <div class="col-md-10 mt-3">
                             <div class="card-box d-flex">
                                 <p style="font-size: 17px;" class="m-0 p-0">{{user.email}}</p>
@@ -23,8 +23,8 @@
                             </div>
                         </div>
                     </div>
-                    <h4 class="mt-5">Select an address:</h4>
-                    <div class="row">
+                    <h4 class="mt-5 ms-md-5 ms-0">Select an address:</h4>
+                    <div class="row justify-content-center">
                         {{#each userDetails.address}}
                         <div class="col-md-10 mt-3">
                             <label class="mt-3 model-container text-center w-100 ">
@@ -57,7 +57,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row justify-content-center">
                         <div class="col-md-10 mt-4">
                             <div class="mt-2 bottem-checkout-btn-container ">
                                 <button class="text-white col-md-6  btn btn-primary  checkout-btn mt-4 "
@@ -67,11 +67,16 @@
                     </div>
                 </form>
             </div>
-            <div class="col-lg-4 col-md-12 p-3 order-right-section">
+            <div class="col-lg-4 col-md-12 p-3 mb-5 mb-md-0 order-right-section">
                 <div class="delivery-address-box mt-2">
-                    <p>Delivery options for 670142</p>
-                    <span><span class="me-2"><i class="bi bi-archive"></i></span> Standard Delivery by Wed, 4th
-                        Jan</span>
+                    <p>APPLY COUPON</p>
+                    <form action="" class="form-inline d-flex justify-content-center align-items-center ">
+                        <div class="form-group mb-0">
+                            <input type="email" class="form-control " id="exampleInputEmail1" style="    border-bottom-right-radius: 0px; border-top-right-radius: 0px;"
+                                aria-describedby="emailHelp" placeholder="Enter Coupon Code">
+                        </div>
+                        <button style="border-top-left-radius: 0px; border-bottom-left-radius: 0px;" type="submit" class="btn btn-dark h-100">Apply</button>
+                    </form>
                 </div>
 
                 <div class="order-summary-wrap mt-3">
@@ -172,7 +177,7 @@
 </script>
 
 <script>
-    let addNewAddressDiv=document.getElementById('add-new-address')
+    let addNewAddressDiv = document.getElementById('add-new-address')
     $('#checkout-form').submit((e) => {
         e.preventDefault();
         $.ajax({
@@ -181,11 +186,21 @@
             data: $('#checkout-form').serialize(),
             success: ((response) => {
                 if (response.status && response.addressId) {
-                    location.href=`/billing/${response.addressId}`
-                }else if(!response.address){
-                    addNewAddressDiv.style.borderColor='red'
+                    location.href = `/billing/${response.addressId}`
+                } else if (!response.address) {
+                    addNewAddressDiv.style.borderColor = 'red'
                 }
             })
         })
     })
 </script>
+
+<style>
+        .form-control:focus {
+            color: #212529;
+            background-color: #fff;
+            border-color: #858585;
+            outline: 0;
+            box-shadow: 0 0 0 0.25rem rgb(255 255 255 / 25%);
+        }
+</style>
