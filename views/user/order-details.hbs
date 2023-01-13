@@ -1,4 +1,6 @@
 {{>user-header}}
+<script src="https://unpkg.com/easyinvoice/dist/easyinvoice.min.js"></script>
+
 <section>
     <div class="headerhny-title text-center mt-3 mb-3">
         <h3 class="hny-title mb-0 p-4">Order Details</h3>
@@ -29,18 +31,58 @@
                     <h5 class="mt-2 ">More actions</h5>
                     <hr style="color: #b5b5b5;">
                     </hr>
-                    <div>
-                        {{#if order.orderStatus}}
-                        <h5 class="text-success text-capitalize">Order {{order.orderStatus}}</h5>
-                        {{else}}
-                        <h5 class="text-danger text-capitalize">Order Canceled</h5>
+                    <div class="row">
+                        <div class="col-6">
+                            <div>
+                                {{#if order.orderStatus}}
+                                <h5 class="text-success text-capitalize">Order {{order.orderStatus}}</h5>
+                                {{else}}
+                                <h5 class="text-danger text-capitalize">Order Canceled</h5>
 
-                        {{/if}}
-                        <p style="font-size: 14px;" class="mt-3">Payment Method: {{order.paymentMethod}}</p>
-                        <p class="mt-3">Expected by Fri, 31st Jul '23
-                        </p>
+                                {{/if}}
+                                <p style="font-size: 14px;" class="mt-3">Payment Method: {{order.paymentMethod}}</p>
+                                <p class="mt-3">Expected by Fri, 31st Jul '23
+                                </p>
 
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <h6>Download Invoice</h6>
+                            <button onclick="getOrderDetails('{{order._id}}','{{user._id}}')" class="btn btn-success">Download</button>
+                        </div>
                     </div>
+                    <script>
+                        function getOrderDetails(orderId, userId) {
+                            $.ajax({
+                                url: '/download-invoice/' + orderId+"/"+ userId,
+                                method: 'get',
+                                success: ((response) => {
+                                    if (response.status) {
+                                        downloadInvoice(response.invoice)
+                                    } else {
+                                        location.reload()
+                                    }
+                                })
+                            })
+
+                            function downloadInvoice(data) {
+
+                                easyinvoice.createInvoice(data, function (result) {
+                                    //The response will contain a base64 encoded PDF file
+                                    console.log('PDF base64 string: ', result.pdf);
+                                    easyinvoice.download('invoice.pdf')
+                                });
+
+                            }
+
+                        }
+                    </script>
+
+                    {{!-- easyinvoice.createInvoice(data, function (result) {
+                    //The response will contain a base64 encoded PDF file
+                    console.log('PDF base64 string: ', result.pdf);
+                    easyinvoice.download('invoice.pdf')
+                    }); --}}
                 </div>
             </div>
         </div>
@@ -458,5 +500,6 @@
 
 <style>
     .user-header {
-    position: fixed !important;}
+        position: fixed !important;
+    }
 </style>

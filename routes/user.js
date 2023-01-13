@@ -9,7 +9,7 @@ const orderControllers = require('../controllers/orderController');
 const { razorpayVerify } = require('../helpers/razorpay');
 const verifyLogin = require('../middleware/userAuth');
 const paginatedResults = require('../middleware/paginatedResults');
-const { response } = require('express');
+const getInvoice =require('../helpers/invoice');
 
 router.get('/', async function (req, res) {
   let cartCount = false;
@@ -165,8 +165,12 @@ router.get('/product-details/:productId', async (req, res) => {
 //cart
 router.get('/add-to-cat/:productId', verifyLogin, (req, res) => {
   userControllers.addToCart(req.params.productId, req.session.user._id).then(async (response) => {
-    let cartCount = await userControllers.getCartCount(req.session.user._id)
-    res.json({ status: true, cartCount })
+    if(response){
+      let cartCount = await userControllers.getCartCount(req.session.user._id);
+      res.json({ status: true, cartCount })
+    }else{
+      res.json({status:false})
+    }
   })
 })
 
@@ -278,11 +282,9 @@ router.post('/place-order', verifyLogin, async (req, res) => {
           })
         } else {
           userControllers.generateRazorpay(user.activeOrder, totalPrice).then((response) => {
-            console.log("haaa");
             response.user = req.session.user;
             res.json(response)
           }).catch(() => {
-            console.log("yesss");
             res.json({ status: false })
           })
         }
@@ -430,6 +432,17 @@ router.get('/remove-coupon',(req,res)=>{
       res.json({status:false})
     }
   })
+})
+
+
+router.get('/download-invoice/:orderId/:userId',(req,res)=>{
+  console.log(req.params.orderId, req.params.userId);
+  userControllers.getOrderForInvoice(req.params.orderId, req.params.userId).then(async (order) => {
+    let cartTotal = await userControllers.getCartTotal(req.session.user._id);
+    let invoice = await getInvoice(order,cartTotal);
+    res.json({status:true,invoice})
+  })
+  // res.json({status:true,data:invoice})
 })
 
 
