@@ -47,42 +47,13 @@
                             </div>
                         </div>
                         <div class="col-6">
+                            {{#if order.shipmentStatus.delivered.status}}
                             <h6>Download Invoice</h6>
-                            <button onclick="getOrderDetails('{{order._id}}','{{user._id}}')" class="btn btn-success">Download</button>
+                            <button onclick="getOrderDetails('{{order._id}}','{{user._id}}')" class="btn btn-outline-primary mt-3">Download </button>
+                            {{/if}}
                         </div>
                     </div>
-                    <script>
-                        function getOrderDetails(orderId, userId) {
-                            $.ajax({
-                                url: '/download-invoice/' + orderId+"/"+ userId,
-                                method: 'get',
-                                success: ((response) => {
-                                    if (response.status) {
-                                        downloadInvoice(response.invoice)
-                                    } else {
-                                        location.reload()
-                                    }
-                                })
-                            })
-
-                            function downloadInvoice(data) {
-
-                                easyinvoice.createInvoice(data, function (result) {
-                                    //The response will contain a base64 encoded PDF file
-                                    console.log('PDF base64 string: ', result.pdf);
-                                    easyinvoice.download('invoice.pdf')
-                                });
-
-                            }
-
-                        }
-                    </script>
-
-                    {{!-- easyinvoice.createInvoice(data, function (result) {
-                    //The response will contain a base64 encoded PDF file
-                    console.log('PDF base64 string: ', result.pdf);
-                    easyinvoice.download('invoice.pdf')
-                    }); --}}
+                   
                 </div>
             </div>
         </div>
@@ -267,6 +238,33 @@
                 }
             }
         })
+    }
+</script>
+
+<script>
+    function getOrderDetails(orderId, userId) {
+        $.ajax({
+            url: '/download-invoice/' + orderId + "/" + userId,
+            method: 'get',
+            success: ((response) => {
+                if (response.status) {
+                    downloadInvoice(response.invoice)
+                } else {
+                    location.reload()
+                }
+            })
+        })
+
+        function downloadInvoice(data) {
+
+            easyinvoice.createInvoice(data, function (result) {
+                //The response will contain a base64 encoded PDF file
+                console.log('PDF base64 string: ', result.pdf);
+                easyinvoice.download('invoice.pdf')
+            });
+
+        }
+
     }
 </script>
 
