@@ -130,7 +130,7 @@
                                                 to cart</span></a>
                                         {{/unless}}
 
-                                        <a {{#if productinCart}} style="display: block;" {{else}} style="display: none;" {{/if}}  href="/cart" class="btn-product btn-cart" id="go-to-cart"><span  class="ms-4">Go To Cart</span></a>
+                                        <a {{#if productinCart}} style="display: flex;" {{else}} style="display: none;" {{/if}}  href="/cart" class="btn-product btn-cart" id="go-to-cart"><span  class="ms-4">Go To Cart</span></a>
 
                                         <!-- End .details-action-wrapper -->
                                     </div>
@@ -337,7 +337,7 @@
                     let count = $('#cartCount').html()
                     $('#cartCount').html(response.cartCount)
                    addToCartBtn.style.display='none';
-                   goToCartBtn.style.display='block';
+                   goToCartBtn.style.display='flex';
                 }
             }
         })

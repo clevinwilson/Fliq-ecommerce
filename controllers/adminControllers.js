@@ -93,11 +93,14 @@ module.exports = {
         })
     },
     addCoupon:(data)=>{
-        data.status=true;
-        data.date=new Date();
-        data.couponDiscount = parseInt(couponDiscount);
-
         return new Promise((resolve,reject)=>{
+            console.log(data);
+            data.status = true;
+            data.date = new Date();
+            data.couponDiscount = parseInt(data.couponDiscount);
+            data.couponCode = data.couponCode.toUpperCase()
+
+            console.log(data, "sdfsdf");
             db.get().collection(collection.COUPON_COLLECTION).insertOne(data).then((response)=>{
                 resolve()
             })

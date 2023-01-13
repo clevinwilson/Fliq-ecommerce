@@ -10,6 +10,7 @@ const { razorpayVerify } = require('../helpers/razorpay');
 const verifyLogin = require('../middleware/userAuth');
 const paginatedResults = require('../middleware/paginatedResults');
 const getInvoice =require('../helpers/invoice');
+const { response } = require('express');
 
 router.get('/', async function (req, res) {
   let cartCount = false;
@@ -369,7 +370,7 @@ router.get('/wishlist', verifyLogin, (req, res) => {
   })
 })
 
-router.get('/add-to-wishList/:productId', (req, res) => {
+router.get('/add-to-wishList/:productId', verifyLogin,(req, res) => {
   userControllers.addToWishlist(req.params.productId, req.session.user._id).then((response) => {
     if (response) {
       res.json({ status: true })
@@ -403,7 +404,7 @@ router.get('/profile', verifyLogin, async (req, res) => {
   }
 })
 
-router.post('/update-profile', (req, res) => {
+router.post('/update-profile',verifyLogin, (req, res) => {
   userControllers.updateUserProfile(req.body).then((response) => {
     res.json({ status: true });
   })
@@ -411,7 +412,7 @@ router.post('/update-profile', (req, res) => {
 
 
 // coupon
-router.post('/apply-coupon/', async (req, res) => {
+router.post('/apply-coupon/',verifyLogin, async (req, res) => {
   let cartTotal = await userControllers.getCartTotal(req.session.user._id);
   userControllers.applyCoupon(req.body.coupon, cartTotal, req.session.user._id).then((response) => {
     console.log(response);
@@ -424,7 +425,7 @@ router.post('/apply-coupon/', async (req, res) => {
 
 })
 
-router.get('/remove-coupon',(req,res)=>{
+router.get('/remove-coupon',verifyLogin,(req,res)=>{
   userControllers.removeCoupon(req.session.user._id).then((response)=>{
     if(response){
       res.json({status:true})
@@ -434,8 +435,14 @@ router.get('/remove-coupon',(req,res)=>{
   })
 })
 
+router.get('/coupon',(req,res)=>{
+  userControllers.getAllCoupon().then((coupons)=>{
+    res.render('user/coupons', { coupons, user: req.session.user })
+  })
+})
 
-router.get('/download-invoice/:orderId/:userId',(req,res)=>{
+// invoice
+router.get('/download-invoice/:orderId/:userId',verifyLogin,(req,res)=>{
   console.log(req.params.orderId, req.params.userId);
   userControllers.getOrderForInvoice(req.params.orderId, req.params.userId).then(async (order) => {
     let cartTotal = await userControllers.getCartTotal(req.session.user._id);
@@ -444,6 +451,11 @@ router.get('/download-invoice/:orderId/:userId',(req,res)=>{
   })
   // res.json({status:true,data:invoice})
 })
+
+
+
+
+
 
 
 

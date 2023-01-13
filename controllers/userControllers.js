@@ -513,6 +513,15 @@ module.exports = {
                 resolve(false)
             })
         })
+    },
+    getAllCoupon:()=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.COUPON_COLLECTION).find().toArray().then((coupons)=>{
+                resolve(coupons)
+            }).catch(()=>{
+                reject();
+            })
+        })
     }
 
 }

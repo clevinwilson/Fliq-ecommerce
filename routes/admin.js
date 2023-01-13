@@ -364,14 +364,11 @@ router.get('/coupon',async (req, res) => {
 })
 
 router.post('/add-coupon', async(req, res) => {
-    console.log(req.body);
     try {
         let couponExists=await adminControllers.checkCoupon(req.body)
-        console.log(couponExists);
         if(!couponExists){
             adminControllers.addCoupon(req.body).then(async (response) => {
                 res.redirect('/admin/coupon');
-
             })
         }else{
             res.redirect('/admin/coupon');
