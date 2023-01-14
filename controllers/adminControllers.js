@@ -140,6 +140,38 @@ module.exports = {
             orderShipped=(orderShipped/total)*100;
             resolve({orderPlaced,orderDelivered,orderShipped})
         })
+    },
+    getOrdersByMonth:()=>{
+        return new Promise(async(resolve)=>{
+            let orders=await db.get().collection(collection.ORDER_COLLECTION).aggregate([{
+                $group:{
+                    _id:"$month",
+                    total: { $sum:'$totalAmount'}
+                }},
+                {
+                    $sort: { _id: 1 }
+                }
+            ]).toArray()
+            let details=[];
+            orders.forEach(element => {
+                details.push(element.total)
+            });
+            resolve(details)
+        })
+    },
+    getProductCount:()=>{
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.PRODUCT_COLLECTION).find().count().then((response) => {
+                resolve(response)
+            })
+        })
+    },
+    getOrdreCount:()=>{
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.ORDER_COLLECTION).find().count().then((response) => {
+                resolve(response)
+            })
+        })
     }
     
    

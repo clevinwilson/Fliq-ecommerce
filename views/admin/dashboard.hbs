@@ -49,7 +49,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Product</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{productCount}}</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{getProductCount}}</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fa-solid fa-computer fa-2x text-gray-300"></i>
@@ -69,7 +69,7 @@
                                             </div>
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{details.theatercount}}</div>
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{getOrdreCount}}</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -106,7 +106,7 @@
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
                                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Orders</h6>
                                    
                                 </div>
                                 <!-- Card Body -->
@@ -186,5 +186,6 @@
 
 <script>
      pieChart('{{ getOrderDetails.orderPlaced }}', '{{ getOrderDetails.orderDelivered}}', '{{ getOrderDetails.orderShipped}}'); 
-    console.log()
+     areaChart('{{ getOrderByMonth }}')
+     
 </script>

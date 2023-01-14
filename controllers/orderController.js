@@ -19,6 +19,7 @@ module.exports = {
                 totalAmount: price,
                 originalPrice: userDetails.originalPrice,
                 date: date,
+                month: new Date().getMonth()+1,
                 cartId: userDetails._id,
                 shipmentStatus: { ordrePlaced: { id: Date.now() + '-' + Math.round(Math.random() * 1E9), status: true, lastUpdate: { date: date, placeUpdates: [] } } }
             }
