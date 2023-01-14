@@ -31,12 +31,12 @@
                 </div>
             </a>
             <a href="/cart" class="text-dark">
-                <div class=" d-none d-md-block cart-wrap  position-relative ">
+                <div class=" cart-wrap  position-relative ">
                     <i class="bi bi-cart2 "></i><span id="cartCount"
                         class="badge badge-dark bg-dark position-absolute">{{cartCount}}</span>
                 </div>
             </a>
-            <button class="user-wrap   position-relative">
+            <button class="user-wrap  d-none d-md-block   position-relative">
                 <span class="text-decoration-none text-dark d-flex"><i
                         class="bi bi-person text-dark d-lg-block user-login-text"></i><span class="ms-2 mt-1"
                         style="font-size: 13px;">{{user.fname}}</span></span>
@@ -60,10 +60,21 @@
 
     {{!-- side bar --}}
     <div id="mySidenav" class="sidenav">
-        <a style="font-size: 22px;" class="text-dark" href="/coupon">Coupon</a>
-        <a style="font-size: 22px;" class="text-dark" href="#">Services</a>
-        <a style="font-size: 22px;" class="text-dark" href="#">Clients</a>
-        <a style="font-size: 22px;" class="text-dark" href="#">Contact</a>
+        <a style="font-size: 16px;" class="text-dark text-decoration-none" href="/home">Home</a>
+        <hr class="m-2">
+
+        <a style="font-size: 16px;" class="text-dark text-decoration-none" href="/profile">Profile</a>
+        <hr class="m-2">
+
+        <a style="font-size: 16px;" class="text-dark text-decoration-none" href="/coupon">Coupon</a>
+        <hr class="m-2">
+        <a style="font-size: 16px;" class="text-dark text-decoration-none" href="/account">Account</a>
+        <hr class="m-2">
+
+
+        <a style="font-size: 16px;" class="text-dark text-decoration-none" href="/wishlist">My Wishlist</a>
+        <hr class="m-2">
+
     </div>
 
     {{!-- search --}}
@@ -74,7 +85,8 @@
                 <div class="input-group-append">
                     <button class="btn btn-primary search-btn border-rounded p"><i class="fas fa-search"></i></button>
                 </div>
-                <input type="text" placeholder="Search" onkeyup="search()" id="search" class="form-control form-control-search search-box">
+                <input type="text" placeholder="Search" onkeyup="search()" id="search"
+                    class="form-control form-control-search search-box">
                 <div onclick="closeSearch()"
                     class="search-close-btn-wrap d-flex justify-content-start align-items-center">
                     <i class="fa-solid fa-xmark"></i>
@@ -109,14 +121,14 @@
             url: "/search/" + key,
             method: 'get',
             success: ((response) => {
-                searchCardContainer.textContent=""
+                searchCardContainer.textContent = ""
                 response.searchResult.forEach((product) => {
 
                     const card = searchCardTemplate.content.cloneNode(true).children[0];
                     const name = card.querySelector('[data-name]');
                     const category = card.querySelector('[data-category]');
                     const image = card.querySelector('[data-image]');
-                    
+
                     name.href = `/product-details/${product._id}`
                     name.textContent = product.name;
                     image.src = `/images/product-images/${product.images[0].filename}`
