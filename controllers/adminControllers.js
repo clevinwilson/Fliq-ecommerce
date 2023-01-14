@@ -98,9 +98,7 @@ module.exports = {
             data.status = true;
             data.date = new Date();
             data.couponDiscount = parseInt(data.couponDiscount);
-            data.couponCode = data.couponCode.toUpperCase()
-
-            console.log(data, "sdfsdf");
+            data.couponCode = data.couponCode.toUpperCase();
             db.get().collection(collection.COUPON_COLLECTION).insertOne(data).then((response)=>{
                 resolve()
             })

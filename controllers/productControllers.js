@@ -71,7 +71,7 @@ module.exports={
                     color: data.color,
                     category: data.category,
                     price: parseInt(data.price),
-                    quantity: data.quantity,
+                    quantity: parseInt(data.quantity),
                     storage: data.storage,
                     specification: data.specification,
                     overview: data.overview,

@@ -56,6 +56,7 @@ module.exports = {
                         let order = await db.get().collection(collection.ORDER_COLLECTION).findOne({ _id: ObjectId(orderId) });
                         let orderProducts = order.products
                         orderProducts.forEach(obj => {
+                            
                             db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ _id: ObjectId(obj.product) }, {
                                 $inc: { quantity: Number("-" + obj.quantity) }
                             })
