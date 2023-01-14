@@ -38,9 +38,11 @@ router.post('/login', (req, res) => {
 
 //dashboard
 router.get('/dashboard', verifyLogin, async (req, res) => {
-    // const userCount = await productControllers.getUserCount();
+     const userCount = await adminControllers.getUserCount();
+    const getOrderDetails=await adminControllers.getOrderDetailsCount();
+    console.log(getOrderDetails);
     // const productCount = await productControllers.getProductCount();
-    res.render('admin/dashboard', { admin: req.session.adminLogin })
+    res.render('admin/dashboard', { admin: req.session.adminLogin, userCount, getOrderDetails })
 })
 
 

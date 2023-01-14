@@ -123,6 +123,25 @@ module.exports = {
                 }
             })
         })
+    },
+    getUserCount:()=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.USER_COLLECTION).find().count().then((response)=>{
+                resolve(response)
+            })
+        })
+    },
+    getOrderDetailsCount:()=>{
+        return new Promise(async(resolve,reject)=>{
+            let orderPlaced = await db.get().collection(collection.ORDER_COLLECTION).find({ "shipmentStatus.ordrePlaced.status":true }).count();
+            let orderDelivered = await db.get().collection(collection.ORDER_COLLECTION).find({ "shipmentStatus.delivered.status": true }).count();
+            let orderShipped = await db.get().collection(collection.ORDER_COLLECTION).find({ "shipmentStatus.shipped.status": true }).count();
+            let total=orderPlaced+orderDelivered+orderShipped;
+            orderPlaced=(orderPlaced/total)*100;
+            orderDelivered=(orderDelivered/total)*100;
+            orderShipped=(orderShipped/total)*100;
+            resolve({orderPlaced,orderDelivered,orderShipped})
+        })
     }
     
    
