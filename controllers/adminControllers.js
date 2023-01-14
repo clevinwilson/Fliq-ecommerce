@@ -94,7 +94,6 @@ module.exports = {
     },
     addCoupon:(data)=>{
         return new Promise((resolve,reject)=>{
-            console.log(data);
             data.status = true;
             data.date = new Date();
             data.couponDiscount = parseInt(data.couponDiscount);
@@ -170,6 +169,41 @@ module.exports = {
         return new Promise((resolve, reject) => {
             db.get().collection(collection.ORDER_COLLECTION).find().count().then((response) => {
                 resolve(response)
+            })
+        })
+    },
+    deleteCoupon:(couponId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.COUPON_COLLECTION).deleteOne({_id:ObjectId(couponId)}).then((response)=>{
+                resolve(response)
+            })
+        })
+    },
+    editCoupon:(couponId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.COUPON_COLLECTION).findOne({_id:ObjectId(couponId)}).then((response)=>{
+                resolve(response)
+            })
+        })
+    },
+    updateCoupon:(data)=>{
+        return new Promise((resolve,reject)=>{
+            data.status = true;
+            data.date = new Date();
+            data.couponDiscount = parseInt(data.couponDiscount);
+            data.couponCode = data.couponCode.toUpperCase();
+            db.get().collection(collection.COUPON_COLLECTION).updateOne({_id:ObjectId(data.couponId)},{
+                $set:{
+                    couponCode: data.couponCode,
+                    ExpiryDate: data.ExpiryDate,
+                    couponDiscount: data.couponDiscount,
+                    minimumPurchase: data.minimumPurchase,
+                    maximumPurchase: data.maximumPurchase,
+                    status: data.status,
+                    lastUpdate:data.date
+                }
+            }).then((response)=>{
+                resolve();
             })
         })
     }

@@ -280,14 +280,14 @@ router.get('/delete-product/:productId', verifyLogin, async (req, res) => {
     })
 })
 
-router.get('/edit-product/:productId', async (req, res) => {
+router.get('/edit-product/:productId',verifyLogin, async (req, res) => {
     let productDetails = await productControllers.getProductDetails(req.params.productId);
     let categoryList = await categoryControllers.getCategoryList();
 
     res.render('admin/edit-product', { categoryList, productDetails, admin: req.session.adminLogin });
 })
 
-router.post('/edit-product', uploadProduct, async (req, res) => {
+router.post('/edit-product', uploadProduct,verifyLogin, async (req, res) => {
     if (req.files.image1 == null) {
         image1 = await productControllers.fetchProductImage(req.body.productId, 0)
     } else {
@@ -330,13 +330,13 @@ router.post('/edit-product', uploadProduct, async (req, res) => {
 
 
 //order
-router.get('/view-orders', (req, res) => {
+router.get('/view-orders',verifyLogin, (req, res) => {
     orderControllers.getAllOrder().then((response) => {
         res.render('admin/view-orders', { orders: response, admin: req.session.adminLogin });
     })
 })
 
-router.get('/order-details/:orderId', (req, res) => {
+router.get('/order-details/:orderId',verifyLogin, (req, res) => {
     orderControllers.getOrderDetails(req.params.orderId).then((response) => {
         res.render('admin/order-details', { order: response, admin: req.session.adminLogin })
     })
@@ -344,7 +344,7 @@ router.get('/order-details/:orderId', (req, res) => {
 
 // change order status
 
-router.get('/change-order-status/:orderId/:status', (req, res) => {
+router.get('/change-order-status/:orderId/:status',verifyLogin, (req, res) => {
     orderControllers.changeOrderstatus(req.params.orderId, req.params.status).then((response) => {
         res.json({ status: true })
     })
@@ -352,14 +352,14 @@ router.get('/change-order-status/:orderId/:status', (req, res) => {
 
 // cancel order
 
-router.get("/cancel-order/:orderId", (req, res) => {
+router.get("/cancel-order/:orderId",verifyLogin, (req, res) => {
     orderControllers.cancelOrder(req.params.orderId).then((response) => {
         res.json({ status: true })
     })
 })
 
 // coupon
-router.get('/coupon',async (req, res) => {
+router.get('/coupon',verifyLogin, async (req, res) => {
     try{
         let coupons = await adminControllers.getCoupons();
         res.render('admin/coupon', { admin: req.session.adminLogin,coupons });
@@ -368,7 +368,7 @@ router.get('/coupon',async (req, res) => {
     }
 })
 
-router.post('/add-coupon', async(req, res) => {
+router.post('/add-coupon',verifyLogin, async(req, res) => {
     try {
         let couponExists=await adminControllers.checkCoupon(req.body)
         if(!couponExists){
@@ -384,5 +384,38 @@ router.post('/add-coupon', async(req, res) => {
         res.redirect('/admin/coupon');
     }
 })
+
+
+router.get('/delete-coupon/:couponId',verifyLogin,(req,res)=>{
+    adminControllers.deleteCoupon(req.params.couponId).then((response)=>{
+        res.redirect('/admin/coupon')
+    })
+})
+
+
+router.get('/edit-coupon/:couponId',(req,res)=>{
+    adminControllers.editCoupon(req.params.couponId).then((response)=>{
+        res.render('admin/edit-coupon', { details: response, admin: req.session.adminLogin })
+    })
+})
+
+router.post('/edit-coupon',(req,res)=>{
+    adminControllers.updateCoupon(req.body).then((response,)=>{
+        res.redirect('/admin/coupon')
+    })
+})
+
+
+// salse report
+
+router.get('/salesreport',verifyLogin,(req,res)=>{
+    orderControllers.getAllOrder().then((response)=>{
+        res.render('admin/sales-report', { orders:response, admin: req.session.adminLogin });
+    })
+
+})
+
+
+
 
 module.exports = router;

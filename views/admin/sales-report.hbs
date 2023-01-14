@@ -1,0 +1,175 @@
+<!-- Custom styles for this page -->
+<link href="/admin/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/admin/vendor/datatables/dataTables.bootstrap4.css">
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    {{>admin-header}}
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <!-- DataTales Example -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Sales report</h6>
+                    </div>
+
+                    <div class="card-body">
+                        {{#if categoryUpdate}}
+                        <div class="alert alert-success" role="alert">
+                            {{categoryUpdate}}
+                        </div>
+                        {{/if}}
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>User Name</th>
+                                        <th>Date</th>
+                                        <th>Payment Method</th>
+                                        <th>Order Status</th>
+                                        <th>Total Price</th>
+                                        <th>Shipment Status</th>
+                        
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>User Name</th>
+                                        <th>Date</th>
+                                        <th>Payment Method</th>
+                                        <th>Order Status</th>
+                                        <th>Total Price</th>
+                                        <th>Shipment Status</th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    {{#each orders}}
+                        
+                                    <tr>
+                                        <td>{{this.deliveryDetails.firstName}} {{this.deliveryDetails.lastName}} </td>
+                                        <td>{{this.date}}
+                                        </td>
+                                        <td>{{this.paymentMethod}}</td>
+                                        <td class="text-capitalize">{{this.orderStatus}}</td>
+                                        <td>₹ {{this.totalAmount}}</td>
+                                        <td class="text-capitalize">
+                                            {{#if this.orderStatus}}
+                                            {{#if this.shipmentStatus.delivered.status}}
+                                            <p class="text-success">Delivered</p>
+                                            {{else if this.shipmentStatus.outForDelivery.status}}
+                                            <p class="text-success">Out For Delivery</p>
+                                            {{else if this.shipmentStatus.shipped.status}}
+                                            <p class="text-success">Shipped</p>
+                                            {{else if this.shipmentStatus.ordrePlaced.status}}
+                                            <p class="text-success">Order Confirmed</p>
+                                            {{/if}}
+                                            {{else}}
+                                            <p class="text-danger">Canceled</p>
+                                            {{/if}}
+                                        </td>
+                                        {{!-- <td class="d-flex justify-content-center align-items-center">
+                                            <a href="/admin/order-details/{{this._id}}" class="btn btn-primary">View
+                                                Details</a>
+                                        </td> --}}
+                        
+                                        {{!-- <td class="d-flex">
+                                            <a title="Delete" class="table-btn btn btn-danger p-2" href="/admin/delete-product/{{this._id}}"><i
+                                                    class="fa-solid fa-trash"></i></a>
+                                            <a title="Edit" href="/admin/edit-product/{{this._id}}"
+                                                class="table-btn ml-2 text-white btn btn-warning p-2"><i class="fa-solid fa-pen"></i></a>
+                        
+                                        </td> --}}
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; Fliq 2022</span>
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<style>
+    .table-btn {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+    }
+</style>
+
+<script>
+    function deleteProduct(productId) {
+        swal({
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        url: "/admin/delete-product/" + productId,
+                        method: 'get',
+                        success: ((response) => {
+                            if (response) {
+                                swal("Product has been deleted!", {
+                                    icon: "success",
+                                }).then(() => {
+                                    window.location.reload();
+                                })
+                            } else {
+                                swal({
+                                    title: "Error",
+                                    text: "Something went wrong !",
+                                    icon: "warning",
+                                    buttons: true,
+                                    dangerMode: true,
+                                })
+                            }
+                        })
+                    })
+
+                }
+            });
+    }
+</script>
