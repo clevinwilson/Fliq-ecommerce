@@ -6680,8 +6680,8 @@ p {
 
 .btn-dark:hover, .btn-dark:focus, .btn-dark.focus, .btn-dark:not(:disabled):not(.disabled):active, .btn-dark:not(:disabled):not(.disabled).active, .show>.btn-dark.dropdown-toggle {
     color: #fff;
-    background-color: #c96;
-    border-color: #c96;
+    background-color: #0088d9;
+    border-color: #0088d9;
     box-shadow: none
 }
 

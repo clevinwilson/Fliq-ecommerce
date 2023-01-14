@@ -122,6 +122,8 @@
 
 
 
+{{#if product.quantity}}
+
                                     {{#if product.status}}
                                     <div class="product-details-action mt-3">
                                         <a href="#" class="btn-buynow me-3"><span class="text-white">Buy Now</span></a>
@@ -135,6 +137,9 @@
                                         <!-- End .details-action-wrapper -->
                                     </div>
                                     {{/if}}
+{{else}}
+<button type="button" class="btn btn-dark mt-3 rounded">Out Of Stock</button>
+{{/if}}
                                 </div><!-- End .product-details -->
                             </div><!-- End .col-md-6 -->
                         </div><!-- End .row -->
@@ -253,7 +258,7 @@
     <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
 
     <!-- Sticky Bar -->
-    <div class="sticky-bar">
+    {{!-- <div class="sticky-bar">
         <div class="container">
             <div class="row">
                 <div class="col-6">
@@ -283,7 +288,7 @@
                 </div><!-- End .col-6 -->
             </div><!-- End .row -->
         </div><!-- End .container -->
-    </div><!-- End .sticky-bar -->
+    </div><!-- End .sticky-bar --> --}}
 
 
     <!-- Mobile Menu -->
