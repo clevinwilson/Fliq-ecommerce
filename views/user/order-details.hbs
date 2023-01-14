@@ -176,11 +176,13 @@
                     </hr>
                     <div class="d-flex justify-content-between align-items-center order-footer mb-2">
                         {{#if order.orderStatus}}
-
+                        {{#if order.shipmentStatus.delivered.status}}
+                        {{else}}
                         <div class="order-cancel-wrap ms-2">
                             <button type="button" class="btn btn-secondary bg-dark" data-bs-toggle="modal"
                                 data-bs-target="#cancelOrder" href="">Cancel order</button>
                         </div>
+                        {{/if}}
                         {{else}}
                         <div class="order-cancel-wrap ms-2">
                             <h6 class="me-2 mb-0 text-danger">Order Canceled</h6>
