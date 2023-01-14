@@ -345,6 +345,7 @@ module.exports = {
     // }
 
     generateRazorpay: (orderId, totalAmount) => {
+        totalAmount= Math.floor(totalAmount)
         return new Promise((resolve, reject) => {
             razorpay(orderId, totalAmount).then((order) => {
                 resolve(order);
