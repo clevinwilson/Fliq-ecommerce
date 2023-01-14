@@ -47,7 +47,10 @@
                                     </div><!-- End .row -->
 
                                     <div class="wishlist-action-wrapper position-absolute  ">
-                                        <a onclick="addToWishlist('{{product._id}}')" class= {{#if wishListStatus}}"buttonws one mobile button--secondary animate active" {{else}} "buttonws one mobile button--secondary deactivate inactive" {{/if}}>
+                                        <a onclick="addToWishlist('{{product._id}}')" class={{#if
+                                            wishListStatus}}"buttonws one mobile button--secondary animate active"
+                                            {{else}} "buttonws one mobile button--secondary deactivate inactive"
+                                            {{/if}}>
 
                                             <div class="btn__effect">
                                                 <svg class="heart-stroke icon-svg icon-svg--size-4 icon-svg--color-silver"
@@ -122,24 +125,27 @@
 
 
 
-{{#if product.quantity}}
+                                    {{#if product.quantity}}
 
                                     {{#if product.status}}
                                     <div class="product-details-action mt-3">
                                         <a href="#" class="btn-buynow me-3"><span class="text-white">Buy Now</span></a>
                                         {{#unless productinCart}}
-                                        <a onclick="addToCart('{{product._id}}')" id="add-to-cart" class="btn-product btn-cart"><span>Add
+                                        <a onclick="addToCart('{{product._id}}')" id="add-to-cart"
+                                            class="btn-product btn-cart"><span>Add
                                                 to cart</span></a>
                                         {{/unless}}
 
-                                        <a {{#if productinCart}} style="display: flex;" {{else}} style="display: none;" {{/if}}  href="/cart" class="btn-product btn-cart" id="go-to-cart"><span  class="ms-4">Go To Cart</span></a>
+                                        <a {{#if productinCart}} style="display: flex;" {{else}} style="display: none;"
+                                            {{/if}} href="/cart" class="btn-product btn-cart" id="go-to-cart"><span
+                                                class="ms-4">Go To Cart</span></a>
 
                                         <!-- End .details-action-wrapper -->
                                     </div>
                                     {{/if}}
-{{else}}
-<button type="button" class="btn btn-dark mt-3 rounded">Out Of Stock</button>
-{{/if}}
+                                    {{else}}
+                                    <button type="button" class="btn btn-dark mt-3 rounded">Out Of Stock</button>
+                                    {{/if}}
                                 </div><!-- End .product-details -->
                             </div><!-- End .col-md-6 -->
                         </div><!-- End .row -->
@@ -331,8 +337,8 @@
     <script src="/stylesheets/assets/js/main.js"></script>
 </body>
 <script>
-    let addToCartBtn=document.getElementById('add-to-cart');
-    let goToCartBtn=document.getElementById('go-to-cart');
+    let addToCartBtn = document.getElementById('add-to-cart');
+    let goToCartBtn = document.getElementById('go-to-cart');
     function addToCart(productId) {
         $.ajax({
             url: '/add-to-cat/' + productId,
@@ -341,8 +347,8 @@
                 if (response.status) {
                     let count = $('#cartCount').html()
                     $('#cartCount').html(response.cartCount)
-                   addToCartBtn.style.display='none';
-                   goToCartBtn.style.display='flex';
+                    addToCartBtn.style.display = 'none';
+                    goToCartBtn.style.display = 'flex';
                 }
             }
         })
@@ -357,7 +363,7 @@
             success: (response) => {
                 if (response.status) {
                     changeStyle()
-                }else{
+                } else {
                     alert("exits")
                 }
             }
@@ -366,17 +372,17 @@
 </script>
 
 <script>
- 
-    function changeStyle(){
-            if ($(".buttonws").hasClass("deactivate")) {
-                $(".buttonws").removeClass("deactivate")
-            }
-            if ($(".buttonws").hasClass("active")) {
-                $(".buttonws").addClass("deactivate")
-            }
-            $(".buttonws").toggleClass("animate");
-            $(".buttonws").toggleClass("active");
-            $(".buttonws").toggleClass("inactive");
+
+    function changeStyle() {
+        if ($(".buttonws").hasClass("deactivate")) {
+            $(".buttonws").removeClass("deactivate")
+        }
+        if ($(".buttonws").hasClass("active")) {
+            $(".buttonws").addClass("deactivate")
+        }
+        $(".buttonws").toggleClass("animate");
+        $(".buttonws").toggleClass("active");
+        $(".buttonws").toggleClass("inactive");
     }
 </script>
 
@@ -471,4 +477,3 @@
         }
     }
 </style>
-

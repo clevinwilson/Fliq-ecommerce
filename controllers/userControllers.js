@@ -104,6 +104,7 @@ module.exports = {
                 if (productExists != -1) {
                     db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId), 'cart.products.product': ObjectId(productId) },
                         {
+                            $unset: { activeOrder :""},
                             $inc: { 'cart.products.$.quantity': 1 }
                         }).then((response) => {
                             resolve(true);
@@ -111,6 +112,7 @@ module.exports = {
                 }
                 else {
                     db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) }, {
+                        $unset: { activeOrder :""},
                         $push: { 'cart.products': productObject }
                     }).then((response) => {
                         resolve(true);
@@ -169,6 +171,7 @@ module.exports = {
             if (data.quantity < productQuantity.quantity || data.count == -1) {
                 if (data.count == -1 && data.quantity == 1) {
                     db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) }, {
+                        $unset: { activeOrder: "" },
                         $pull: { 'cart.products': { product: ObjectId(data.productId) } }
                     }).then((response) => {
                         resolve(false)
@@ -176,6 +179,7 @@ module.exports = {
                 } else {
                     db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId), 'cart.products.product': ObjectId(data.productId) },
                         {
+                            $unset: { activeOrder: "" },
                             $inc: { 'cart.products.$.quantity': parseInt(data.count) }
                         }).then((response) => {
                             resolve(true);

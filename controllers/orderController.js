@@ -7,9 +7,8 @@ module.exports = {
     placeOrder: (phone, paymentMethod, userDetails, price) => {
         return new Promise((resolve, reject) => {
             userDetails.address.phone = phone;
-            var date = new Date();
-            var current_date = date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
-            var current_time = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+            let date = new Date().toString().slice(0, 21);
+            
 
             orderObj = {
                 userId: ObjectId(userDetails._id),
@@ -19,9 +18,9 @@ module.exports = {
                 products: userDetails.cart.products,
                 totalAmount: price,
                 originalPrice: userDetails.originalPrice,
-                date: current_date,
+                date: date,
                 cartId: userDetails._id,
-                shipmentStatus: { ordrePlaced: { id: Date.now() + '-' + Math.round(Math.random() * 1E9), status: true, lastUpdate: { date: current_date, time: current_time, placeUpdates: [] } } }
+                shipmentStatus: { ordrePlaced: { id: Date.now() + '-' + Math.round(Math.random() * 1E9), status: true, lastUpdate: { date: date, placeUpdates: [] } } }
             }
             db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response) => {
                 db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userDetails._id) }, {
@@ -136,13 +135,12 @@ module.exports = {
         })
     },
     changeOrderstatus: (orderId, status) => {
-        var date = new Date();
-        var current_date = date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
-        var current_time = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+        let date = new Date().toString().slice(0, 21)
+        
         const obj = {
             id: Date.now() + '-' + Math.round(Math.random() * 1E9),
             status: true,
-            lastUpdate: { date: current_date, time: current_time, placeUpdates: [] }
+            lastUpdate: { date: date, placeUpdates: [] }
         }
         return new Promise((resolve, reject) => {
             if (status == 0) {
