@@ -409,8 +409,9 @@ router.post('/edit-coupon',(req,res)=>{
 // salse report
 
 router.get('/salesreport',verifyLogin,(req,res)=>{
-    orderControllers.getAllOrder().then((response)=>{
-        res.render('admin/sales-report', { orders:response, admin: req.session.adminLogin });
+    adminControllers.getSalesReportData().then((response)=>{
+        console.log(response);
+        res.render('admin/sales-report', { salesData: response, admin: req.session.adminLogin })
     })
 
 })

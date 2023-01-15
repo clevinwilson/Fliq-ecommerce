@@ -206,6 +206,27 @@ module.exports = {
                 resolve();
             })
         })
+    },
+    getSalesReportData:()=>{
+        return new Promise(async (resolve) => {
+            let data = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
+            {
+                $unwind:'$products'
+            },
+            {
+                $group: {
+                    _id: "$month",
+                    total: { $sum: '$totalAmount' },
+                    orderCount:{$sum:1},
+                    productQty: { $sum: "$products.quantity" }
+                }
+            },
+            {
+                $sort: { monthInNo: 1 }
+            }
+            ]).toArray()
+            resolve(data)
+        })
     }
     
    

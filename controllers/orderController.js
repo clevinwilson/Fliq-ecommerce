@@ -8,7 +8,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
             userDetails.address.phone = phone;
             let date = new Date().toString().slice(0, 21);
-            
+            const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
             orderObj = {
                 userId: ObjectId(userDetails._id),
@@ -19,7 +19,8 @@ module.exports = {
                 totalAmount: price,
                 originalPrice: userDetails.originalPrice,
                 date: date,
-                month: new Date().getMonth()+1,
+                monthInNo: new Date().getMonth()+1,
+                month: month[new Date().getMonth()],
                 cartId: userDetails._id,
                 shipmentStatus: { ordrePlaced: { id: Date.now() + '-' + Math.round(Math.random() * 1E9), status: true, lastUpdate: { date: date, placeUpdates: [] } } }
             }
