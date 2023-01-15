@@ -11,10 +11,11 @@
             {{#each coupons}}
             <div class="col-md-8 col-sm-10 col-xl-6 mt-4">
                 <div class="coupon-card">
-                    <h3>{{this.couponDiscount}}%  off on all products<br>with Maximum order value of {{this.maximumPurchase}}</h3>
+                    <h3>{{this.couponDiscount}}% off on all products<br>with Maximum order value of
+                        {{this.maximumPurchase}}</h3>
                     <di class="coupon-row">
-                        <span id="cpnCode">{{this.couponCode}}</span>
-                        <span id="cpnBtn">Copy Code</span>
+                        <span class="cpnCode" id="{{this._id}}">{{this.couponCode}}</span>
+                        <span class="cpnBtn" id="cpnBtn{{this._id}}" onclick="copyCode('{{this._id}}')">Copy Code</span>
                     </di>
                     <p>Valid Till: {{this.ExpiryDate}}</p>
                     <div class="circle1"></div>
@@ -81,14 +82,14 @@ Follow me on Codepen
 
     }
 
-    #cpnCode {
+    .cpnCode {
         border: 1px dashed #fff;
         padding: 10px 20px;
         border-right: 0;
         text-transform: uppercase
     }
 
-    #cpnBtn {
+    .cpnBtn {
         border: 1px solid #fff;
         background: #fff;
         padding: 10px 20px;
@@ -130,14 +131,19 @@ Follow me on Codepen
 </style>
 
 <script>
-    var cpnBtn = document.getElementById("cpnBtn");
-    var cpnCode = document.getElementById("cpnCode");
 
-    cpnBtn.onclick = function () {
+
+    function copyCode(couponId) {
+        const cpnBtn = document.getElementById("cpnBtn"+ couponId);
+        const cpnCode = document.getElementById(couponId);
+
         navigator.clipboard.writeText(cpnCode.innerHTML);
         cpnBtn.innerHTML = "COPIED";
         setTimeout(function () {
             cpnBtn.innerHTML = "COPY CODE";
         }, 3000);
+    }
+    cpnBtn.onclick = function () {
+
     }
 </script>
