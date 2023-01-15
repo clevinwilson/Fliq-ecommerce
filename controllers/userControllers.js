@@ -373,7 +373,8 @@ module.exports = {
     },
     addToWishlist: (productId, userId) => {
         return new Promise(async (resolve, reject) => {
-            let isProductExits = await db.get().collection(collection.USER_COLLECTION).findOne({ wishlist: ObjectId(productId) });
+            let isProductExits = await db.get().collection(collection.USER_COLLECTION).findOne({ $and: [{ _id: ObjectId(userId) },{ wishlist: ObjectId(productId) }]});
+            console.log(isProductExits,"<<<<<<<<<<");
             if (isProductExits) {
                 db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) }, { $pull: { wishlist: ObjectId(productId) } });
                 resolve({ remove: true })
