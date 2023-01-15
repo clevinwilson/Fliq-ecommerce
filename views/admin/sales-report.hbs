@@ -18,6 +18,15 @@
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
+                <!-- Page Heading -->
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">Sales report</h1>
+                    <a onclick="generateSalesreport()" id="generateReport"
+                        class=" text-white btn btn-sm btn-primary shadow-sm"> Generate Report</a>
+                    <a style="display: none;" id="downloadReport" class=" text-white  btn btn-sm btn-success shadow-sm"
+                        href="http://localhost:3000/salesreport/report.pdf" download><i
+                            class="fas fa-download fa-sm text-white-50 me-2"></i>Download</a>
+                </div>
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
@@ -39,21 +48,21 @@
                                         <th>Amount</th>
                                         <th>Orders</th>
                                         <th>Products Sold</th>
-                        
+
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                    <th>No</th>
-                                    <th>Month</th>
-                                    <th>Amount</th>
-                                    <th>Orders</th>
-                                    <th>Products Sold</th>
+                                        <th>No</th>
+                                        <th>Month</th>
+                                        <th>Amount</th>
+                                        <th>Orders</th>
+                                        <th>Products Sold</th>
                                     </tr>
                                 </tfoot>
                                 <tbody>
                                     {{#each salesData}}
-                        
+
                                     <tr>
                                         <td>{{@index}}</td>
                                         <td>{{this._id}}</td>
@@ -107,39 +116,26 @@
 </style>
 
 <script>
-    function deleteProduct(productId) {
-        swal({
-            title: "Are you sure?",
-            text: "Once deleted, you will not be able to recover!",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
-            .then((willDelete) => {
-                if (willDelete) {
-                    $.ajax({
-                        url: "/admin/delete-product/" + productId,
-                        method: 'get',
-                        success: ((response) => {
-                            if (response) {
-                                swal("Product has been deleted!", {
-                                    icon: "success",
-                                }).then(() => {
-                                    window.location.reload();
-                                })
-                            } else {
-                                swal({
-                                    title: "Error",
-                                    text: "Something went wrong !",
-                                    icon: "warning",
-                                    buttons: true,
-                                    dangerMode: true,
-                                })
-                            }
-                        })
+    function generateSalesreport(productId) {
+        $.ajax({
+            url: "/admin/generate-salesreport",
+            method: 'get',
+            success: ((response) => {
+                if (response.status) {
+                    swal({
+                        title: "Success",
+                        text: "Your file is ready to download!",
+                        icon: "success",
+                        button: "OK",
+                    }).then(() => {
+                        document.getElementById('generateReport').style.display = "none"
+                        document.getElementById('downloadReport').style.display = "block"
                     })
-
                 }
-            });
+
+            })
+        })
     }
+
+
 </script>

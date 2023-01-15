@@ -9,7 +9,7 @@ const { uploadProduct, uploadCategoryImage, uploadBannerImage } = require('../mi
 const productControllers = require('../controllers/productControllers');
 const deleteImages = require('../helpers/delete-file');
 const verifyLogin = require('../middleware/adminAuth');
-const { response } = require('express');
+const salesReport=require('../helpers/salesreport');
 
 
 //login page
@@ -410,10 +410,18 @@ router.post('/edit-coupon',(req,res)=>{
 
 router.get('/salesreport',verifyLogin,(req,res)=>{
     adminControllers.getSalesReportData().then((response)=>{
-        console.log(response);
         res.render('admin/sales-report', { salesData: response, admin: req.session.adminLogin })
     })
+})
 
+
+router.get('/generate-salesreport',async(req,res)=>{
+    adminControllers.getSalesReportData().then((response)=>{
+        salesReport(response).then(()=>{
+            res.json({status:true})
+        })
+        // res.render('admin/sales-report', { salesData: response, admin: req.session.adminLogin })
+    })
 })
 
 

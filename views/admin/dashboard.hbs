@@ -19,6 +19,11 @@
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                        <a onclick="generateSalesreport()" id="generateReport" class=" text-white btn btn-sm btn-primary shadow-sm"> Generate
+                            Report</a>
+                        <a style="display: none;" id="downloadReport" class=" text-white  btn btn-sm btn-success shadow-sm"
+                            href="http://localhost:3000/salesreport/report.pdf" download><i
+                                class="fas fa-download fa-sm text-white-50 me-2"></i>Download</a>
                     </div>
 
                     <div class="row">
@@ -188,4 +193,29 @@
      pieChart('{{ getOrderDetails.orderPlaced }}', '{{ getOrderDetails.orderDelivered}}', '{{ getOrderDetails.orderShipped}}'); 
      areaChart('{{ getOrderByMonth }}')
      
+</script>
+
+<script>
+    function generateSalesreport(productId) {
+        $.ajax({
+            url: "/admin/generate-salesreport",
+            method: 'get',
+            success: ((response) => {
+                if (response.status) {
+                    swal({
+                        title: "Success",
+                        text: "Your file is ready to download!",
+                        icon: "success",
+                        button: "OK",
+                    }).then(() => {
+                        document.getElementById('generateReport').style.display = "none"
+                        document.getElementById('downloadReport').style.display = "block"
+                    })
+                }
+
+            })
+        })
+    }
+
+
 </script>
