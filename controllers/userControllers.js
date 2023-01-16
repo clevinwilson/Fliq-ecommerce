@@ -557,7 +557,6 @@ module.exports = {
         }
     },
     updateUserAddress:async(req,res)=>{
-        console.log(req.body);
         try{
             db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(req.session.user._id), "address.id": req.body.addressId },{
                 $set:{
@@ -575,6 +574,18 @@ module.exports = {
             })
         }catch(err){
 
+        }
+    },
+    deleteAddress:async(req,res)=>{
+        console.log(req.params.addressId);
+        try{
+            db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(req.session.user._id)},{
+                $pull: { address: { id: req.params.addressId } }
+            }).then((response)=>{
+                res.redirect('/address-management')
+            })
+        }catch(err){
+            console.log(err);
         }
     }
 

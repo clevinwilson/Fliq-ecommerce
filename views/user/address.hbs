@@ -15,23 +15,105 @@
                                 <h5 class="card-title">{{this.firstName}} {{this.lastName}}</h5>
                             </div>
                             <div class="col-4 mt-2 d-flex justify-content-center">
-                                
+
                                 <a href="/edit-address/{{this.id}}">
-                                    <i style="font-size: 13px; cursor: pointer;" class="text-dark fa-solid fa-pen me-4"></i>
+                                    <i style="font-size: 13px; cursor: pointer;"
+                                        class="text-dark fa-solid fa-pen me-4"></i>
                                 </a>
                                 <a href="/delete-address/{{this.id}}">
-                                    <i style="font-size: 13px; cursor: pointer;" class="text-dark fa-solid fa-trash"></i>
+                                    <i style="font-size: 13px; cursor: pointer;"
+                                        class="text-dark fa-solid fa-trash"></i>
                                 </a>
                             </div>
                         </div>
-                        <p style="line-height: 22px;" class="card-text mt-3">{{this.street}},{{this.AddressLine2}},{{this.Landmark}},<br>{{this.postalCode}},{{this.state}},{{this.country}}</p>
+                        <p style="line-height: 22px;" class="card-text mt-3">
+                            {{this.street}},{{this.AddressLine2}},{{this.Landmark}},<br>{{this.postalCode}},{{this.state}},{{this.country}}
+                        </p>
                     </div>
                 </div>
             </div>
             {{/each}}
 
+            <div class="col-md-4 d-flex mt-3 justify-content-center">
+                <div onclick="showNewAddress()" class="card text-start position-relative"
+                    style="width: 20rem; background-color: #f6f6f6;">
+                    <div class="card-body d-flex justify-content-center align-items-center " style="font-size: 24px;">
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
+
+<!-- address Modal -->
+<div class="modal fade " id="addNewAddress" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Add Address</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/add-new-address" method="POST">
+                <div class="col-md-12 p-3">
+                    <div class="email">
+                        <input style="border-radius: 10px;" type="text" class="mt-3 p-2 form-input-padding form-control"
+                            id="firstName" name="firstName" value="{{user.firstname}}" placeholder="First Name"
+                            required>
+                    </div>
+                    <div class="number ">
+                        <input style="border-radius: 10px;" type="text" class="mt-3 p-2 form-input-padding form-control"
+                            id="lastName" name="lastName" value="{{user.lastname}}" placeholder="Last Name" required>
+                    </div>
+                    <div class="address1 ">
+                        <input style="border-radius: 10px;" type="text" class="mt-3 p-2 form-input-padding form-control"
+                            id="street" name="street" value="{{user.address.street}}" placeholder="Address Line 1"
+                            autocomplete="address-level1" required>
+                    </div>
+                    <div class="address2 ">
+                        <input style="border-radius: 10px;" type="text" class="mt-3 p-2 form-input-padding form-control"
+                            id="street2" name="AddressLine2" value="{{user.address.street2}}"
+                            placeholder="Address Line 2 (Optional)" autocomplete="address-level2">
+                    </div>
+                    <div class="landmark ">
+                        <input style="border-radius: 10px;" type="text" class="mt-3 p-2 form-input-padding form-control"
+                            id="street3" name="Landmark" value="{{user.address.street3}}"
+                            placeholder="Landmark (Optional)" autocomplete="address-level3">
+                    </div>
+                    <div class="postalCode ">
+                        <input style="border-radius: 10px;" type="text" class="mt-3 p-2 form-input-padding form-control"
+                            id="postalCode" name="postalCode" value="{{user.address.postalCode}}" placeholder="PIN Code"
+                            autocomplete required>
+                    </div>
+                    <div class="cityState ">
+                        <input style="border-radius: 10px;" type="text" class="mt-3 p-2 form-input-padding form-control"
+                            id="cityState" name="state" value="{{user.address.state}}" placeholder="City, State"
+                            required>
+                    </div>
+                    <div class="country ">
+                        <input style="border-radius: 10px;" type="text" class="mt-3 p-2 form-input-padding form-control"
+                            id="country" name="country" placeholder="Country" value="India" readonly required>
+                    </div>
+                </div>
+
+                <div class="bottem-checkout-btn-container col-md-12 p-3  ">
+                    <button type="submit" id="submit" style="padding: 12px 1px;"
+                        class="text-white col-md-12  btn btn-primary bottem-shipping-btn checkout-btn mb-4  ">Save
+                        Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    function showNewAddress() {
+        $('#addNewAddress').modal('show');
+    }
+</script>
 
 {{>user-footer}}

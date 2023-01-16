@@ -222,7 +222,7 @@ router.get('/checkout', verifyLogin, async (req, res) => {
 //checkout page
 router.post('/add-new-address', verifyLogin, (req, res) => {
   userControllers.addNewAddress(req.body, req.session.user._id).then((response) => {
-    res.redirect('/checkout');
+    res.redirect(req.headers.referer);
   })
 })
 
@@ -454,7 +454,8 @@ router.get('/download-invoice/:orderId/:userId',verifyLogin,(req,res)=>{
 //address
 router.get('/address-management', userControllers.getUserAllAddress);
 router.get('/edit-address/:addressId',userControllers.getUserAddress);
-router.post('/update-address',verifyLogin,userControllers.updateUserAddress)
+router.post('/update-address',verifyLogin,userControllers.updateUserAddress);
+router.get('/delete-address/:addressId',verifyLogin,userControllers.deleteAddress);
 
 
 
