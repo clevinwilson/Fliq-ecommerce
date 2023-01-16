@@ -452,8 +452,8 @@ router.get('/download-invoice/:orderId/:userId',verifyLogin,(req,res)=>{
 
 
 //address
-router.get('/address-management', userControllers.getUserAllAddress);
-router.get('/edit-address/:addressId',userControllers.getUserAddress);
+router.get('/address-management', verifyLogin, userControllers.getUserAllAddress);
+router.get('/edit-address/:addressId', verifyLogin,userControllers.getUserAddress);
 router.post('/update-address',verifyLogin,userControllers.updateUserAddress);
 router.get('/delete-address/:addressId',verifyLogin,userControllers.deleteAddress);
 
