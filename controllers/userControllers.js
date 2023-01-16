@@ -528,6 +528,54 @@ module.exports = {
                 reject();
             })
         })
+    },
+    getUserAllAddress:(req,res)=>{
+      try{
+          db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(req.session.user._id) }).then((response) => {
+              console.log(response.address);
+              res.render('user/address',{user:req.session.user,address:response.address});
+          })
+      }catch(err){
+        res.redirect('/')
+      }
+    },
+    getUserAddress:async(req,res)=>{
+        try{
+           let user=await db.get().collection(collection.USER_COLLECTION).aggregate([
+                {
+                    $match: { _id:ObjectId(req.session.user._id) }
+                },
+                {$unwind:"$address"},
+                {
+                    $match: { 'address.id': req.params.addressId }
+                }
+            ]).toArray()
+            console.log(user);
+            res.render('user/edit-address', {address:user[0].address})
+        }catch(err){
+            console.log(err);
+        }
+    },
+    updateUserAddress:async(req,res)=>{
+        console.log(req.body);
+        try{
+            db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(req.session.user._id), "address.id": req.body.addressId },{
+                $set:{
+                    "address.$.firstName":req.body.firstName,
+                    "address.$.lastName":req.body.lastName,
+                    "address.$.street":req.body.street,
+                    "address.$.AddressLine2":req.body.AddressLine2,
+                    "address.$.Landmark":req.body.Landmark,
+                    "address.$.postalCode":req.body.postalCode,
+                    "address.$.state":req.body.state,
+                    "address.$.country":req.body.country
+                }
+            }).then((response)=>{
+                res.json({status:true})
+            })
+        }catch(err){
+
+        }
     }
 
 }

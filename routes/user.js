@@ -10,7 +10,6 @@ const { razorpayVerify } = require('../helpers/razorpay');
 const verifyLogin = require('../middleware/userAuth');
 const paginatedResults = require('../middleware/paginatedResults');
 const getInvoice =require('../helpers/invoice');
-const { response } = require('express');
 
 router.get('/', async function (req, res) {
   let cartCount = false;
@@ -443,7 +442,6 @@ router.get('/coupon',(req,res)=>{
 
 // invoice
 router.get('/download-invoice/:orderId/:userId',verifyLogin,(req,res)=>{
-  console.log(req.params.orderId, req.params.userId);
   userControllers.getOrderForInvoice(req.params.orderId, req.params.userId).then(async (order) => {
     let cartTotal = await userControllers.getCartTotal(req.session.user._id);
     let invoice = await getInvoice(order,cartTotal);
@@ -452,6 +450,11 @@ router.get('/download-invoice/:orderId/:userId',verifyLogin,(req,res)=>{
   // res.json({status:true,data:invoice})
 })
 
+
+//address
+router.get('/address-management', userControllers.getUserAllAddress);
+router.get('/edit-address/:addressId',userControllers.getUserAddress);
+router.post('/update-address',verifyLogin,userControllers.updateUserAddress)
 
 
 

@@ -1,0 +1,37 @@
+{{>user-header}}
+<div class="headerhny-title text-center mt-3 mb-3">
+    <h3 class="hny-title mb-0 p-4">My Address</h3>
+</div>
+
+<section>
+    <div class="container mb-5">
+        <div class="row">
+            {{#each address}}
+            <div class="col-md-4 d-flex mt-3 justify-content-center">
+                <div class="card text-start position-relative" style="width: 20rem; background-color: #f6f6f6;">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-8 mt-2">
+                                <h5 class="card-title">{{this.firstName}} {{this.lastName}}</h5>
+                            </div>
+                            <div class="col-4 mt-2 d-flex justify-content-center">
+                                
+                                <a href="/edit-address/{{this.id}}">
+                                    <i style="font-size: 13px; cursor: pointer;" class="text-dark fa-solid fa-pen me-4"></i>
+                                </a>
+                                <a href="/delete-address/{{this.id}}">
+                                    <i style="font-size: 13px; cursor: pointer;" class="text-dark fa-solid fa-trash"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <p style="line-height: 22px;" class="card-text mt-3">{{this.street}},{{this.AddressLine2}},{{this.Landmark}},<br>{{this.postalCode}},{{this.state}},{{this.country}}</p>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+
+        </div>
+    </div>
+</section>
+
+{{>user-footer}}
