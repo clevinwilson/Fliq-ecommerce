@@ -63,14 +63,14 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Email</label>
-                                        <input type="text" name="email" class="form-control" value="{{user.email}}">
+                                        <input type="text" name="email" class="form-control" value="{{user.email}}" readonly>
                                     </div>
                                 </div>
                                 <input type="text" value="{{user._id}}" name="userId" class="d-none">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Phone number</label>
-                                        <input type="text" name="phone" class="form-control" value="{{user.phone}}">
+                                        <input type="text" name="phone" class="form-control" value="{{user.phone}}" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -264,8 +264,8 @@
                 success: ((response) => {
                     if (response) {
                         swal({
-                            title: "Good job!",
-                            text: "You clicked the button!",
+                            title: "Success",
+                            text: "Profile updated successfully",
                             icon: "success",
                             button: "OK",
                         }).then(() => {

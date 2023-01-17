@@ -467,11 +467,12 @@ module.exports = {
                 $set: {
                     fname: userDetails.fname,
                     lname: userDetails.lname,
-                    email: userDetails.email,
-                    phone: userDetails.phone,
+                    
                     dateOfbirth: userDetails.dateOfbirth
                 }
             }).then((response) => {
+                // email: userDetails.email,
+                //     phone: userDetails.phone,
                 resolve(response)
             })
         })
