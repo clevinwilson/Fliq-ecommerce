@@ -92,148 +92,150 @@ module.exports = {
             })
         })
     },
-    addCoupon:(data)=>{
-        return new Promise((resolve,reject)=>{
+    addCoupon: (data) => {
+        return new Promise((resolve, reject) => {
             data.status = true;
             data.date = new Date();
             data.couponDiscount = parseInt(data.couponDiscount);
             data.couponCode = data.couponCode.toUpperCase();
-            db.get().collection(collection.COUPON_COLLECTION).insertOne(data).then((response)=>{
+            db.get().collection(collection.COUPON_COLLECTION).insertOne(data).then((response) => {
                 resolve()
             })
         })
     },
-    getCoupons:()=>{
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collection.COUPON_COLLECTION).find().toArray().then((response)=>{
+    getCoupons: () => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.COUPON_COLLECTION).find().toArray().then((response) => {
                 resolve(response)
             })
         })
     },
-    checkCoupon:(data)=>{
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collection.CATEGORY_COLLECTION).findOne({ couponCode: data.couponCode }).then((response)=>{
-                if(response){
+    checkCoupon: (data) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.CATEGORY_COLLECTION).findOne({ couponCode: data.couponCode }).then((response) => {
+                if (response) {
                     resolve(true);
-                }else{
+                } else {
                     resolve(false);
                 }
             })
         })
     },
-    getUserCount:()=>{
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collection.USER_COLLECTION).find().count().then((response)=>{
+    getUserCount: () => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.USER_COLLECTION).find().count().then((response) => {
                 resolve(response)
             })
         })
     },
-    getOrderDetailsCount:()=>{
-        return new Promise(async(resolve,reject)=>{
-            let orderPlaced = await db.get().collection(collection.ORDER_COLLECTION).find({ "shipmentStatus.ordrePlaced.status":true }).count();
+    getOrderDetailsCount: () => {
+        return new Promise(async (resolve, reject) => {
+            let orderPlaced = await db.get().collection(collection.ORDER_COLLECTION).find({ "shipmentStatus.ordrePlaced.status": true }).count();
             let orderDelivered = await db.get().collection(collection.ORDER_COLLECTION).find({ "shipmentStatus.delivered.status": true }).count();
             let orderShipped = await db.get().collection(collection.ORDER_COLLECTION).find({ "shipmentStatus.shipped.status": true }).count();
-            let total=orderPlaced+orderDelivered+orderShipped;
-            orderPlaced=(orderPlaced/total)*100;
-            orderDelivered=(orderDelivered/total)*100;
-            orderShipped=(orderShipped/total)*100;
-            resolve({orderPlaced,orderDelivered,orderShipped})
+            let total = orderPlaced + orderDelivered + orderShipped;
+            orderPlaced = (orderPlaced / total) * 100;
+            orderDelivered = (orderDelivered / total) * 100;
+            orderShipped = (orderShipped / total) * 100;
+            resolve({ orderPlaced, orderDelivered, orderShipped })
         })
     },
-    getOrdersByMonth:()=>{
-        return new Promise(async(resolve)=>{
-            let orders=await db.get().collection(collection.ORDER_COLLECTION).aggregate([{
-                $group:{
-                    _id:"$month",
-                    total: { $sum:'$totalAmount'}
-                }},
+    getOrdersByMonth: () => {
+        return new Promise(async (resolve) => {
+            let orders = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
+                {
+                    $match: { "shipmentStatus.delivered.status": true }
+                },
+                {
+                    $group: {
+                        _id: "$month",
+                        total: { $sum: '$totalAmount' }
+                    }
+                },
                 {
                     $sort: { _id: 1 }
                 }
             ]).toArray()
-            let details=[];
+            let details = [];
             orders.forEach(element => {
                 details.push(element.total)
             });
             resolve(details)
         })
     },
-    getProductCount:()=>{
+    getProductCount: () => {
         return new Promise((resolve, reject) => {
             db.get().collection(collection.PRODUCT_COLLECTION).find().count().then((response) => {
                 resolve(response)
             })
         })
     },
-    getOrdreCount:()=>{
+    getOrdreCount: () => {
         return new Promise((resolve, reject) => {
             db.get().collection(collection.ORDER_COLLECTION).find().count().then((response) => {
                 resolve(response)
             })
         })
     },
-    deleteCoupon:(couponId)=>{
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collection.COUPON_COLLECTION).deleteOne({_id:ObjectId(couponId)}).then((response)=>{
+    deleteCoupon: (couponId) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.COUPON_COLLECTION).deleteOne({ _id: ObjectId(couponId) }).then((response) => {
                 resolve(response)
             })
         })
     },
-    editCoupon:(couponId)=>{
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collection.COUPON_COLLECTION).findOne({_id:ObjectId(couponId)}).then((response)=>{
+    editCoupon: (couponId) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.COUPON_COLLECTION).findOne({ _id: ObjectId(couponId) }).then((response) => {
                 resolve(response)
             })
         })
     },
-    updateCoupon:(data)=>{
-        return new Promise((resolve,reject)=>{
+    updateCoupon: (data) => {
+        return new Promise((resolve, reject) => {
             data.status = true;
             data.date = new Date();
             data.couponDiscount = parseInt(data.couponDiscount);
             data.couponCode = data.couponCode.toUpperCase();
-            db.get().collection(collection.COUPON_COLLECTION).updateOne({_id:ObjectId(data.couponId)},{
-                $set:{
+            db.get().collection(collection.COUPON_COLLECTION).updateOne({ _id: ObjectId(data.couponId) }, {
+                $set: {
                     couponCode: data.couponCode,
                     ExpiryDate: data.ExpiryDate,
                     couponDiscount: data.couponDiscount,
                     minimumPurchase: data.minimumPurchase,
                     maximumPurchase: data.maximumPurchase,
                     status: data.status,
-                    lastUpdate:data.date
+                    lastUpdate: data.date
                 }
-            }).then((response)=>{
+            }).then((response) => {
                 resolve();
             })
         })
     },
-    getSalesReportData:()=>{
+    getSalesReportData: () => {
         return new Promise(async (resolve) => {
             let data = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
-            {
-                $unwind:'$products'
-            },
-            {
-                $group: {
-                    _id: "$month",
-                    total: { $sum: '$totalAmount' },
-                    orderCount:{$sum:1},
-                    productQty: { $sum: "$products.quantity" }
+                {
+                    $match: { "shipmentStatus.delivered.status": true }
+                },
+                {
+                    $unwind: '$products'
+                },
+                {
+                    $group: {
+                        _id: "$month",
+                        total: { $sum: '$totalAmount' },
+                        orderCount: { $sum: 1 },
+                        productQty: { $sum: "$products.quantity" }
+                    }
+                },
+                {
+                    $sort: { monthInNo: 1 }
                 }
-            },
-            {
-                $sort: { monthInNo: 1 }
-            }
             ]).toArray()
             resolve(data)
         })
     }
-    
-   
-    
-    
-    
-   
 
 
 }

@@ -417,6 +417,7 @@ router.get('/salesreport',verifyLogin,(req,res)=>{
 
 router.get('/generate-salesreport',async(req,res)=>{
     adminControllers.getSalesReportData().then((response)=>{
+        console.log(response);
         salesReport(response).then(()=>{
             res.json({status:true})
         })
