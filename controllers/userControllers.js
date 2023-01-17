@@ -88,23 +88,23 @@ module.exports = {
             const productObject = {
                 product: ObjectId(productId),
                 name: product.name,
-                description:product.name,
+                description: product.name,
                 quantity: 1,
-                "tax-rate":0,
+                "tax-rate": 0,
                 price: product.price,
             }
             if (!product) {
                 resolve(false);
             }
             if (product.quantity > 0) {
-               
+
                 const user = await db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(userId) });
                 console.log(user);
                 const productExists = user.cart.products.findIndex(products => products.product == productId);
                 if (productExists != -1) {
                     db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId), 'cart.products.product': ObjectId(productId) },
                         {
-                            $unset: { activeOrder :""},
+                            $unset: { activeOrder: "" },
                             $inc: { 'cart.products.$.quantity': 1 }
                         }).then((response) => {
                             resolve(true);
@@ -112,13 +112,13 @@ module.exports = {
                 }
                 else {
                     db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) }, {
-                        $unset: { activeOrder :""},
+                        $unset: { activeOrder: "" },
                         $push: { 'cart.products': productObject }
                     }).then((response) => {
                         resolve(true);
                     })
                 }
-            }else{
+            } else {
                 resolve(false)
             }
 
@@ -345,7 +345,7 @@ module.exports = {
     // }
 
     generateRazorpay: (orderId, totalAmount) => {
-        totalAmount= Math.floor(totalAmount)
+        totalAmount = Math.floor(totalAmount)
         return new Promise((resolve, reject) => {
             razorpay(orderId, totalAmount).then((order) => {
                 resolve(order);
@@ -373,8 +373,8 @@ module.exports = {
     },
     addToWishlist: (productId, userId) => {
         return new Promise(async (resolve, reject) => {
-            let isProductExits = await db.get().collection(collection.USER_COLLECTION).findOne({ $and: [{ _id: ObjectId(userId) },{ wishlist: ObjectId(productId) }]});
-          
+            let isProductExits = await db.get().collection(collection.USER_COLLECTION).findOne({ $and: [{ _id: ObjectId(userId) }, { wishlist: ObjectId(productId) }] });
+
             if (isProductExits) {
                 db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) }, { $pull: { wishlist: ObjectId(productId) } });
                 resolve({ remove: true })
@@ -511,82 +511,153 @@ module.exports = {
             })
         })
     },
-    getOrderForInvoice:(orderId,userId)=>{
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collection.ORDER_COLLECTION).findOne({ _id: ObjectId(orderId), userId :ObjectId(userId)}).then((response)=>{
+    getOrderForInvoice: (orderId, userId) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.ORDER_COLLECTION).findOne({ _id: ObjectId(orderId), userId: ObjectId(userId) }).then((response) => {
                 resolve(response)
-            }).catch(()=>{
+            }).catch(() => {
                 resolve(false)
             })
         })
     },
-    getAllCoupon:()=>{
-        return new Promise((resolve,reject)=>{
-            db.get().collection(collection.COUPON_COLLECTION).find().toArray().then((coupons)=>{
+    getAllCoupon: () => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.COUPON_COLLECTION).find().toArray().then((coupons) => {
                 resolve(coupons)
-            }).catch(()=>{
+            }).catch(() => {
                 reject();
             })
         })
     },
-    getUserAllAddress:(req,res)=>{
-      try{
-          db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(req.session.user._id) }).then((response) => {
-              console.log(response.address);
-              res.render('user/address',{user:req.session.user,address:response.address});
-          })
-      }catch(err){
-        res.redirect('/')
-      }
+    getUserAllAddress: (req, res) => {
+        try {
+            db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(req.session.user._id) }).then((response) => {
+                console.log(response.address);
+                res.render('user/address', { user: req.session.user, address: response.address });
+            })
+        } catch (err) {
+            res.redirect('/')
+        }
     },
-    getUserAddress:async(req,res)=>{
-        try{
-           let user=await db.get().collection(collection.USER_COLLECTION).aggregate([
+    getUserAddress: async (req, res) => {
+        try {
+            let user = await db.get().collection(collection.USER_COLLECTION).aggregate([
                 {
-                    $match: { _id:ObjectId(req.session.user._id) }
+                    $match: { _id: ObjectId(req.session.user._id) }
                 },
-                {$unwind:"$address"},
+                { $unwind: "$address" },
                 {
                     $match: { 'address.id': req.params.addressId }
                 }
             ]).toArray()
             console.log(user);
-            res.render('user/edit-address', {address:user[0].address})
-        }catch(err){
+            res.render('user/edit-address', { address: user[0].address })
+        } catch (err) {
             console.log(err);
         }
     },
-    updateUserAddress:async(req,res)=>{
-        try{
-            db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(req.session.user._id), "address.id": req.body.addressId },{
-                $set:{
-                    "address.$.firstName":req.body.firstName,
-                    "address.$.lastName":req.body.lastName,
-                    "address.$.street":req.body.street,
-                    "address.$.AddressLine2":req.body.AddressLine2,
-                    "address.$.Landmark":req.body.Landmark,
-                    "address.$.postalCode":req.body.postalCode,
-                    "address.$.state":req.body.state,
-                    "address.$.country":req.body.country
+    updateUserAddress: async (req, res) => {
+        try {
+            db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(req.session.user._id), "address.id": req.body.addressId }, {
+                $set: {
+                    "address.$.firstName": req.body.firstName,
+                    "address.$.lastName": req.body.lastName,
+                    "address.$.street": req.body.street,
+                    "address.$.AddressLine2": req.body.AddressLine2,
+                    "address.$.Landmark": req.body.Landmark,
+                    "address.$.postalCode": req.body.postalCode,
+                    "address.$.state": req.body.state,
+                    "address.$.country": req.body.country
                 }
-            }).then((response)=>{
-                res.json({status:true})
+            }).then((response) => {
+                res.json({ status: true })
             })
-        }catch(err){
+        } catch (err) {
 
         }
     },
-    deleteAddress:async(req,res)=>{
+    deleteAddress: async (req, res) => {
         console.log(req.params.addressId);
-        try{
-            db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(req.session.user._id)},{
+        try {
+            db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(req.session.user._id) }, {
                 $pull: { address: { id: req.params.addressId } }
-            }).then((response)=>{
+            }).then((response) => {
                 res.redirect('/address-management')
             })
-        }catch(err){
+        } catch (err) {
             console.log(err);
         }
+    },
+    checkPassord: async (req, res) => {
+        try {
+            let user = await db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(req.body.userId) });
+            if (user) {
+                bcrypt.compare(req.body.password, user.password).then(function (result) {
+                    if (result) {
+                        if (user.status == true) {
+                            verify.sendVerificationToken(req.body.phone).then((response) => {
+                                if (response) {
+                                    res.json({ status: true, message: "OTP send" })
+                                } else {
+                                    res.json({ status: false, message: "Something went wrong" })
+
+                                }
+                            })
+                        } else {
+                            req.json({ status: 'blocked', message: "User Blocked" })
+                        }
+                    } else {
+                        res.json({ status: false, message: "Incorrect username or password" })
+                    }
+                });
+
+            } else {
+                res.josn({ status: false, message: "User not exists" })
+            }
+        } catch (err) {
+            res.josn({ status: false, message: "Something went wrong" })
+
+        }
+    },
+    verifyOtpInChangePassword: (req, res) => {
+        try {
+            verify.checkVerificationToken(req.body.otp, req.body.phone).then((response) => {
+                if (response) {
+                    res.json({ status: true, message: "OTP verified successfully " })
+                } else {
+                    res.json({ status: false, message: "Incorrect OTP" })
+                }
+            })
+        } catch (err) {
+            res.json({ status: false, message: "Something went wrong" })
+        }
+    },
+    updatePassword: async (req, res) => {
+        try {
+            if (req.body.password === req.body.confirmPassword) {
+                let user = await db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(req.body.userId) })
+                if (user) {
+                    bcrypt.hash(req.body.password, 10, function (err, hash) {
+                        req.body.password = hash;
+                        db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(req.body.userId) }, {
+                            $set: {
+                                password: req.body.password
+                            }
+                        }).then((response) => {
+                            res.json({ status: true, message: "Password Updated Successfully" })
+                        })
+                    });
+                } else {
+                    res.json({ status: false, message: "User Not exists" })
+                }
+            } else {
+                res.json({ status: false, message: "Password Not Matching" })
+            }
+
+        } catch (err) {
+            res.json({ status: false, message: "Something went wrong" })
+        }
     }
+
 
 }

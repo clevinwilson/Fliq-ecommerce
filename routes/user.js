@@ -457,6 +457,11 @@ router.get('/edit-address/:addressId', verifyLogin,userControllers.getUserAddres
 router.post('/update-address',verifyLogin,userControllers.updateUserAddress);
 router.get('/delete-address/:addressId',verifyLogin,userControllers.deleteAddress);
 
+//change password
+router.post('/check-password',verifyLogin,userControllers.checkPassord);
+router.post('/verify-otp',verifyLogin,userControllers.verifyOtpInChangePassword);
+router.post('/update-password',verifyLogin,userControllers.updatePassword);
+
 
 
 

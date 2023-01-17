@@ -45,7 +45,7 @@
                 </div>
                 <div class="tab-content p-4 p-md-5" id="v-pills-tabContent">
                     <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
-                        <form action="" method="post"  id="account-details">
+                        <form action="" method="post" id="account-details">
                             <h3 class="mb-4">Account Settings</h3>
                             <div class="row">
                                 <div class="col-md-6">
@@ -76,8 +76,8 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Date of Birth</label>
-                                        <input type="date" value="{{user.dateOfbirth}}"  name="dateOfbirth" class="form-control"
-                                            placeholder="DD/MM/YY">
+                                        <input type="date" value="{{user.dateOfbirth}}" name="dateOfbirth"
+                                            class="form-control" placeholder="DD/MM/YY">
                                     </div>
                                 </div>
 
@@ -91,32 +91,70 @@
                     </div>
                     <div class="tab-pane fade" id="password" role="tabpanel" aria-labelledby="password-tab">
                         <h3 class="mb-4">Password Settings</h3>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Old password</label>
-                                    <input type="password" class="form-control">
+                        {{!-- old password --}}
+                        <form action="" id="oldpassword" method="post">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Old password</label>
+                                        <input type="text" class="d-none" name="userId" value="{{user._id}}">
+                                        <input type="text" class="d-none" name="phone" value="{{user.phone}}">
+
+                                        <p style="font-size: 12px; display: none;" id="checkPasswordError"
+                                            class="text-danger"></p>
+                                        <input type="password" name="password" class="form-control">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>New password</label>
-                                    <input type="password" class="form-control">
+
+                            <div>
+                                <button class="btn btn-primary">Continue</button>
+                            </div>
+                        </form>
+
+                        {{!-- otp --}}
+                        <form style="display: none;" id="otpForm" action="" method="post">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Enter OTP</label>
+                                        <p style="font-size: 12px; display: none;" id="otpError" class="text-danger">
+                                        </p>
+                                        <input type="text" name="otp" class="form-control">
+                                    </div>
+                                </div>
+                                <input type="text" class="d-none" name="userId" value="{{user._id}}">
+                                <input type="text" class="d-none" name="phone" value="{{user.phone}}">
+                            </div>
+                            <div>
+                                <button class="btn btn-primary">Continue</button>
+                            </div>
+                        </form>
+
+                        {{!-- new password --}}
+                        <form style="display: none;" id="updatePassword" action="" method="post">
+                            <p style="font-size: 12px; display: none;" id="passwordError" class="text-danger"></p>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>New password</label>
+                                        <input type="password" name="password" class="form-control">
+                                    </div>
+                                </div>
+                                <input type="text" class="d-none" name="userId" value="{{user._id}}">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Confirm new password</label>
+                                        <input type="password" name="confirmPassword" class="form-control">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Confirm new password</label>
-                                    <input type="password" class="form-control">
-                                </div>
+                            <div>
+                                <button class="btn btn-primary">Update</button>
                             </div>
-                        </div>
-                        <div>
-                            <button class="btn btn-primary">Update</button>
-                            <button class="btn btn-light">Cancel</button>
-                        </div>
+                        </form>
+
+
                     </div>
                     <div class="tab-pane fade" id="security" role="tabpanel" aria-labelledby="security-tab">
                         <h3 class="mb-4">Security Settings</h3>
@@ -224,15 +262,88 @@
                 method: 'post',
                 data: $('#account-details').serialize(),
                 success: ((response) => {
-                    if(response){
+                    if (response) {
                         swal({
                             title: "Good job!",
                             text: "You clicked the button!",
                             icon: "success",
                             button: "OK",
-                        }).then(()=>{
+                        }).then(() => {
                             location.reload();
                         })
+                    }
+                })
+            })
+        })
+    </script>
+
+    {{!-- old password verify --}}
+    <script>
+        $('#oldpassword').submit((e) => {
+            e.preventDefault();
+            $.ajax({
+                url: '/check-password',
+                method: 'post',
+                data: $('#oldpassword').serialize(),
+                success: ((response) => {
+                    if (response) {
+                        console.log(response)
+                        if (response.status) {
+                            document.getElementById('oldpassword').style.display = "none";
+                            document.getElementById('otpForm').style.display = "block";
+                        } else {
+                            const checkPasswordError = document.getElementById('checkPasswordError');
+                            checkPasswordError.innerText = response.message;
+                            checkPasswordError.style.display = 'block'
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+
+
+    <script>
+        $('#otpForm').submit((e) => {
+            e.preventDefault();
+            $.ajax({
+                url: '/verify-otp',
+                method: 'post',
+                data: $('#otpForm').serialize(),
+                success: ((response) => {
+                    if (response.status) {
+                        document.getElementById('otpForm').style.display = "none";
+                        document.getElementById("updatePassword").style.display = "block"
+                    } else {
+                        const otpError = document.getElementById('otpError');
+                        otpError.innerText = response.message;
+                        otpError.style.display = 'block'
+                    }
+                })
+            })
+        })
+    </script>
+
+    <script>
+        $('#updatePassword').submit((e) => {
+            e.preventDefault();
+            $.ajax({
+                url: '/update-password',
+                method: 'post',
+                data: $('#updatePassword').serialize(),
+                success: ((response) => {
+                    if (response.status) {
+                        console.log(response)
+                        swal({
+                            title: "Success",
+                            text: "Password updated successfully",
+                            icon: "success",
+                            button: "OK",
+                        })
+                    } else {
+                        const passwordError = document.getElementById('passwordError');
+                        passwordError.innerText = response.message;
+                        passwordError.style.display = 'block'
                     }
                 })
             })
