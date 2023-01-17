@@ -662,6 +662,20 @@ module.exports = {
         } catch (err) {
             res.json({ status: false, message: "Something went wrong" })
         }
+    },
+    AddReview:(req,res)=>{
+        console.log(req.body);
+        try{
+            req.body.orderId = ObjectId(req.body.orderId);
+            req.body.productId = ObjectId(req.body.productId);
+            req.body.userId = ObjectId(req.body.userId);
+            req.body.like=0;
+            db.get().collection(collection.REVIEW_COLLECTION).insertOne(req.body).then((response)=>{
+                res.json({status:true,message:"review added"})
+            })
+        }catch(err){
+            req.json({status:false})
+        }
     }
 
 

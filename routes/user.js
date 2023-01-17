@@ -158,6 +158,7 @@ router.get('/product-details/:productId', async (req, res) => {
     cartCount = await userControllers.getCartCount(req.session.user._id);
     productinCart = await userControllers.productExistCart(req.session.user._id, req.params.productId);
   }
+  
   productControllers.getProductDetails(req.params.productId).then((product) => {
     res.render('user/product-details', { product, user: req.session.user, cartCount, wishListStatus, productinCart })
   }).catch(()=>{
@@ -465,6 +466,9 @@ router.get('/delete-address/:addressId',verifyLogin,userControllers.deleteAddres
 router.post('/check-password',verifyLogin,userControllers.checkPassord);
 router.post('/verify-otp',verifyLogin,userControllers.verifyOtpInChangePassword);
 router.post('/update-password',verifyLogin,userControllers.updatePassword);
+
+//review
+router.post('/add-review',verifyLogin,userControllers.AddReview);
 
 
 
