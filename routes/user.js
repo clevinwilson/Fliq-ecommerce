@@ -152,12 +152,16 @@ router.get('/product-details/:productId', async (req, res) => {
   let wishListStatus = false;
   let productinCart = false;
   if (req.session.user) {
-    wishListStatus = await userControllers.productExistWishlist(req.session.user._id, req.params.productId);
+    wishListStatus = await userControllers.productExistWishlist(req.session.user._id, req.params.productId).catch(()=>{
+      res.render('/error')
+    })
     cartCount = await userControllers.getCartCount(req.session.user._id);
     productinCart = await userControllers.productExistCart(req.session.user._id, req.params.productId);
   }
   productControllers.getProductDetails(req.params.productId).then((product) => {
     res.render('user/product-details', { product, user: req.session.user, cartCount, wishListStatus, productinCart })
+  }).catch(()=>{
+    res.render('/error')
   })
 })
 
@@ -311,7 +315,7 @@ router.get('/order-details/:orderId', (req, res) => {
     const cartCount = await userControllers.getCartCount(req.session.user._id);
 
     res.render('user/order-details', { order: response, user: req.session.user, cartCount });
-  }).catch(() => { res.redirect('/orders') })
+  }).catch(() => { res.render('/error') })
 })
 
 // cancel order

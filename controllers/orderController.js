@@ -93,21 +93,25 @@ module.exports = {
     },
     getOrderDetails: (orderId) => {
         return new Promise(async (resolve, reject) => {
-            const orderDetails = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
-                {
-                    $match: { _id: ObjectId(orderId) }
-                },
-                {
-                    $lookup:
-                    {
-                        from: collection.PRODUCT_COLLECTION,
-                        localField: 'products.product',
-                        foreignField: '_id',
-                        as: 'products'
-                    }
-                }
-            ]).toArray();
-            resolve(orderDetails[0])
+           try{
+               const orderDetails = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
+                   {
+                       $match: { _id: ObjectId(orderId) }
+                   },
+                   {
+                       $lookup:
+                       {
+                           from: collection.PRODUCT_COLLECTION,
+                           localField: 'products.product',
+                           foreignField: '_id',
+                           as: 'products'
+                       }
+                   }
+               ]).toArray();
+               resolve(orderDetails[0])
+           }catch(err){
+            reject();
+           }
         })
     },
     cancelOrder: (orderId) => {

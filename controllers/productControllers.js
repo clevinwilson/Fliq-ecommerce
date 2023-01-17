@@ -35,28 +35,35 @@ module.exports={
     },
     getProductDetails:(productId)=>{
         return new Promise(async(resolve,reject)=>{
-           let Details=await db.get().collection(collection.PRODUCT_COLLECTION).aggregate([
-                {
-                    $match:{
-                        _id:ObjectId(productId)
-                    }
-                },
-                { $lookup:{
-                        from:collection.CATEGORY_COLLECTION,
-                    localField:"categoryId",
-                        foreignField:"_id",
-                        as:"categoryDetails"
-                    }   
-                },
-               {
-                   $project: {
+            try{
+                let Details = await db.get().collection(collection.PRODUCT_COLLECTION).aggregate([
+                    {
+                        $match: {
+                            _id: ObjectId(productId)
+                        }
+                    },
+                    {
+                        $lookup: {
+                            from: collection.CATEGORY_COLLECTION,
+                            localField: "categoryId",
+                            foreignField: "_id",
+                            as: "categoryDetails"
+                        }
+                    },
+                    {
+                        $project: {
 
-                       _id: 1, name: 1, feature:1, type: 1,status:1, brand: 1, modelnumber: 1, color: 1, price: 1, quantity: 1, storage: 1, specification: 1, overview: 1, images:1, categoryDetails: { $arrayElemAt: ['$categoryDetails', 0] }
-                   }
-               }
-                
-            ]).toArray()
-           resolve(Details[0])
+                            _id: 1, name: 1, feature: 1, type: 1, status: 1, brand: 1, modelnumber: 1, color: 1, price: 1, quantity: 1, storage: 1, specification: 1, overview: 1, images: 1, categoryDetails: { $arrayElemAt: ['$categoryDetails', 0] }
+                        }
+                    }
+
+                ]).toArray()
+                resolve(Details[0])
+            }catch(err){
+                reject();
+            }
+           
+        //    resolve(Details[0])
             
         })
     },

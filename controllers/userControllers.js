@@ -390,12 +390,16 @@ module.exports = {
     },
     productExistWishlist: (userId, productId) => {
         return new Promise(async (resolve, reject) => {
-            let isProductExits = await db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(userId), wishlist: ObjectId(productId) });
-            if (isProductExits) {
-                resolve(true);
-            } else {
-                resolve(false);
-            }
+           try{
+               let isProductExits = await db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(userId), wishlist: ObjectId(productId) });
+               if (isProductExits) {
+                   resolve(true);
+               } else {
+                   resolve(false);
+               }
+           }catch(err){
+            reject()
+           }
         })
     },
     getWishList: (userId) => {
@@ -554,7 +558,7 @@ module.exports = {
             console.log(user);
             res.render('user/edit-address', { address: user[0].address })
         } catch (err) {
-            console.log(err);
+            res.render('/error');
         }
     },
     updateUserAddress: async (req, res) => {
