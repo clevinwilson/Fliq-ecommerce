@@ -9,7 +9,7 @@ const state = {
 module.exports.main = async function () {
 
     // Connection URL
-    const url = 'mongodb://0.0.0.0:27017';
+    const url = process.env.MONGODB_URL
     const client = new MongoClient(url);
 
     // Database Name
