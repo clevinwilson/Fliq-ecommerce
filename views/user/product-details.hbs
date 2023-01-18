@@ -181,6 +181,7 @@
                             <div class="reviews">
                                 <h3>Reviews</h3>
 
+                               {{#if review}}
                                 {{#each review}}
                                 <div class="review">
                                     <div class="row no-gutters">
@@ -206,11 +207,11 @@
                                         </div><!-- End .col -->
                                         <div class="col">
                                             <h4>{{this.rating}}</h4>
-
+                                
                                             <div class="review-content">
                                                 <p>{{this.review}}</p>
                                             </div><!-- End .review-content -->
-
+                                
                                             <div class="review-action">
                                                 <a href="#"><i class="icon-thumbs-up"></i>Helpful (0)</a>
                                                 <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
@@ -219,6 +220,9 @@
                                     </div><!-- End .row -->
                                 </div><!-- End .review -->
                                 {{/each}}
+                                {{else}}
+                                <h3 class="text-center">No reviews</h3>
+                                {{/if}}
                             </div><!-- End .reviews -->
                         </div><!-- .End .tab-pane -->
 
