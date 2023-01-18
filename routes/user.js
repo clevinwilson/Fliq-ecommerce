@@ -160,7 +160,11 @@ router.get('/product-details/:productId', async (req, res) => {
   }
   
   productControllers.getProductDetails(req.params.productId).then((product) => {
-    res.render('user/product-details', { product, user: req.session.user, cartCount, wishListStatus, productinCart })
+    userControllers.getProductReviews(req.params.productId).then((review) => {
+      res.render('user/product-details', { product, user: req.session.user, cartCount, wishListStatus, productinCart, review })
+    }).catch(() => {
+      res.render('/error')
+    })
   }).catch(()=>{
     res.render('/error')
   })

@@ -670,12 +670,38 @@ module.exports = {
             req.body.productId = ObjectId(req.body.productId);
             req.body.userId = ObjectId(req.body.userId);
             req.body.like=0;
+            req.body[req.body.rating]=true;
+            req.body.date = new Date().toString().slice(0, 21);
+
+
             db.get().collection(collection.REVIEW_COLLECTION).insertOne(req.body).then((response)=>{
                 res.json({status:true,message:"review added"})
             })
         }catch(err){
             req.json({status:false})
         }
+    },
+    getProductReviews: (productId)=>{
+            return new Promise((resolve,reject)=>{
+                db.get().collection(collection.REVIEW_COLLECTION).aggregate([
+                    {
+                        $match:{productId:ObjectId(productId)}
+                    },
+                    {
+                        $lookup: {
+                            from: collection.USER_COLLECTION,
+                            localField: 'userId',
+                            foreignField: '_id',
+                            as: 'user'
+                        }
+                    },
+                ]).toArray().then((reviews) => {
+                    resolve(reviews)
+                }).catch(() => {
+                    reject(false)
+                })
+            })
+        
     }
 
 

@@ -143,7 +143,7 @@
 
                         <div class="inputbox">
                             <textarea type="text" id="userReview" name="review" class="reviewinp"
-                                placeholder="Write a review"></textarea>
+                                placeholder="Write a review" required></textarea>
                         </div>
                         <div class="stars my-4 justify-content-evenly">
                             <div onclick="setrating(1)" class="star1"><i class="far fa-star starj1"></i></div>
@@ -186,9 +186,11 @@
                                         <h6 class="mt-2 device-name text-capitalize">{{this.name}}</h6>
                                         <p style="font-size: 12px;" class="m-0">{{this.brand}}</p>
                                         <h6 class="mt-2">₹ {{this.price}}</h6>
+                                        {{#if ../order.shipmentStatus.delivered.status}}
                                         <p onclick="displayReviewBox('{{this._id}}')"
-                                            style="font-weight: 600; color: #0088d9;"><span><i
+                                            style="font-weight: 600; color: #0088d9; cursor: pointer;"><span><i
                                                     class="fa-solid fa-star"></i></span> Rate & Review Product</p>
+                                        {{/if}}
                                         <h6 style="font-size: 13px;" class="mt-2">{{this.color}}</h6>
 
                                     </div>
@@ -292,7 +294,7 @@
                 data,
                 success: (response) => {
                     if (response.status) {
-                        console.log(response)
+                        swal("Success", "Review add successfully", "success");
                     }
                 }
             })
