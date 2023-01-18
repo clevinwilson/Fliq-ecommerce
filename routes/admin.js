@@ -117,19 +117,11 @@ router.get('/unblock-user/:userId', verifyLogin, (req, res) => {
 //category management
 
 router.get('/add-category', verifyLogin, (req, res) => {
-    res.render('admin/add-category', { admin: req.session.adminLogin })
+    res.render('admin/add-category', { admin: req.session.adminLogin, categoryError: req.session.categoryErrorMessage })
+    req.session.categoryErrorMessage=false;
 })
 
-router.post('/add-category', verifyLogin, uploadCategoryImage, (req, res) => {
-    req.body.image = req.files.image[0];
-    categoryControllers.addCategory(req.body).then((response) => {
-        if (response.insertedId) {
-            res.redirect('/admin/view-category')
-        } else {
-            res.redirect('/admin/view-category')
-        }
-    })
-})
+router.post('/add-category', verifyLogin, uploadCategoryImage, categoryControllers.addCategory)
 
 router.get('/view-category', verifyLogin, (req, res) => {
     categoryControllers.getCategoryList().then((response) => {

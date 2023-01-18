@@ -2,7 +2,7 @@ const collection = require('../config/collection');
 const db = require('../config/connection');
 const { ObjectId } = require("mongodb");
 
-module.exports={
+module.exports = {
     getCategory: () => {
         return new Promise((resolve, reject) => {
             db.get().collection(collection.CATEGORY_COLLECTION).find({ status: true }).toArray().then((response) => {
@@ -10,13 +10,26 @@ module.exports={
             })
         })
     },
-    addCategory: (data) => {
-        data.status = true;
-        return new Promise((resolve, reject) => {
-            db.get().collection(collection.CATEGORY_COLLECTION).insertOne(data).then((response) => {
-                resolve(response)
-            })
-        })
+    addCategory: async (req, res) => {
+        try {
+            req.body.status = true;
+            req.body.image = req.files.image[0];
+
+            let category = await db.get().collection(collection.CATEGORY_COLLECTION).findOne({ name: req.body.name });
+
+            if (!category) {
+                db.get().collection(collection.CATEGORY_COLLECTION).insertOne(req.body).then((response) => {
+                    res.redirect('/admin/view-category');
+                })
+            }
+            else {
+                req.session.categoryErrorMessage = "Category already exists "
+                res.redirect('/admin/add-category');
+            }
+        } catch (err) {
+            req.session.categoryErrorMessage = "Something went wrong "
+            res.redirect('/admin/add-category')
+        }
     },
     getCategoryDetails: (categoryId) => {
         return new Promise((resolve, reject) => {
@@ -58,16 +71,16 @@ module.exports={
     },
 
     deleteCategory: (categoryId) => {
-        return new Promise(async(resolve, reject) => {
-            let product=await db.get().collection(collection.PRODUCT_COLLECTION).findOne({categoryId:ObjectId(categoryId)});
-            if(!product){
+        return new Promise(async (resolve, reject) => {
+            let product = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ categoryId: ObjectId(categoryId) });
+            if (!product) {
                 db.get().collection(collection.CATEGORY_COLLECTION).deleteOne({ _id: ObjectId(categoryId) }).then((response) => {
                     resolve(response);
                 })
-            }else{
+            } else {
                 resolve(false)
             }
-            
+
         })
     },
     changeStatus: (categoryId, status) => {
