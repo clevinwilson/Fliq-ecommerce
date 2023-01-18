@@ -357,6 +357,7 @@ module.exports = {
     },
     getSearchResult: (key) => {
         return new Promise((resolve, reject) => {
+            key = key.replace(/[^a-zA-Z ]/g, "")
             db.get().collection(collection.PRODUCT_COLLECTION).find(
                 {
                     $or: [
