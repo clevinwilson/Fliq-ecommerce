@@ -390,16 +390,16 @@ module.exports = {
     },
     productExistWishlist: (userId, productId) => {
         return new Promise(async (resolve, reject) => {
-           try{
-               let isProductExits = await db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(userId), wishlist: ObjectId(productId) });
-               if (isProductExits) {
-                   resolve(true);
-               } else {
-                   resolve(false);
-               }
-           }catch(err){
-            reject()
-           }
+            try {
+                let isProductExits = await db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(userId), wishlist: ObjectId(productId) });
+                if (isProductExits) {
+                    resolve(true);
+                } else {
+                    resolve(false);
+                }
+            } catch (err) {
+                reject()
+            }
         })
     },
     getWishList: (userId) => {
@@ -471,7 +471,7 @@ module.exports = {
                 $set: {
                     fname: userDetails.fname,
                     lname: userDetails.lname,
-                    
+
                     dateOfbirth: userDetails.dateOfbirth
                 }
             }).then((response) => {
@@ -663,45 +663,84 @@ module.exports = {
             res.json({ status: false, message: "Something went wrong" })
         }
     },
-    AddReview:(req,res)=>{
+    AddReview: (req, res) => {
         console.log(req.body);
-        try{
+        try {
             req.body.orderId = ObjectId(req.body.orderId);
             req.body.productId = ObjectId(req.body.productId);
             req.body.userId = ObjectId(req.body.userId);
-            req.body.like=0;
-            req.body[req.body.rating]=true;
+            req.body.like = 0;
+            req.body[req.body.rating] = true;
             req.body.date = new Date().toString().slice(0, 21);
 
 
-            db.get().collection(collection.REVIEW_COLLECTION).insertOne(req.body).then((response)=>{
-                res.json({status:true,message:"review added"})
+            db.get().collection(collection.REVIEW_COLLECTION).insertOne(req.body).then((response) => {
+                res.json({ status: true, message: "review added" })
             })
-        }catch(err){
-            req.json({status:false})
+        } catch (err) {
+            req.json({ status: false })
         }
     },
-    getProductReviews: (productId)=>{
-            return new Promise((resolve,reject)=>{
-                db.get().collection(collection.REVIEW_COLLECTION).aggregate([
-                    {
-                        $match:{productId:ObjectId(productId)}
-                    },
-                    {
-                        $lookup: {
-                            from: collection.USER_COLLECTION,
-                            localField: 'userId',
-                            foreignField: '_id',
-                            as: 'user'
-                        }
-                    },
-                ]).toArray().then((reviews) => {
-                    resolve(reviews)
-                }).catch(() => {
-                    reject(false)
-                })
+    getProductReviews: (productId) => {
+        return new Promise((resolve, reject) => {
+            db.get().collection(collection.REVIEW_COLLECTION).aggregate([
+                {
+                    $match: { productId: ObjectId(productId) }
+                },
+                {
+                    $lookup: {
+                        from: collection.USER_COLLECTION,
+                        localField: 'userId',
+                        foreignField: '_id',
+                        as: 'user'
+                    }
+                },
+            ]).toArray().then((reviews) => {
+                resolve(reviews)
+            }).catch(() => {
+                reject(false)
             })
-        
+        })
+
+    },
+    buyNow: async (req, res) => {
+        let product = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ _id: ObjectId(req.params.productId) });
+        const productObject = {
+            product: ObjectId(req.params.productId),
+            name: product.name,
+            description: product.name,
+            quantity: 1,
+            "tax-rate": 0,
+            price: product.price,
+        }
+        if (!product) {
+            res.render('/error');
+        }
+        if (product.quantity > 0) {
+
+            const user = await db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(req.session.user._id) });
+            console.log(user);
+            const productExists = user.cart.products.findIndex(products => products.product == req.params.productId);
+            if (productExists != -1) {
+                db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(req.session.user._id), 'cart.products.product': ObjectId(req.params.productId) },
+                    {
+                        $unset: { activeOrder: "" },
+                        $inc: { 'cart.products.$.quantity': 1 }
+                    }).then((response) => {
+                        res.redirect('/cart');
+                    })
+            }
+            else {
+                db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(req.session.user._id) }, {
+                    $unset: { activeOrder: "" },
+                    $push: { 'cart.products': productObject }
+                }).then((response) => {
+                    res.redirect('/cart');
+                })
+            }
+        } else {
+            res.render('/error');
+        }
     }
 
 

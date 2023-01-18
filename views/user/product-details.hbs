@@ -129,7 +129,7 @@
 
                                     {{#if product.status}}
                                     <div class="product-details-action mt-3">
-                                        <a href="#" class="btn-buynow me-3"><span class="text-white">Buy Now</span></a>
+                                        <a href="/buy-now/{{product._id}}" class="btn-buynow me-3"><span class="text-white">Buy Now</span></a>
                                         {{#unless productinCart}}
                                         <a onclick="addToCart('{{product._id}}')" id="add-to-cart"
                                             class="btn-product btn-cart"><span>Add

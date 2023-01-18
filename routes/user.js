@@ -170,6 +170,8 @@ router.get('/product-details/:productId', async (req, res) => {
   })
 })
 
+//buynow
+router.get('/buy-now/:productId',verifyLogin,userControllers.buyNow)
 
 //cart
 router.get('/add-to-cat/:productId', verifyLogin, (req, res) => {
