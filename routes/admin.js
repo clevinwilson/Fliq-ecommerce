@@ -9,7 +9,6 @@ const { uploadProduct, uploadCategoryImage, uploadBannerImage } = require('../mi
 const productControllers = require('../controllers/productControllers');
 const deleteImages = require('../helpers/delete-file');
 const verifyLogin = require('../middleware/adminAuth');
-const salesReport=require('../helpers/salesreport');
 
 
 //login page
@@ -407,15 +406,7 @@ router.get('/salesreport',verifyLogin,(req,res)=>{
 })
 
 
-router.get('/generate-salesreport',async(req,res)=>{
-    adminControllers.getSalesReportData().then((response)=>{
-        console.log(response);
-        salesReport(response).then(()=>{
-            res.json({status:true})
-        })
-        // res.render('admin/sales-report', { salesData: response, admin: req.session.adminLogin })
-    })
-})
+router.post('/generate-salesreport',verifyLogin,adminControllers.gerSalesReportInfo)
 
 
 

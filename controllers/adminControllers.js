@@ -2,7 +2,8 @@ const db = require('../config/connection');
 const collection = require('../config/collection');
 const bcrypt = require('bcrypt');
 const { ObjectId } = require("mongodb");
-const { response } = require('express');
+const salesReport = require('../helpers/salesreport');
+
 
 module.exports = {
     doLogin: (data) => {
@@ -235,6 +236,52 @@ module.exports = {
             ]).toArray()
             resolve(data)
         })
+    },
+    gerSalesReportInfo: async (req, res) => {
+        console.log(new Date(req.body.fromDate).toString().slice(0,16));
+        console.log(new Date());
+
+        try {
+            if (new Date(req.body.fromDate) < new Date()){
+                let data = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
+                    {
+                        $match: {
+                            $and: [
+                                { "shipmentStatus.delivered.status": true },
+                                {
+                                    date: {
+                                        $gt: new Date(req.body.fromDate),
+                                        $lte: new Date(req.body.toDate)
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        $unwind: '$products'
+                    },
+                    {
+                        $group: {
+                            _id: "$month",
+                            total: { $sum: '$totalAmount' },
+                            orderCount: { $sum: 1 },
+                            productQty: { $sum: "$products.quantity" }
+                        }
+                    },
+                    {
+                        $sort: { monthInNo: 1 }
+                    }
+                ]).toArray();
+                console.log(data);
+                salesReport(data).then(() => {
+                    res.json({ status: true })
+                })
+            }else{
+                res.json({ status: false })
+            }
+        } catch (err) {
+            res.json({ status: false })
+        }
     }
 
 

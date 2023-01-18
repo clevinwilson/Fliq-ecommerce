@@ -21,18 +21,13 @@
                 <!-- Page Heading -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
                     <h1 class="h3 mb-0 text-gray-800">Sales report</h1>
-                    <a onclick="generateSalesreport()" id="generateReport"
-                        class=" text-white btn btn-sm btn-primary shadow-sm"> Generate Report</a>
-                    <a style="display: none;" id="downloadReport" class=" text-white  btn btn-sm btn-success shadow-sm"
-                        href="http://localhost:3000/salesreport/report.pdf" download><i
-                            class="fas fa-download fa-sm text-white-50 me-2"></i>Download</a>
+
                 </div>
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Sales report</h6>
                     </div>
-
                     <div class="card-body">
                         {{#if categoryUpdate}}
                         <div class="alert alert-success" role="alert">
@@ -75,6 +70,76 @@
                             </table>
                         </div>
                     </div>
+
+                    {{!-- <div class="col-md-12">
+                        <h6>Generate Sales report</h6>
+                        <form action="" id="salesReport" method="post">
+                            <div class="row">
+                                <div class="form-group mt-3 col-md-4">
+                                    <label for="">From date</label>
+                                    <input style="border-color:#b4e3eb;" value="" type="date"
+                                        class="form-control col-md-12 mt-2" id="fromDate" name="fromDate" required>
+                                </div>
+                                <div class="form-group mt-3  col-md-4">
+                                    <label for="category-image">To date</label>
+                                    <input style="border-color:#b4e3eb;" value="" type="date"
+                                        class="form-control col-md-12 mt-2" id="toDate" name="toDate" required>
+                                </div>
+
+                                <div class="d-flex align-items-end bottom-0 mb-4 col-md-4 justify-content-center">
+                                    <a onclick="generateSalesreport()" id="generateReport"
+                                        class=" text-white btn btn-sm btn-primary shadow-sm"> Generate
+                                        Report</a>
+                                    <a style="display: none;" id="downloadReport"
+                                        class=" text-white  btn btn-sm btn-success shadow-sm"
+                                        href="http://localhost:3000/salesreport/report.pdf" download><i
+                                            class="fas fa-download fa-sm text-white-50 me-2"></i>Download</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div> --}}
+                </div>
+
+            </div>
+
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <!-- Page Heading -->
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+
+                </div>
+                <!-- DataTales Example -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Generate Sales report</h6>
+                    </div>
+                    <div class="col-md-12">
+                        <form action="" id="salesReport" method="post">
+                            <div class="row">
+                                <div class="form-group mt-3 col-md-4">
+                                    <label for="">From date</label>
+                                    <input style="border-color:#b4e3eb;" value="" type="date"
+                                        class="form-control col-md-12 mt-2" id="fromDate" name="fromDate" required>
+                                </div>
+                                <div class="form-group mt-3  col-md-4">
+                                    <label for="category-image">To date</label>
+                                    <input style="border-color:#b4e3eb;" value="" type="date"
+                                        class="form-control col-md-12 mt-2" id="toDate" name="toDate" required>
+                                </div>
+
+                                <div class="d-flex align-items-end bottom-0 mb-4 col-md-4 justify-content-center">
+                                    <button type="submit" id="generateReport"
+                                        class=" text-white btn btn-sm btn-primary shadow-sm"> Generate
+                                        Report</button>
+                                    <a style="display: none;" id="downloadReport"
+                                        class=" text-white  btn btn-sm btn-success shadow-sm"
+                                        href="http://localhost:3000/salesreport/report.pdf" download><i
+                                            class="fas fa-download fa-sm text-white-50 me-2"></i>Download</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
 
             </div>
@@ -116,10 +181,12 @@
 </style>
 
 <script>
-    function generateSalesreport(productId) {
+    $('#salesReport').submit((e) => {
+        e.preventDefault();
         $.ajax({
             url: "/admin/generate-salesreport",
-            method: 'get',
+            method: 'post',
+            data: $('#salesReport').serialize(),
             success: ((response) => {
                 if (response.status) {
                     swal({
@@ -131,11 +198,19 @@
                         document.getElementById('generateReport').style.display = "none"
                         document.getElementById('downloadReport').style.display = "block"
                     })
+                }else{
+                   swal({
+                        title: "Error",
+                        text: "Check the date",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    })
                 }
 
             })
         })
-    }
+    })
 
 
 </script>

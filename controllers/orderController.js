@@ -7,7 +7,7 @@ module.exports = {
     placeOrder: (phone, paymentMethod, userDetails, price) => {
         return new Promise((resolve, reject) => {
             userDetails.address.phone = phone;
-            let date = new Date().toString().slice(0, 21);
+            let date = new Date()
             const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
             orderObj = {
