@@ -11,7 +11,9 @@ const verifyLogin = require('../middleware/userAuth');
 const paginatedResults = require('../middleware/paginatedResults');
 const getInvoice =require('../helpers/invoice');
 const csrf = require('csurf')
-const csrfProtection = csrf({ cookie: true })
+const csrfProtection = csrf({ cookie: true });
+const getCartCount=require('../middleware/cart-count');
+
 
 
 router.get('/', async function (req, res) {
@@ -27,128 +29,35 @@ router.get('/', async function (req, res) {
 
 
 //user signup using phone no
-router.get('/signup-phone', (req, res) => {
-  if (req.session.loggedIn) {
-    res.redirect('/')
-  } else {
-    res.render('user/phone', { phoneError: req.session.phoneError })
-    req.session.phoneError = false
-  }
-})
-
-router.post('/signup-phone', (req, res) => {
-  userControllers.generateOtp(req.body).then((response) => {
-    if (response.status) {
-      req.session.userPhone = req.body;
-      res.redirect('/otp-verification')
-    } else {
-      req.session.phoneError = response.message;
-      res.redirect('/signup-phone');
-    }
-  })
-})
-
+router.get('/signup-phone',userControllers.signupUsingPhone);
+router.post('/signup-phone', userControllers.generateOtp);
 
 //phone and otp
-router.get('/otp-verification', (req, res) => {
-  if (req.session.otp) {
-    res.redirect('/signup');
-  } else {
-    res.render('user/otp-verification', { otpError: req.session.otpError });
-    req.session.otpError = false;
-  }
-
-})
-
-
-router.post('/otp-verification', (req, res) => {
-  if (req.session.loggedIn) {
-    res.redirect('/')
-  } else {
-    userControllers.verifyOtp(req.body.otp, req.session.userPhone).then((response) => {
-      if (response) {
-        req.session.otp = true;
-        res.redirect('/signup');
-        req.session.signupError = false;
-      } else {
-        req.session.otpError = "OTP Not Match";
-        res.redirect('/otp-verification');
-      }
-    })
-  }
-})
+router.get('/otp-verification',userControllers.otpVerification);
+router.post('/otp-verification',userControllers.verifyOtp);
 
 
 //signup
-router.get('/signup', (req, res) => {
-  if (req.session.loggedIn) {
-    res.redirect('/')
-  } else {
-    res.render('user/signup', { signupError: req.session.signupError })
-    req.session.signupError = false
-  }
-})
-
-router.post('/signup', (req, res) => {
-  req.body.phone = req.session.userPhone.phone;
-  userControllers.doSignup(req.body).then((response) => {
-    if (response) {
-      res.redirect('/login');
-      req.session.otp = false;
-    } else {
-      req.session.signupError = "Email already exists ";
-      res.redirect('/signup')
-    }
-  })
-})
+router.get('/signup',userControllers.signup);
+router.post('/signup',userControllers.doSignup);
 
 
 //login
-router.get('/login', (req, res) => {
-  if (req.session.loggedIn) {
-    res.redirect('/');
-  } else {
-    res.render('user/login', { LoginError: req.session.LoginError });
-    req.session.LoginError = false
-  }
-})
+router.get('/login',userControllers.login)
 
-router.post('/login', (req, res) => {
-  userControllers.doLogin(req.body).then((response) => {
-    console.log(response);
-    if (response.status === true) {
-      req.session.loggedIn = true;
-      req.session.user = response.user;
-      res.redirect('/')
-    } else if (response.status === "blocked") {
-      res.render('user/account-suspended')
-    } else {
-      req.session.LoginError = response.message;
-      res.redirect('/login')
-    }
-  })
-})
+router.post('/login',userControllers.doLogin)
 
 //logout
-router.get('/logout', (req, res) => {
-  req.session.destroy();
-  res.redirect('/');
-})
+router.get('/logout',userControllers.logout)
 
 //account-suspended
-router.get('/account-suspended', (req, res) => {
-  res.render('user/account-suspended')
-})
+router.get('/account-suspended',userControllers.assoutSuspended)
 
 //account page
-router.get('/account', verifyLogin, async (req, res) => {
-  const cartCount = await userControllers.getCartCount(req.session.user._id);
-  res.render('user/account', { user: req.session.user, cartCount });
-})
+router.get('/account', verifyLogin, getCartCount,userControllers.account)
 
 
 //product
-
 //product details page
 router.get('/product-details/:productId', async (req, res) => {
   let cartCount = false;

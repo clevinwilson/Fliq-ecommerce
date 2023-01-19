@@ -10,78 +10,163 @@ const { razorpay } = require('../helpers/razorpay');
 
 module.exports = {
 
-    doSignup: function (userData) {
-        return new Promise(async (resolve, reject) => {
-            userData.joined_date = new Date();
-            userData.address = [];
-            userData.status = true;
-            userData.wishlist = [];
-            userData.orders = [];
-            userData.cart = { products: [] };
+    doSignup:async function (req,res) {
+          try{
+              req.body.phone = req.session.userPhone.phone;
+              req.body.joined_date = new Date();
+              req.body.address = [];
+              req.body.status = true;
+              req.body.wishlist = [];
+              req.body.orders = [];
+              req.body.cart = { products: [] };
 
-            const user = await db.get().collection(collection.USER_COLLECTION).findOne({ email: userData.email })
-            if (user) {
-                resolve(false)
-            } else {
-                bcrypt.hash(userData.password, 10, function (err, hash) {
-                    userData.password = hash;
-                    db.get().collection(collection.USER_COLLECTION).insertOne(userData).then((response) => {
-                        resolve(true);
-                    }).catch(() => reject())
-                });
-            }
-        })
+              const user = await db.get().collection(collection.USER_COLLECTION).findOne({ email: req.body.email })
+              if (user) {
+                  req.session.signupError = "Email already exists ";
+                  res.redirect('/signup')
+              } else {
+                  bcrypt.hash(req.body.password, 10, function (err, hash) {
+                      req.body.password = hash;
+                      db.get().collection(collection.USER_COLLECTION).insertOne(req.body).then((response) => {
+                          res.redirect('/login');
+                          req.session.otp = false;
+                      })
+                  });
+              }
+          }catch(err){
+            res.render('/error');
+          }
     },
-    generateOtp: (userData) => {
-        return new Promise(async (resolve, reject) => {
-            const user = await db.get().collection(collection.USER_COLLECTION).findOne({ phone: userData.phone });
+    signupUsingPhone: (req,res) => {
+        try {
+            if (req.session.loggedIn) {
+                res.redirect('/')
+            } else {
+                res.render('user/phone', { phoneError: req.session.phoneError })
+                req.session.phoneError = false
+            }
+        } catch (err) {
+            res.render('/error')
+        }
+    },
+    generateOtp: async (req, res) => {
+        try {
+            const user = await db.get().collection(collection.USER_COLLECTION).findOne({ phone: req.body.phone });
             if (!user) {
-                verify.sendVerificationToken(userData.phone).then((response) => {
+                verify.sendVerificationToken(req.body.phone).then((response) => {
                     if (response) {
-                        resolve({ status: true })
+                        req.session.userPhone = req.body;
+                        res.redirect('/otp-verification')
                     } else {
-                        resolve({ status: false, message: "Something went wrong" })
+                        req.session.phoneError = "Something went wrong";
+                        res.redirect('/signup-phone');
                     }
                 })
             } else {
-                resolve({ status: false, message: "User already exists" })
+                req.session.phoneError = "User already exists";
+                res.redirect('/signup-phone');
             }
-        })
+        } catch (err) {
+            res.render('/error');
+        }
     },
-    verifyOtp: (otp, userData) => {
-        return new Promise((resolve, reject) => {
-            verify.checkVerificationToken(otp, userData.phone).then((response) => {
-                if (response) {
-                    resolve(response)
-                } else {
-                    resolve(response)
-                }
-            })
-        })
+    otpVerification: (req, res) => {
+        if (req.session.otp) {
+            res.redirect('/signup');
+        } else {
+            res.render('user/otp-verification', { otpError: req.session.otpError });
+            req.session.otpError = false;
+        }
     },
-    doLogin: (data) => {
-        return new Promise(async (resolve, reject) => {
-            let user = await db.get().collection(collection.USER_COLLECTION).findOne({ email: data.email });
+    verifyOtp: (req, res) => {
+        try {
+            if (req.session.loggedIn) {
+                res.redirect('/')
+            } else {
+                verify.checkVerificationToken(req.body.otp, req.session.userPhone.phone).then((response) => {
+                    console.log(response);
+
+                    if (response) {
+                        req.session.otp = true;
+                        res.redirect('/signup');
+                        req.session.signupError = false;
+                    } else {
+                        req.session.otpError = "OTP Not Match";
+                        res.redirect('/otp-verification');
+                    }
+                })
+            }
+        } catch (err) {
+            res.render('/error');
+        }
+    },
+    signup: (req, res) => {
+        if (req.session.loggedIn) {
+            res.redirect('/')
+        } else {
+            res.render('user/signup', { signupError: req.session.signupError })
+            req.session.signupError = false
+        }
+    },
+    login:(req,res)=>{
+        try{
+            if (req.session.loggedIn) {
+                res.redirect('/');
+            } else {
+                res.render('user/login', { LoginError: req.session.LoginError });
+                req.session.LoginError = false
+            }
+        }catch(err){
+            res.render('/error');
+        }
+    },
+    doLogin: async(req,res) => {
+        try{
+            let user = await db.get().collection(collection.USER_COLLECTION).findOne({ email: req.body.email });
             if (user) {
 
-                bcrypt.compare(data.password, user.password).then(function (result) {
+                bcrypt.compare(req.body.password, user.password).then(function (result) {
                     if (result) {
                         if (user.status == true) {
-                            resolve({ user, status: true })
+                            req.session.loggedIn = true;
+                            req.session.user = user
+                            res.redirect('/')
                         } else {
-                            resolve({ status: 'blocked' })
+                            res.render('user/account-suspended')
                         }
                     } else {
-                        resolve({ status: false, message: "Incorrect username or password" })
+                        req.session.LoginError = "Incorrect username or password";
+                        res.redirect('/login')
                     }
                 });
 
             } else {
-                resolve({ status: false, message: "User not exists" })
+                req.session.LoginError = "User not exists";
+                res.redirect('/login')
             }
-        })
+        }catch(err){
+            res.render('/error');
+        }
     },
+    logout:(req,res)=>{
+        try{
+            req.session.destroy();
+            res.redirect('/');
+        }catch(err){
+            res.render('/error');
+        }
+    },
+    assoutSuspended:(req,res)=>{
+        res.render('user/account-suspended')
+    },
+    account:(req,res)=>{
+        try{
+            res.render('user/account', { user: req.session.user, cartCount: res.cartCount });
+        }catch(err){
+            res.render('/error');
 
+        }
+    },
     addToCart: async (productId, userId) => {
         return new Promise(async (resolve, reject) => {
             let product = await db.get().collection(collection.PRODUCT_COLLECTION).findOne({ _id: ObjectId(productId) })
@@ -125,12 +210,7 @@ module.exports = {
         })
     },
     getCartCount: (userId) => {
-        return new Promise(async (resolve, reject) => {
-            let user = await db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(userId) });
-            if (user) {
-                resolve(user.cart.products.length ?? 0)
-            }
-        })
+       
     },
     getCartProducts: (userId) => {
         return new Promise(async (resolve, reject) => {
