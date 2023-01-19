@@ -4,7 +4,9 @@ const bcrypt = require('bcrypt');
 const verify = require('../helpers/otp_verification');
 const { ObjectId } = require('mongodb');
 const { razorpay } = require('../helpers/razorpay');
-const { response } = require('express');
+const csrf = require('csurf')
+const csrfProtection = csrf({ cookie: true })
+
 
 
 

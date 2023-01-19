@@ -10,6 +10,9 @@ const { razorpayVerify } = require('../helpers/razorpay');
 const verifyLogin = require('../middleware/userAuth');
 const paginatedResults = require('../middleware/paginatedResults');
 const getInvoice =require('../helpers/invoice');
+const csrf = require('csurf')
+const csrfProtection = csrf({ cookie: true })
+
 
 router.get('/', async function (req, res) {
   let cartCount = false;
@@ -403,18 +406,18 @@ router.get('/move-to-wishlist/:productId', verifyLogin, (req, res) => {
 })
 
 //profile
-router.get('/profile', verifyLogin, async (req, res) => {
+router.get('/profile', verifyLogin, csrfProtection, async (req, res) => {
   try {
     let cartCount = await userControllers.getCartCount(req.session.user._id);
     userControllers.getUserDetails(req.session.user._id).then((userDetails) => {
-      res.render('user/profile', { user: userDetails, cartCount })
+      res.render('user/profile', { user: userDetails, cartCount, csrfToken: req.csrfToken() })
     })
   } catch (err) {
     res.redirect('/accoutn')
   }
 })
 
-router.post('/update-profile',verifyLogin, (req, res) => {
+router.post('/update-profile', verifyLogin, csrfProtection, (req, res) => {
   userControllers.updateUserProfile(req.body).then((response) => {
     res.json({ status: true });
   })
@@ -469,9 +472,9 @@ router.post('/update-address',verifyLogin,userControllers.updateUserAddress);
 router.get('/delete-address/:addressId',verifyLogin,userControllers.deleteAddress);
 
 //change password
-router.post('/check-password',verifyLogin,userControllers.checkPassord);
-router.post('/verify-otp',verifyLogin,userControllers.verifyOtpInChangePassword);
-router.post('/update-password',verifyLogin,userControllers.updatePassword);
+router.post('/check-password', verifyLogin,csrfProtection,userControllers.checkPassord);
+router.post('/verify-otp', verifyLogin,csrfProtection,userControllers.verifyOtpInChangePassword);
+router.post('/update-password', verifyLogin,csrfProtection,userControllers.updatePassword);
 
 //review
 router.post('/add-review',verifyLogin,userControllers.AddReview);
