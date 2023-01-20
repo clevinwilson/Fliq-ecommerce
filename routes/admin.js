@@ -328,7 +328,7 @@ router.get('/view-orders',verifyLogin, (req, res) => {
 })
 
 router.get('/order-details/:orderId',verifyLogin, (req, res) => {
-    orderControllers.getOrderDetails(req.params.orderId).then((response) => {
+    adminControllers.getOrderDetails(req.params.orderId).then((response) => {
         res.render('admin/order-details', { order: response, admin: req.session.adminLogin })
     })
 })

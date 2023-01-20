@@ -179,7 +179,8 @@ module.exports = {
                 price: product.price,
             }
             if (!product) {
-                resolve(false);
+                res.json({ status: false })
+
             }
             if (product.quantity > 0) {
 
@@ -204,13 +205,19 @@ module.exports = {
                     })
                 }
             } else {
-                resolve(false)
+                res.json({ status: false })
+
             }
 
         })
     },
     getCartCount: (userId) => {
-       
+        return new Promise(async (resolve, reject) => {
+            let user = await db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(userId) });
+            if (user) {
+                resolve(user.cart.products.length ?? 0)
+            }
+        })
     },
     getCartProducts: (userId) => {
         return new Promise(async (resolve, reject) => {
@@ -273,14 +280,16 @@ module.exports = {
             }
         })
     },
-    deleteCartProduct: (productId, userId) => {
-        return new Promise((resolve, reject) => {
-            db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) }, {
-                $pull: { 'cart.products': { product: ObjectId(productId) } }
+    deleteCartProduct: (req,res) => {
+        try{
+            db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(req.session.user._id) }, {
+                $pull: { 'cart.products': { product: ObjectId(req.params.productId) } }
             }).then((response) => {
-                resolve()
+                res.redirect('/cart')
             })
-        })
+        }catch(err){
+            res.render('/error');
+        }
     },
     getCartTotal: (userId) => {
         return new Promise(async (resolve, reject) => {
@@ -322,17 +331,19 @@ module.exports = {
             }
         })
     },
-    addNewAddress: (data, userId) => {
-        return new Promise((resolve, reject) => {
-            data.default = false;
-            data.id = Date.now() + '-' + Math.round(Math.random() * 1E9)
+    addNewAddress: (req,res) => {
+        try{
+            req.body.default = false;
+            req.body.id = Date.now() + '-' + Math.round(Math.random() * 1E9)
 
-            db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) }, {
-                $push: { address: data }
+            db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(req.session.user._id) }, {
+                $push: { address: req.body }
             }).then((response) => {
-                resolve(response)
+                res.redirect(req.headers.referer);
             })
-        })
+        }catch(err){
+            res.render('/error');
+        }
     },
     getUserAdress: (userId) => {
         return new Promise((resolve, reject) => {
@@ -435,6 +446,14 @@ module.exports = {
             })
         })
     },
+    categorListing:(req,res)=>{
+        try{
+            res.render('user/product-listing', { results: res.paginatedResults, user: req.session.user, cartCount: res.cartCount });
+
+        }catch(err){
+            res.render('/error')
+        }
+    },
     getSearchResult: (key) => {
         return new Promise((resolve, reject) => {
             key = key.replace(/[^a-zA-Z ]/g, "")
@@ -452,22 +471,24 @@ module.exports = {
             })
         })
     },
-    addToWishlist: (productId, userId) => {
-        return new Promise(async (resolve, reject) => {
-            let isProductExits = await db.get().collection(collection.USER_COLLECTION).findOne({ $and: [{ _id: ObjectId(userId) }, { wishlist: ObjectId(productId) }] });
+    addToWishlist:async (req,res) => {
+        try{
+            let isProductExits = await db.get().collection(collection.USER_COLLECTION).findOne({ $and: [{ _id: ObjectId(req.session.user._id) }, { wishlist: ObjectId(req.params.productId) }] });
 
             if (isProductExits) {
-                db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) }, { $pull: { wishlist: ObjectId(productId) } });
-                resolve({ remove: true })
+                db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(req.session.user._id) }, { $pull: { wishlist: ObjectId(req.params.productId) } });
+                res.json({ status: true })
             } else {
-                console.log("push");
-                db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) }, { $push: { wishlist: ObjectId(productId) } }).then((response) => {
-                    resolve({ insert: true })
+                db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(req.session.user._id) }, { $push: { wishlist: ObjectId(req.params.productId) } }).then((response) => {
+                    res.json({ status: true })
+
                 }).catch(() => {
-                    resolve(false)
+                    res.json({ status: false })
                 })
             }
-        })
+        }catch(err){
+            res.render('/error')
+        }
     },
     productExistWishlist: (userId, productId) => {
         return new Promise(async (resolve, reject) => {
@@ -483,11 +504,11 @@ module.exports = {
             }
         })
     },
-    getWishList: (userId) => {
-        return new Promise(async (resolve, reject) => {
+    getWishList:async (req,res) => {
+        try{
             let wishList = await db.get().collection(collection.USER_COLLECTION).aggregate([
                 {
-                    $match: { _id: ObjectId(userId) }
+                    $match: { _id: ObjectId(req.session.user._id) }
                 },
                 {
                     $lookup:
@@ -502,32 +523,38 @@ module.exports = {
                     $project: { products: 1 }
                 }
             ]).toArray();
-            resolve(wishList[0].products);
-        })
+            res.render('user/wishlist', { user: req.session.user, wishList: wishList[0].products, cartCount: res.cartCount });
+
+        }catch(err){
+            res.render('/error')
+        }
     },
-    deleteFromWishList: (productId, userId) => {
-        return new Promise((resolve, reject) => {
-            db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) },
+    deleteFromWishList: (req,res) => {
+        try{
+            db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(req.session.user._id) },
                 {
-                    $pull: { wishlist: ObjectId(productId) }
+                    $pull: { wishlist: ObjectId(req.params.productId) }
                 }
             ).then((response) => {
-                resolve();
+                res.redirect('/wishlist');
             })
-        })
+        }catch(err){
+            res.render('/error');
+        }
     },
-    moveToWishlist: (productId, userId) => {
-        console.log(productId, userId);
-        return new Promise((resolve, reject) => {
-            db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) },
-                { $pull: { 'cart.products': { product: ObjectId(productId) } } }
+    moveToWishlist: (req,res) => {
+        try{
+            db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(req.session.user._id) },
+                { $pull: { 'cart.products': { product: ObjectId(req.params.productId) } } }
             ).then((response) => {
-                db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) },
-                    { $push: { wishlist: ObjectId(productId) } }, { upsert: true }).then((response) => {
-                        resolve();
+                db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(req.session.user._id) },
+                    { $push: { wishlist: ObjectId(req.params.productId) } }, { upsert: true }).then((response) => {
+                        res.redirect('/wishList')
                     })
             })
-        })
+        }catch(err){
+            res.render('/error');
+        }
     },
     productExistCart: (userId, productId) => {
         return new Promise(async (resolve, reject) => {
@@ -539,28 +566,32 @@ module.exports = {
             }
         })
     },
-    getUserDetails: (userId) => {
-        return new Promise((resolve, reject) => {
-            db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(userId) }).then((response) => {
-                resolve(response)
-            })
-        })
-    },
-    updateUserProfile: (userDetails) => {
-        return new Promise((resolve, reject) => {
-            db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userDetails.userId) }, {
-                $set: {
-                    fname: userDetails.fname,
-                    lname: userDetails.lname,
+    getUserDetails: (req,res) => {
+        try{
+            db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(req.session.user._id) }).then((response) => {
+                res.render('user/profile', { user: response, cartCount: res.cartCount, csrfToken: req.csrfToken() })
 
-                    dateOfbirth: userDetails.dateOfbirth
+            })
+        }catch(err){
+            res.render('/error');
+        }
+    },
+    updateUserProfile: (req,res) => {
+        try{
+            db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(req.body.userId) }, {
+                $set: {
+                    fname: req.body.fname,
+                    lname: req.body.lname,
+                    dateOfbirth: req.body.dateOfbirth
                 }
             }).then((response) => {
                 // email: userDetails.email,
                 //     phone: userDetails.phone,
-                resolve(response)
+                res.json({ status: true });
             })
-        })
+        }catch(err){
+            res.render('/error');
+        }
     },
     applyCoupon: (coupon, cartTotal, userId) => {
         return new Promise((resolve, reject) => {
@@ -587,16 +618,19 @@ module.exports = {
         })
     },
     removeCoupon: (userId) => {
-        return new Promise((resolve, reject) => {
-            db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) }, {
+        try{
+            db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(req.session.user._id) }, {
                 $unset: { 'cart.discountedPrice': "", 'cart.savingPrice': "", 'cart.coupon': "" }
             }).then((response) => {
-                resolve(true)
+                res.json({ status: true })
             }).catch(() => {
-                resolve(false)
+                res.json({ status: false })
             })
-        })
-    },
+        }catch(err){
+            res.render('/error');
+
+        }    
+},
     getOrderForInvoice: (orderId, userId) => {
         return new Promise((resolve, reject) => {
             db.get().collection(collection.ORDER_COLLECTION).findOne({ _id: ObjectId(orderId), userId: ObjectId(userId) }).then((response) => {
@@ -606,14 +640,14 @@ module.exports = {
             })
         })
     },
-    getAllCoupon: () => {
-        return new Promise((resolve, reject) => {
+    getAllCoupon: (req,res) => {
+        try{
             db.get().collection(collection.COUPON_COLLECTION).find().toArray().then((coupons) => {
-                resolve(coupons)
-            }).catch(() => {
-                reject();
+                res.render('user/coupons', { coupons, user: req.session.user })
             })
-        })
+        }catch(err){
+            res.render('/error');
+        }
     },
     getUserAllAddress: (req, res) => {
         try {

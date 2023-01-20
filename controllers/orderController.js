@@ -69,11 +69,11 @@ module.exports = {
             })
         })
     },
-    getMyOrders: (userId) => {
+    getMyOrders: (req,res) => {
         return new Promise(async (resolve, reject) => {
             let orders = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
                 {
-                    $match: { userId: ObjectId(userId) }
+                    $match: { userId: ObjectId(req.session.user._id) }
                 },
                 {
                     $lookup:
@@ -88,15 +88,15 @@ module.exports = {
                     $sort: { date: -1 }
                 }
             ]).toArray();
-            resolve(orders);
+            res.render('user/orders', { orders, user: req.session.user, cartCount: res.cartCount });
         })
     },
-    getOrderDetails: (orderId) => {
+    getOrderDetails: (req,res) => {
         return new Promise(async (resolve, reject) => {
            try{
                const orderDetails = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
                    {
-                       $match: { _id: ObjectId(orderId) }
+                       $match: { _id: ObjectId(req.params.orderId) }
                    },
                    {
                        $lookup:
@@ -108,21 +108,28 @@ module.exports = {
                        }
                    }
                ]).toArray();
-               resolve(orderDetails[0])
+               res.render('user/order-details', { order: orderDetails[0], user: req.session.user, cartCount: res.cartCount });
            }catch(err){
-            reject();
+            res.render('/error')
            }
         })
     },
-    cancelOrder: (orderId) => {
+    orderSuccess:(req,res)=>{
+        try{
+            res.render('user/order-success');
+        }catch(err){
+            res.render('/error')
+        }
+    },
+    cancelOrder: (req,res) => {
         return new Promise((resolve, reject) => {
-            db.get().collection(collection.ORDER_COLLECTION).updateOne({ _id: ObjectId(orderId) }, {
+            db.get().collection(collection.ORDER_COLLECTION).updateOne({ _id: ObjectId(req.params.orderId) }, {
                 $set: {
                     orderStatus: false
                 }
             }).then(async(response) => {
-                resolve();
-                let order = await db.get().collection(collection.ORDER_COLLECTION).findOne({ _id: ObjectId(orderId) });
+                res.json({ status: true })
+                let order = await db.get().collection(collection.ORDER_COLLECTION).findOne({ _id: ObjectId(req.params.orderId) });
                 let orderProducts = order.products
                 orderProducts.forEach(obj => {
                     db.get().collection(collection.PRODUCT_COLLECTION).updateOne({ _id: ObjectId(obj.product) }, {

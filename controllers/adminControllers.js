@@ -3,6 +3,7 @@ const collection = require('../config/collection');
 const bcrypt = require('bcrypt');
 const { ObjectId } = require("mongodb");
 const salesReport = require('../helpers/salesreport');
+const { response } = require('express');
 
 
 module.exports = {
@@ -282,7 +283,26 @@ module.exports = {
         } catch (err) {
             res.json({ status: false })
         }
-    }
+    },
+    getOrderDetails: (orderId) => {
+        return new Promise(async (resolve, reject) => {
+            const orderDetails = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
+                {
+                    $match: { _id: ObjectId(orderId) }
+                },
+                {
+                    $lookup:
+                    {
+                        from: collection.PRODUCT_COLLECTION,
+                        localField: 'products.product',
+                        foreignField: '_id',
+                        as: 'products'
+                    }
+                }
+            ]).toArray();
+            resolve(orderDetails[0])
+        })
+    },
 
 
 }

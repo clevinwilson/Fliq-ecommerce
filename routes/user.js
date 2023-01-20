@@ -9,99 +9,92 @@ const orderControllers = require('../controllers/orderController');
 const { razorpayVerify } = require('../helpers/razorpay');
 const verifyLogin = require('../middleware/userAuth');
 const paginatedResults = require('../middleware/paginatedResults');
-const getInvoice =require('../helpers/invoice');
+const getInvoice = require('../helpers/invoice');
 const csrf = require('csurf')
 const csrfProtection = csrf({ cookie: true });
-const getCartCount=require('../middleware/cart-count');
+const getCartCount = require('../middleware/cartCount');
 
 
 
-router.get('/', async function (req, res) {
-  let cartCount = false;
+router.get('/', getCartCount, async function (req, res) {
   let categoryList = await categoryControllers.getCategory();
   let banner = await bannerControllers.getBanner();
-  if (req.session.user) {
-    cartCount = await userControllers.getCartCount(req.session.user._id)
-  }
   const products = await productControllers.getProducts();
-  res.render('user/index', { user: req.session.user, cartCount, categoryList, banner, products })
+  res.render('user/index', { user: req.session.user, cartCount: res.cartCount, categoryList, banner, products })
 });
 
 
 //user signup using phone no
-router.get('/signup-phone',userControllers.signupUsingPhone);
+router.get('/signup-phone', userControllers.signupUsingPhone);
 router.post('/signup-phone', userControllers.generateOtp);
 
 //phone and otp
-router.get('/otp-verification',userControllers.otpVerification);
-router.post('/otp-verification',userControllers.verifyOtp);
+router.get('/otp-verification', userControllers.otpVerification);
+router.post('/otp-verification', userControllers.verifyOtp);
 
 
 //signup
-router.get('/signup',userControllers.signup);
-router.post('/signup',userControllers.doSignup);
+router.get('/signup', userControllers.signup);
+router.post('/signup', userControllers.doSignup);
 
 
 //login
-router.get('/login',userControllers.login)
-
-router.post('/login',userControllers.doLogin)
-
+router.get('/login', userControllers.login)
+router.post('/login', userControllers.doLogin)
 //logout
-router.get('/logout',userControllers.logout)
+router.get('/logout', userControllers.logout)
 
 //account-suspended
-router.get('/account-suspended',userControllers.assoutSuspended)
+router.get('/account-suspended', userControllers.assoutSuspended)
 
 //account page
-router.get('/account', verifyLogin, getCartCount,userControllers.account)
+router.get('/account', verifyLogin, getCartCount, userControllers.account)
 
 
 //product
 //product details page
-router.get('/product-details/:productId', async (req, res) => {
-  let cartCount = false;
+router.get('/product-details/:productId', getCartCount, async (req, res) => {
+  let cartCount = res.cartCount;
   let wishListStatus = false;
   let productinCart = false;
   if (req.session.user) {
-    wishListStatus = await userControllers.productExistWishlist(req.session.user._id, req.params.productId).catch(()=>{
+    wishListStatus = await userControllers.productExistWishlist(req.session.user._id, req.params.productId).catch(() => {
       res.render('/error')
     })
-    cartCount = await userControllers.getCartCount(req.session.user._id);
     productinCart = await userControllers.productExistCart(req.session.user._id, req.params.productId);
   }
-  
   productControllers.getProductDetails(req.params.productId).then((product) => {
     userControllers.getProductReviews(req.params.productId).then((review) => {
       res.render('user/product-details', { product, user: req.session.user, cartCount, wishListStatus, productinCart, review })
     }).catch(() => {
       res.render('/error')
     })
-  }).catch(()=>{
+  }).catch(() => {
     res.render('/error')
   })
 })
 
+
 //buynow
-router.get('/buy-now/:productId',verifyLogin,userControllers.buyNow)
+router.get('/buy-now/:productId', verifyLogin, userControllers.buyNow)
 
 //cart
 router.get('/add-to-cat/:productId', verifyLogin, (req, res) => {
   userControllers.addToCart(req.params.productId, req.session.user._id).then(async (response) => {
-    if(response){
+    if (response) {
       let cartCount = await userControllers.getCartCount(req.session.user._id);
+      console.log(cartCount);
       res.json({ status: true, cartCount })
-    }else{
-      res.json({status:false})
+    } else {
+      res.json({ status: false })
     }
   })
 })
 
-router.get('/cart', verifyLogin, async (req, res) => {
-  let cartCount = await userControllers.getCartCount(req.session.user._id);
+router.get('/cart', verifyLogin, getCartCount, async (req, res) => {
   let cartTotal = await userControllers.getCartTotal(req.session.user._id);
   userControllers.getCartProducts(req.session.user._id).then((response) => {
-    res.render('user/cart', { cartItems: response, user: req.session.user, cartCount, cartTotal })
+    res.render('user/cart', { cartItems: response, user: req.session.user, cartCount: res.cartCount, cartTotal })
   })
 })
 
@@ -122,32 +115,23 @@ router.post('/change-product-quantity', verifyLogin, (req, res) => {
 })
 
 
-router.get('/remove-product/:productId', verifyLogin, (req, res) => {
-  userControllers.deleteCartProduct(req.params.productId, req.session.user._id).then((response) => {
-    res.redirect('/cart')
-  })
-})
+router.get('/remove-product/:productId', verifyLogin, userControllers.deleteCartProduct)
 
 
 //checkout page
-router.get('/checkout', verifyLogin, async (req, res) => {
+router.get('/checkout', verifyLogin, getCartCount, async (req, res) => {
   let userDetails = await userControllers.getUserAdress(req.session.user._id);
   let cartTotal = await userControllers.getCartTotal(req.session.user._id);
-  const cartCount = await userControllers.getCartCount(req.session.user._id);
   let discountedPriceDetails = false;
   if (userDetails.cart.discountedPrice) {
     discountedPriceDetails = await userControllers.applyCoupon(userDetails.cart.coupon, cartTotal, req.session.user._id)
   }
-  res.render('user/checkout', { userDetails, cartTotal, user: req.session.user, cartCount, discountedPriceDetails: discountedPriceDetails });
+  res.render('user/checkout', { userDetails, cartTotal, user: req.session.user, cartCount: res.cartCount, discountedPriceDetails: discountedPriceDetails });
 })
 
 
 //checkout page
-router.post('/add-new-address', verifyLogin, (req, res) => {
-  userControllers.addNewAddress(req.body, req.session.user._id).then((response) => {
-    res.redirect(req.headers.referer);
-  })
-})
+router.post('/add-new-address', verifyLogin, userControllers.addNewAddress)
 
 //billing
 router.post('/confirm-address', async (req, res) => {
@@ -159,11 +143,9 @@ router.post('/confirm-address', async (req, res) => {
   }
 })
 
-router.get('/billing/:addressId', async (req, res) => {
+router.get('/billing/:addressId', verifyLogin, getCartCount, async (req, res) => {
   let cartTotal = await userControllers.getCartTotal(req.session.user._id);
-  const cartCount = await userControllers.getCartCount(req.session.user._id);
-
-  res.render('user/billing', { cartTotal, addressId: req.params.addressId, user: req.session.user, cartCount })
+  res.render('user/billing', { cartTotal, addressId: req.params.addressId, user: req.session.user, cartCount: res.cartCount })
 })
 
 
@@ -222,32 +204,12 @@ router.post('/place-order', verifyLogin, async (req, res) => {
   }
 })
 
-router.get('/orders', verifyLogin, (req, res) => {
-  orderControllers.getMyOrders(req.session.user._id).then(async (response) => {
-    const cartCount = await userControllers.getCartCount(req.session.user._id);
-    res.render('user/orders', { orders: response, user: req.session.user, cartCount });
-  })
-})
-
-router.get('/order-details/:orderId', (req, res) => {
-  orderControllers.getOrderDetails(req.params.orderId).then(async (response) => {
-    const cartCount = await userControllers.getCartCount(req.session.user._id);
-
-    res.render('user/order-details', { order: response, user: req.session.user, cartCount });
-  }).catch(() => { res.render('/error') })
-})
-
+router.get('/orders', verifyLogin, getCartCount, orderControllers.getMyOrders)
+router.get('/order-details/:orderId', verifyLogin, getCartCount, orderControllers.getOrderDetails)
 // cancel order
-router.get("/cancel-order/:orderId", (req, res) => {
-  orderControllers.cancelOrder(req.params.orderId).then((response) => {
-    res.json({ status: true })
-  })
-})
-
+router.get("/cancel-order/:orderId", verifyLogin, orderControllers.cancelOrder)
 //order success
-router.get('/order-success', (req, res) => {
-  res.render('user/order-success');
-})
+router.get('/order-success', verifyLogin, orderControllers.orderSuccess)
 
 
 
@@ -267,77 +229,29 @@ router.post('/verify-payment', async (req, res) => {
 
 
 //category listing 
-router.get('/product-listing/:categoryId', paginatedResults(), async (req, res) => {
-  let cartCount = 0
-
-  if (req.session.user) {
-    cartCount = await userControllers.getCartCount(req.session.user._id);
-  }
-  res.render('user/product-listing', { results: res.paginatedResults, user: req.session.user, cartCount });
-})
+router.get('/product-listing/:categoryId', paginatedResults(), getCartCount, userControllers.categorListing)
 
 //search
-
 router.get('/search/:key', async (req, res) => {
   let searchResult = await userControllers.getSearchResult(req.params.key);
   res.json({ searchResult })
 })
 
-
 //wishlist 
-router.get('/wishlist', verifyLogin, (req, res) => {
-  userControllers.getWishList(req.session.user._id).then(async (response) => {
-    let cartCount = await userControllers.getCartCount(req.session.user._id);
-    res.render('user/wishlist', { user: req.session.user, wishList: response, cartCount });
-  })
-})
-
-router.get('/add-to-wishList/:productId', verifyLogin,(req, res) => {
-  userControllers.addToWishlist(req.params.productId, req.session.user._id).then((response) => {
-    if (response) {
-      res.json({ status: true })
-    } else {
-      res.json({ status: false })
-    }
-  })
-})
-
-router.get('/deleteWishList/:productId', verifyLogin, (req, res) => {
-  userControllers.deleteFromWishList(req.params.productId, req.session.user._id).then((response) => {
-    res.redirect('/wishlist');
-  })
-})
-
-router.get('/move-to-wishlist/:productId', verifyLogin, (req, res) => {
-  userControllers.moveToWishlist(req.params.productId, req.session.user._id).then((response) => {
-    res.redirect('/wishList')
-  })
-})
+router.get('/wishlist', verifyLogin, getCartCount, userControllers.getWishList)
+router.get('/add-to-wishList/:productId', verifyLogin, userControllers.addToWishlist)
+router.get('/deleteWishList/:productId', verifyLogin, userControllers.deleteFromWishList)
+router.get('/move-to-wishlist/:productId', verifyLogin, userControllers.moveToWishlist)
 
 //profile
-router.get('/profile', verifyLogin, csrfProtection, async (req, res) => {
-  try {
-    let cartCount = await userControllers.getCartCount(req.session.user._id);
-    userControllers.getUserDetails(req.session.user._id).then((userDetails) => {
-      res.render('user/profile', { user: userDetails, cartCount, csrfToken: req.csrfToken() })
-    })
-  } catch (err) {
-    res.redirect('/accoutn')
-  }
-})
-
-router.post('/update-profile', verifyLogin, csrfProtection, (req, res) => {
-  userControllers.updateUserProfile(req.body).then((response) => {
-    res.json({ status: true });
-  })
-})
+router.get('/profile', verifyLogin, csrfProtection, getCartCount, userControllers.getUserDetails)
+router.post('/update-profile', verifyLogin, csrfProtection, userControllers.updateUserProfile)
 
 
 // coupon
-router.post('/apply-coupon/',verifyLogin, async (req, res) => {
+router.post('/apply-coupon/', verifyLogin, async (req, res) => {
   let cartTotal = await userControllers.getCartTotal(req.session.user._id);
   userControllers.applyCoupon(req.body.coupon, cartTotal, req.session.user._id).then((response) => {
-    console.log(response);
     if (response) {
       res.json({ status: true, response })
     } else {
@@ -346,29 +260,15 @@ router.post('/apply-coupon/',verifyLogin, async (req, res) => {
   })
 
 })
-
-router.get('/remove-coupon',verifyLogin,(req,res)=>{
-  userControllers.removeCoupon(req.session.user._id).then((response)=>{
-    if(response){
-      res.json({status:true})
-    }else{
-      res.json({status:false})
-    }
-  })
-})
-
-router.get('/coupon',(req,res)=>{
-  userControllers.getAllCoupon().then((coupons)=>{
-    res.render('user/coupons', { coupons, user: req.session.user })
-  })
-})
+router.get('/remove-coupon', verifyLogin, userControllers.removeCoupon)
+router.get('/coupon', userControllers.getAllCoupon)
 
 // invoice
-router.get('/download-invoice/:orderId/:userId',verifyLogin,(req,res)=>{
+router.get('/download-invoice/:orderId/:userId', verifyLogin, (req, res) => {
   userControllers.getOrderForInvoice(req.params.orderId, req.params.userId).then(async (order) => {
     let cartTotal = await userControllers.getCartTotal(req.session.user._id);
-    let invoice = await getInvoice(order,cartTotal);
-    res.json({status:true,invoice})
+    let invoice = await getInvoice(order, cartTotal);
+    res.json({ status: true, invoice })
   })
   // res.json({status:true,data:invoice})
 })
@@ -376,27 +276,17 @@ router.get('/download-invoice/:orderId/:userId',verifyLogin,(req,res)=>{
 
 //address
 router.get('/address-management', verifyLogin, userControllers.getUserAllAddress);
-router.get('/edit-address/:addressId', verifyLogin,userControllers.getUserAddress);
-router.post('/update-address',verifyLogin,userControllers.updateUserAddress);
-router.get('/delete-address/:addressId',verifyLogin,userControllers.deleteAddress);
+router.get('/edit-address/:addressId', verifyLogin, userControllers.getUserAddress);
+router.post('/update-address', verifyLogin, userControllers.updateUserAddress);
+router.get('/delete-address/:addressId', verifyLogin, userControllers.deleteAddress);
 
 //change password
-router.post('/check-password', verifyLogin,csrfProtection,userControllers.checkPassord);
-router.post('/verify-otp', verifyLogin,csrfProtection,userControllers.verifyOtpInChangePassword);
-router.post('/update-password', verifyLogin,csrfProtection,userControllers.updatePassword);
+router.post('/check-password', verifyLogin, csrfProtection, userControllers.checkPassord);
+router.post('/verify-otp', verifyLogin, csrfProtection, userControllers.verifyOtpInChangePassword);
+router.post('/update-password', verifyLogin, csrfProtection, userControllers.updatePassword);
 
 //review
-router.post('/add-review',verifyLogin,userControllers.AddReview);
-
-
-
-
-
-
-
-
-
-
+router.post('/add-review', verifyLogin, userControllers.AddReview);
 
 
 module.exports = router;
