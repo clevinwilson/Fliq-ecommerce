@@ -22,6 +22,8 @@ module.exports = {
                 totalAmount: Math.floor(price) ,
                 originalPrice: userDetails.originalPrice,
                 date: date,
+                coupon: userDetails.cart.coupon ?? 0,
+                savingPrice: userDetails.cart.savingPrice ?? 0,
                 orderDate: new Date().toString().slice(0, 16),
                 monthInNo: new Date().getMonth()+1,
                 month: month[new Date().getMonth()],

@@ -236,7 +236,10 @@
                         </div> --}}
 
                         <div class="order-total-wrap">
-                            <h6 class="me-2 mb-0">Total: ₹{{order.totalAmount}}</h6>
+                            <h6 style="font-size: 13px;" class="me-2 mb-2">Item(s) Subtotal: ₹{{order.originalPrice}}</h6>
+                            <h6 style="font-size: 13px;" class="me-2 mb-2">Shipping: ₹0</h6>
+                            <h6 style="font-size: 13px;" class="me-2 mb-2">Coupon Applied: ₹{{order.savingPrice}} </h6>
+                            <h6 style="font-weight: 600;" class="me-2 mb-2">Total: ₹{{order.totalAmount}}</h6>
                         </div>
                     </div>
                 </div>
