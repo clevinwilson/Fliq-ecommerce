@@ -596,9 +596,9 @@ module.exports = {
     applyCoupon: (coupon, cartTotal, userId) => {
         return new Promise((resolve, reject) => {
             db.get().collection(collection.COUPON_COLLECTION).findOne({ couponCode: coupon }).then((couponDetails) => {
-                if (couponDetails && cartTotal >= parseInt(couponDetails.minimumPurchase) && cartTotal <= parseInt(couponDetails.maximumPurchase)) {
-                    let savingPrice = (cartTotal * (parseInt(couponDetails.couponDiscount) / 100));
-                    let discountedPrice = cartTotal - savingPrice;
+                if (couponDetails && cartTotal >= parseInt(couponDetails.minimumPurchase) && cartTotal <= parseInt(couponDetails.maximumPurchase) && new Date() <=couponDetails.ExpiryDate) {
+                    let savingPrice = Math.floor((cartTotal * (parseInt(couponDetails.couponDiscount) / 100)));
+                    let discountedPrice = Math.floor(cartTotal - savingPrice);
                     db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) }, {
                         $set: {
                             'cart.discountedPrice': discountedPrice,
@@ -606,7 +606,6 @@ module.exports = {
                             'cart.coupon': coupon,
                         }
                     }).then((response) => {
-                        console.log(response, ">dsfsdfsdf");
                         resolve({ savingPrice, discountedPrice });
                     }).catch((response) => {
                         resolve(false);
@@ -617,7 +616,7 @@ module.exports = {
             })
         })
     },
-    removeCoupon: (userId) => {
+    removeCoupon: (req,res) => {
         try{
             db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(req.session.user._id) }, {
                 $unset: { 'cart.discountedPrice': "", 'cart.savingPrice': "", 'cart.coupon': "" }

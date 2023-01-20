@@ -100,6 +100,7 @@ module.exports = {
             data.date = new Date();
             data.couponDiscount = parseInt(data.couponDiscount);
             data.couponCode = data.couponCode.toUpperCase();
+            data.ExpiryDate = new Date(data.ExpiryDate);
             db.get().collection(collection.COUPON_COLLECTION).insertOne(data).then((response) => {
                 resolve()
             })
@@ -202,7 +203,7 @@ module.exports = {
             db.get().collection(collection.COUPON_COLLECTION).updateOne({ _id: ObjectId(data.couponId) }, {
                 $set: {
                     couponCode: data.couponCode,
-                    ExpiryDate: data.ExpiryDate,
+                    ExpiryDate: new Date(data.ExpiryDate),
                     couponDiscount: data.couponDiscount,
                     minimumPurchase: data.minimumPurchase,
                     maximumPurchase: data.maximumPurchase,
@@ -239,8 +240,6 @@ module.exports = {
         })
     },
     gerSalesReportInfo: async (req, res) => {
-        console.log(new Date(req.body.fromDate).toString().slice(0,16));
-        console.log(new Date());
 
         try {
             if (new Date(req.body.fromDate) < new Date()){
