@@ -11,7 +11,7 @@
             <div class="orders-wrap col-11 col-md-9 m-3">
                 <div class="order-header d-flex justify-content-between mt-2">
                     <p class="m-0 order-id"><span class="text-dark text-capitalize">Order</span> #{{this._id}}</p>
-                    <p class="m-0 text-secondary order-date d-flex align-items-center">Order Placed: {{this.date}}</p>
+                    <p class="m-0 text-secondary order-date d-flex align-items-center">Order Placed: {{this.orderDate}}</p>
                 </div>
                 <hr style="color: #b5b5b5;">
                 </hr>
@@ -34,10 +34,10 @@
                                     <h6 class="mt-2 device-name text-capitalize text-danger">Order Canceled</h6>
 
                                     {{/if}}
-                                    <p style="font-size: 12px;" class="m-0">Orderd date: {{../this.date}}</p>
+                                    <p style="font-size: 14px;" class="m-0">{{this.name}}</p>
                                     <h6 class="mt-2">₹ {{this.price}}</h6>
                                     <p style="font-size: 11px;">(incl. all Taxes)</p>
-                                    <h6 style="font-size: 13px;" class="mt-2">Standard Delivery by Wed, 4th Jan</h6>
+                                    <h6 style="font-size: 13px;" class="mt-2">Standard Delivery by {{../expectedDeliveryDate}}</h6>
 
                                 </div>
                             </div>

@@ -162,13 +162,13 @@ router.post('/place-order', verifyLogin, async (req, res) => {
       }
       if (!activeOrder) {
         if (req.body.paymentMethod == "COD") {
-          orderControllers.placeOrder(req.body.phone, req.body.paymentMethod, user, totalPrice).then((details) => {
+          orderControllers.placeOrder(user.phone, req.body.paymentMethod, user, totalPrice).then((details) => {
             orderControllers.changeOrderStatus(details.response.insertedId, req.session.user._id).then((response) => {
               res.json({ codSuccess: true })
             })
           })
         } else {
-          let details = await orderControllers.placeOrder(req.body.phone, req.body.paymentMethod, user, totalPrice);
+          let details = await orderControllers.placeOrder(user.phone, req.body.paymentMethod, user, totalPrice);
           userControllers.generateRazorpay(details.response.insertedId, totalPrice).then((response) => {
 
             response.user = req.session.user;

@@ -7,7 +7,10 @@ module.exports = {
     placeOrder: (phone, paymentMethod, userDetails, price) => {
         return new Promise((resolve, reject) => {
             userDetails.address.phone = phone;
-            let date = new Date()
+            let date = new Date();
+            let today = new Date();
+            let expectedDeliveryDate = new Date(today);
+            expectedDeliveryDate.setDate(today.getDate() + 6);
             const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
             orderObj = {
@@ -16,13 +19,15 @@ module.exports = {
                 paymentMethod: paymentMethod,
                 orderStatus: paymentMethod === 'COD' ? "placed" : 'pending',
                 products: userDetails.cart.products,
-                totalAmount: price,
+                totalAmount: Math.floor(price) ,
                 originalPrice: userDetails.originalPrice,
                 date: date,
+                orderDate: new Date().toString().slice(0, 16),
                 monthInNo: new Date().getMonth()+1,
                 month: month[new Date().getMonth()],
+                expectedDeliveryDate: expectedDeliveryDate.toString().slice(0, 16),
                 cartId: userDetails._id,
-                shipmentStatus: { ordrePlaced: { id: Date.now() + '-' + Math.round(Math.random() * 1E9), status: true, lastUpdate: { date: date, placeUpdates: [] } } }
+                shipmentStatus: { ordrePlaced: { id: Date.now() + '-' + Math.round(Math.random() * 1E9), status: true, lastUpdate: { date: new Date().toString().slice(0, 16), placeUpdates: [] } } }
             }
             db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response) => {
                 db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userDetails._id) }, {
@@ -88,6 +93,7 @@ module.exports = {
                     $sort: { date: -1 }
                 }
             ]).toArray();
+            console.log(orders);
             res.render('user/orders', { orders, user: req.session.user, cartCount: res.cartCount });
         })
     },
@@ -108,6 +114,7 @@ module.exports = {
                        }
                    }
                ]).toArray();
+               console.log(orderDetails);
                res.render('user/order-details', { order: orderDetails[0], user: req.session.user, cartCount: res.cartCount });
            }catch(err){
             res.render('/error')
