@@ -27,7 +27,7 @@ module.exports = {
                 month: month[new Date().getMonth()],
                 expectedDeliveryDate: expectedDeliveryDate.toString().slice(0, 16),
                 cartId: userDetails._id,
-                shipmentStatus: { ordrePlaced: { id: Date.now() + '-' + Math.round(Math.random() * 1E9), status: true, lastUpdate: { date: new Date().toString().slice(0, 16), placeUpdates: [] } } }
+                shipmentStatus: { ordrePlaced: { id: Date.now() + '-' + Math.round(Math.random() * 1E9), status: true, lastUpdate: { date: new Date().toString().slice(0, 21), placeUpdates: [] } } }
             }
             db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response) => {
                 db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userDetails._id) }, {

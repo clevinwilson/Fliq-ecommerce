@@ -27,9 +27,18 @@
                             <div class=" col-8 col-md-5 align-items-center d-flex ">
                                 <div class="card-info-wrap ms-md-3">
                                     {{#if ../this.orderStatus}}
-
-                                    <h6 class="mt-2 device-name text-capitalize text-success">Order
-                                        {{../this.orderStatus}}</h6>
+                                        {{#if ../this.shipmentStatus.delivered.status}}
+                                            <h5 class="text-success text-capitalize">Delivered</h5>
+                                        {{else if ../this.shipmentStatus.outForDelivery.status}}
+                                            <h5 class="text-success text-capitalize">Out for delivery</h5>
+                                        {{else if ../this.shipmentStatus.shipped.status}}
+                                            <h5 class="text-success text-capitalize">Order Shipped </h5>
+                                        {{else if ../this.shipmentStatus.ordrePlaced.status}}
+                                            <h5 class="text-success text-capitalize">Order Confirmed</h5>
+                                        {{else}}
+                                            <h6 class="mt-2 device-name text-capitalize text-success">Order
+                                                {{../this.orderStatus}}</h6>
+                                        {{/if}}
                                     {{else}}
                                     <h6 class="mt-2 device-name text-capitalize text-danger">Order Canceled</h6>
 

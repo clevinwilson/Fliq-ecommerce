@@ -35,7 +35,17 @@
                         <div class="col-6">
                             <div>
                                 {{#if order.orderStatus}}
-                                <h5 class="text-success text-capitalize">Order {{order.orderStatus}}</h5>
+                                      {{#if order.shipmentStatus.delivered.status}}
+                                            <h5 class="text-success text-capitalize">Delivered</h5>
+                                      {{else if order.shipmentStatus.outForDelivery.status}}
+                                             <h5 class="text-success text-capitalize">Out for delivery</h5>
+                                      {{else if order.shipmentStatus.shipped.status}}
+                                             <h5 class="text-success text-capitalize">Order Shipped </h5>
+                                      {{else if order.shipmentStatus.ordrePlaced.status}}
+                                             <h5 class="text-success text-capitalize">Order Confirmed</h5>
+                                      {{else}}
+                                             <h5 class="text-success text-capitalize">Order {{order.orderStatus}}</h5>
+                                      {{/if}}
                                 {{else}}
                                 <h5 class="text-danger text-capitalize">Order Canceled</h5>
 
@@ -153,7 +163,7 @@
                             <div onclick="setrating(5)" class="star5"><i class="far fa-star starj5"></i></div>
                         </div>
                         <input type="text" class="d-none" name="orderId" value="{{order._id}}">
-                        <input type="text" class="d-none" name="productId"  id="reviewProductId">
+                        <input type="text" class="d-none" name="productId" id="reviewProductId">
                         <input type="text" class="d-none" name="rating" id="ratinginput">
                         <input type="text" class="d-none" name="userId" value="{{user._id}}">
                         <div class="submitbtn">
@@ -166,7 +176,8 @@
                 <div class="orders-wrap ">
                     <div class="order-header d-flex justify-content-between mt-2">
                         <p class="m-0 order-id"><span class="text-dark text-capitalize">Order</span> #{{order._id}}</p>
-                        <p class="m-0 text-secondary order-date d-flex align-items-center">Order Placed: {{order.orderDate}}
+                        <p class="m-0 text-secondary order-date d-flex align-items-center">Order Placed:
+                            {{order.orderDate}}
                         </p>
                     </div>
                     <hr style="color: #b5b5b5;">
@@ -261,7 +272,7 @@
 
 
 <script>
-    let ratingBox=document.getElementById('ratinginput')
+    let ratingBox = document.getElementById('ratinginput')
     function setrating(count) {
         if (count == 1) {
             ratingBox.value = "VeryBad";
@@ -283,24 +294,24 @@
         document.getElementById('review-wrap').style.display = 'block'
     }
 
-    
-        $('#submitReview').submit((e) => {
-            e.preventDefault();
-            let data= $('#submitReview').serialize();
-            console.log(data)
-            $.ajax({
-                url: '/add-review',
-                method: 'post',
-                data,
-                success: (response) => {
-                    if (response.status) {
-                        swal("Success", "Review add successfully", "success");
-                    }
+
+    $('#submitReview').submit((e) => {
+        e.preventDefault();
+        let data = $('#submitReview').serialize();
+        console.log(data)
+        $.ajax({
+            url: '/add-review',
+            method: 'post',
+            data,
+            success: (response) => {
+                if (response.status) {
+                    swal("Success", "Review add successfully", "success");
                 }
-            })
-            console.log()
+            }
         })
-    
+        console.log()
+    })
+
 </script>
 
 
