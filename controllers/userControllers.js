@@ -855,6 +855,13 @@ module.exports = {
         } else {
             res.render('/error');
         }
+    },
+    userWallet:(req,res)=>{
+        try{
+            res.render('user/wallet')
+        }catch(err){
+            res.render('/error')
+        }
     }
 
 

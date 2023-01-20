@@ -288,5 +288,6 @@ router.post('/update-password', verifyLogin, csrfProtection, userControllers.upd
 //review
 router.post('/add-review', verifyLogin, userControllers.AddReview);
 
+router.get('/wallet',verifyLogin,userControllers.userWallet)
 
 module.exports = router;
