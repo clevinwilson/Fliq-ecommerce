@@ -135,6 +135,14 @@
                                 </div>
                             </div>
                             {{/if}}
+                            {{#if order.return}}
+                            <div class="tl-item ">
+                                <div class="tl-dot b-danger"></div>
+                                <div class="tl-content">
+                                    <div class="">Returned</div>
+                                </div>
+                            </div>
+                            {{else}}
                             <div class="tl-item ">
                                 <div class="tl-dot b-danger"></div>
                                 <div class="tl-content">
@@ -142,6 +150,7 @@
 
                                 </div>
                             </div>
+                            {{/if}}
                         </div>
                         {{/if}}
                     </div>
@@ -219,6 +228,9 @@
                     <div class="d-flex justify-content-between align-items-center order-footer mb-2">
                         {{#if order.orderStatus}}
                         {{#if order.shipmentStatus.delivered.status}}
+                        <div class="order-cancel-wrap ms-2">
+                            <button type="button" class="btn btn-secondary bg-dark" onclick="returnOrder('{{order._id}}')">Return</button>
+                        </div>
                         {{else}}
                         <div class="order-cancel-wrap ms-2">
                             <button type="button" class="btn btn-secondary bg-dark" data-bs-toggle="modal"
@@ -226,10 +238,17 @@
                         </div>
                         {{/if}}
                         {{else}}
-                        <div class="order-cancel-wrap ms-2">
-                            <h6 class="me-2 mb-0 text-danger">Order Canceled</h6>
-
-                        </div>
+                            {{#if order.return}}
+                            <div class="order-cancel-wrap ms-2">
+                                <h6 class="me-2 mb-0 text-success">Return Initialted</h6>
+                            
+                            </div>
+                            {{else}}
+                            <div class="order-cancel-wrap ms-2">
+                                <h6 class="me-2 mb-0 text-danger">Order Canceled</h6>
+                            
+                            </div>
+                            {{/if}}
                         {{/if}}
                         {{!-- <div class="order-more-wrap d-flex justify-content-center ">
                             <a class="text-dark text-decoration-none" href="/order-details/{{this._id}}">View More</a>
@@ -329,6 +348,36 @@
                 }
             }
         })
+    }
+</script>
+
+
+
+<script>
+    function returnOrder(orderId){
+        swal({
+            title: "Are you sure",
+            text: "Are you sure you want to return this order",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((response) => {
+                if (response) {
+                    $.ajax({
+                        url: '/return/' + orderId,
+                        method: 'get',
+                        success: (response) => {
+                            if (response.status) {
+                                swal("Success", "Return initiated successfully", "success").then(()=>{
+                                    location.reload();
+                                })
+                            }
+                        }
+                    })
+                }
+            });
+
     }
 </script>
 

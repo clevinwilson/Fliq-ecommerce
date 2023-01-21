@@ -82,7 +82,11 @@
                                                      <p class="text-success">Order Confirmed</p>
                                                  {{/if}}
                                             {{else}}
+                                            {{#if this.return}}
+                                            <p class="text-success">Return {{this.return}}</p>
+                                            {{else}}
                                                 <p class="text-danger">Canceled</p>
+                                                {{/if}}
                                             {{/if}}
                                         </td>
                                         <td class="d-flex justify-content-center align-items-center">

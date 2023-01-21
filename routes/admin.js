@@ -343,11 +343,7 @@ router.get('/change-order-status/:orderId/:status',verifyLogin, (req, res) => {
 
 // cancel order
 
-router.get("/cancel-order/:orderId",verifyLogin, (req, res) => {
-    orderControllers.cancelOrder(req.params.orderId).then((response) => {
-        res.json({ status: true })
-    })
-})
+router.get("/cancel-order/:orderId", verifyLogin, orderControllers.cancelOrder);
 
 // coupon
 router.get('/coupon',verifyLogin, async (req, res) => {
@@ -406,7 +402,8 @@ router.get('/salesreport',verifyLogin,(req,res)=>{
 })
 
 
-router.post('/generate-salesreport',verifyLogin,adminControllers.gerSalesReportInfo)
+router.post('/generate-salesreport',verifyLogin,adminControllers.gerSalesReportInfo);
+router.get('/confirm-return/:orderId',verifyLogin,adminControllers.confirmReturn)
 
 
 

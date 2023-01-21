@@ -37,7 +37,7 @@
                         <div>
                             <h5 class="text-success text-capitalize">Order {{order.orderStatus}}</h5>
                             <p style="font-size: 14px;" class="mt-3">Payment Method: {{order.paymentMethod}}</p>
-                            <p class="mt-3">Expected by Fri, 31st Jul '23
+                            <p class="mt-3">Expected by {{order.expectedDeliveryDate}}
                             </p>
 
                         </div>
@@ -51,7 +51,7 @@
                         <hr style="color: #b5b5b5;">
                         </hr>
                         <div class="row">
-                        {{#if order.orderStatus}}
+                            {{#if order.orderStatus}}
 
                             <div class="timeline p-3 ms-4 ">
                                 {{#if order.shipmentStatus.ordrePlaced.status}}
@@ -111,15 +111,34 @@
                                     </div>
                                 </div>
                                 {{/if}}
+                                {{#if order.return}}
+                                <div class="tl-item ">
+                                    <div class="tl-dot b-danger"></div>
+                                    <div class="tl-content">
+                                        <div class="">Returned</div>
+                                    </div>
+                                </div>
+                                {{else}}
+                                {{#if order.return}}
+                                <div class="tl-item ">
+                                    <div class="tl-dot b-danger"></div>
+                                    <div class="tl-content">
+                                        <div class="">Return {{order.return}}</div>
+                                
+                                    </div>
+                                </div>
+                                {{else}}
                                 <div class="tl-item ">
                                     <div class="tl-dot b-danger"></div>
                                     <div class="tl-content">
                                         <div class="">Cancelled</div>
-                                       
+                                
                                     </div>
                                 </div>
+                                {{/if}}
+                                {{/if}}
                             </div>
-                        {{/if}}
+                            {{/if}}
                         </div>
                     </div>
                 </div>
@@ -129,7 +148,7 @@
                             <p class="m-0 order-id"><span class="text-dark text-capitalize">Order</span> #{{order._id}}
                             </p>
                             <p class="m-0 text-secondary order-date d-flex align-items-center">Order Placed:
-                                {{order.date}}
+                                {{order.orderDate}}
                             </p>
                         </div>
                         <hr style="color: #b5b5b5;">
@@ -192,7 +211,16 @@
                         <h5 class="text-success font-weight-bold">Order Confirmed</h5>
                         {{/if}}
                         {{else}}
-                        <h5 class="text-danger">Canceled</h5>
+                        {{#if order.return}}
+                        <div class="order-cancel-wrap ms-2">
+                            <h6 class="me-2 mb-0 text-success">Return {{order.return}}</h6>
+                        </div>
+
+                        {{else}}
+                        <div class="order-cancel-wrap ms-2">
+                            <h5 class="text-danger">Canceled</h5>
+                        </div>
+                        {{/if}}
                         {{/if}}
                     </div>
                     <div class="col-md-12 mt-2 col-lg-9">
@@ -248,8 +276,12 @@
 
                             </div>
                             {{/if}}
-
-
+                        </div>
+                        {{/if}}
+                        {{#if (eq order.return "initiated")}}
+                        <div class="mt-2 d-flex justify-content-center">
+                            <a onclick="Confirmreturn('{{order._id}}')" class="text-white btn btn-danger me-2">Confirm
+                                return</a>
                         </div>
                         {{/if}}
                     </div>
@@ -286,6 +318,34 @@
         </div>
     </div>
 </div>
+
+<script>
+    function Confirmreturn(orderId) {
+        swal({
+            title: "Are you sure",
+            text: "Confirm return",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((response) => {
+                if (response) {
+                    $.ajax({
+                        url: '/admin/confirm-return/' + orderId,
+                        method: 'get',
+                        success: (response) => {
+                            if (response.status) {
+                                swal("Success", "Return initiated successfully", "success").then(() => {
+                                    location.reload();
+                                })
+                            }
+                        }
+                    })
+                }
+            });
+
+    }
+</script>
 
 <style>
     .table-btn {

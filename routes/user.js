@@ -288,6 +288,10 @@ router.post('/update-password', verifyLogin, csrfProtection, userControllers.upd
 //review
 router.post('/add-review', verifyLogin, userControllers.AddReview);
 
-router.get('/wallet',verifyLogin,userControllers.userWallet)
+//wallet
+router.get('/wallet',verifyLogin,userControllers.userWallet);
+
+//return
+router.get('/return/:orderId', verifyLogin, orderControllers.initiateReturn)
 
 module.exports = router;

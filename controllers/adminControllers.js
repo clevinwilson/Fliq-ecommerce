@@ -302,6 +302,23 @@ module.exports = {
             resolve(orderDetails[0])
         })
     },
+    confirmReturn:async(req,res)=>{
+        try{
+            let order=await db.get().collection(collection.ORDER_COLLECTION).findOne({_id:ObjectId(req.params.orderId)});
+            if(order){
+                db.get().collection(collection.ORDER_COLLECTION).updateOne({ _id: ObjectId(req.params.orderId) }, {
+                    $set: {
+                        return: 'confirmed'
+                    }
+                }).then((response) => {
+                    res.json({ status: true })
+                })
+            }
+           
+        }catch(err){
+            res.render('/error')
+        }
+    }
 
 
 }

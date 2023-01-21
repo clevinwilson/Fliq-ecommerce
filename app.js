@@ -6,6 +6,7 @@ const logger = require('morgan');
 const hbs = require('express-handlebars');
 const db=require('./config/connection');
 const session = require('express-session');
+const Handlebars = require('handlebars');
 
 require('dotenv').config();
 
@@ -54,6 +55,9 @@ db.main()
   .then()
   .catch(console.error)
 
+Handlebars.registerHelper('eq', function (a, b) {
+  return a === b;
+});
 
 
 

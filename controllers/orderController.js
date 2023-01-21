@@ -82,7 +82,7 @@ module.exports = {
                 {
                     $match: { 
                         userId: ObjectId(req.session.user._id),
-                        orderStatus:'placed'
+                        orderStatus:{$in:['placed',false] }
                     }
                 },
                 {
@@ -154,7 +154,7 @@ module.exports = {
     //admin
     getAllOrder: () => {
         return new Promise((resolve, reject) => {
-            db.get().collection(collection.ORDER_COLLECTION).find({ orderStatus: 'placed' }).sort({ date: -1 }).toArray().then((response) => {
+            db.get().collection(collection.ORDER_COLLECTION).find({ orderStatus: {$in:['placed',false] }}).sort({ date: -1 }).toArray().then((response) => {
                 resolve(response);
             })
         })
@@ -207,6 +207,25 @@ module.exports = {
             }
         })
     },
+    initiateReturn:async(req,res)=>{
+        try{
+            let order = await db.get().collection(collection.ORDER_COLLECTION).findOne({ _id: ObjectId(req.params.orderId)});
+            if(order){
+                console.log(order);
+                db.get().collection(collection.ORDER_COLLECTION).updateOne({ _id: ObjectId(req.params.orderId)},{
+                    $set:{
+                        orderStatus:false,
+                        return:"initiated"
+                    }
+                }).then((response)=>{
+                    res.json({status:true})
+                })
+            }
+        }catch(err){
+            console.log(err);
+            res.render('/error')
+        }
+    }
 
 
 }
