@@ -98,6 +98,7 @@ module.exports = {
                     $sort: { date: -1 }
                 }
             ]).toArray();
+            console.log(orders,">>>>>>>>>>>");
             res.render('user/orders', { orders, user: req.session.user, cartCount: res.cartCount });
         })
     },

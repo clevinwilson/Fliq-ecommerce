@@ -11,7 +11,8 @@
             <div class="orders-wrap col-11 col-md-9 m-3">
                 <div class="order-header d-flex justify-content-between mt-2">
                     <p class="m-0 order-id"><span class="text-dark text-capitalize">Order</span> #{{this._id}}</p>
-                    <p class="m-0 text-secondary order-date d-flex align-items-center">Order Placed: {{this.orderDate}}</p>
+                    <p class="m-0 text-secondary order-date d-flex align-items-center">Order Placed: {{this.orderDate}}
+                    </p>
                 </div>
                 <hr style="color: #b5b5b5;">
                 </hr>
@@ -27,26 +28,31 @@
                             <div class=" col-8 col-md-5 align-items-center d-flex ">
                                 <div class="card-info-wrap ms-md-3">
                                     {{#if ../this.orderStatus}}
-                                        {{#if ../this.shipmentStatus.delivered.status}}
-                                            <h5 class="text-success text-capitalize">Delivered</h5>
-                                        {{else if ../this.shipmentStatus.outForDelivery.status}}
-                                            <h5 class="text-success text-capitalize">Out for delivery</h5>
-                                        {{else if ../this.shipmentStatus.shipped.status}}
-                                            <h5 class="text-success text-capitalize">Order Shipped </h5>
-                                        {{else if ../this.shipmentStatus.ordrePlaced.status}}
-                                            <h5 class="text-success text-capitalize">Order Confirmed</h5>
-                                        {{else}}
-                                            <h6 class="mt-2 device-name text-capitalize text-success">Order
-                                                {{../this.orderStatus}}</h6>
-                                        {{/if}}
+                                    {{#if ../this.shipmentStatus.delivered.status}}
+                                    <h5 class="text-success text-capitalize">Delivered</h5>
+                                    {{else if ../this.shipmentStatus.outForDelivery.status}}
+                                    <h5 class="text-success text-capitalize">Out for delivery</h5>
+                                    {{else if ../this.shipmentStatus.shipped.status}}
+                                    <h5 class="text-success text-capitalize">Order Shipped </h5>
+                                    {{else if ../this.shipmentStatus.ordrePlaced.status}}
+                                    <h5 class="text-success text-capitalize">Order Confirmed</h5>
+                                    {{else}}
+                                    <h6 class="mt-2 device-name text-capitalize text-success">Order
+                                        {{../this.orderStatus}}</h6>
+                                    {{/if}}
+                                    {{else}}
+                                    {{#if ../this.return}}
+                                    <h6 class="mt-2 device-name text-capitalize text-success">Return {{../this.return}}
+                                    </h6>
                                     {{else}}
                                     <h6 class="mt-2 device-name text-capitalize text-danger">Order Canceled</h6>
-
+                                    {{/if}}
                                     {{/if}}
                                     <p style="font-size: 14px;" class="m-0">{{this.name}}</p>
                                     <h6 class="mt-2">₹ {{this.price}}</h6>
                                     <p style="font-size: 11px;">(incl. all Taxes)</p>
-                                    <h6 style="font-size: 13px;" class="mt-2">Standard Delivery by {{../expectedDeliveryDate}}</h6>
+                                    <h6 style="font-size: 13px;" class="mt-2">Standard Delivery by
+                                        {{../expectedDeliveryDate}}</h6>
 
                                 </div>
                             </div>
@@ -77,30 +83,29 @@
         {{else}}
         <div class="container-fluid ">
             <div class="row">
-        
+
                 <div class="col-md-12">
-        
+
                     <div class="cart-card border-0 my-2">
                         <div class="card-body  cart">
                             <div class="col-sm-12 empty-cart-cls text-center">
-                                <img style="width: 200px;"
-                                    src="/images/1e5a9b6fb55fd9e51a390aa8f355d3bc.jpg"
+                                <img style="width: 200px;" src="/images/1e5a9b6fb55fd9e51a390aa8f355d3bc.jpg"
                                     width="130" height="130" class="img-fluid mb-4 mr-3">
                                 <h4><strong>No Order History Available</strong></h4>
                                 <h6 class="mt-4">Explore our wide selection and find something you like</h6>
                                 <a href="/" class="btn btn-primary cart-btn-transform m-3 mt-4 bg-dark border-dark"
                                     style=" padding: 9px 11px;" data-abc="true">Continue Shopping</a>
-        
-        
+
+
                             </div>
                         </div>
                     </div>
-        
-        
+
+
                 </div>
-        
+
             </div>
-        
+
         </div>
         {{/if}}
     </div>
