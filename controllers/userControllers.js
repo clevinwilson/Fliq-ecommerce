@@ -858,7 +858,7 @@ module.exports = {
     },
     userWallet:(req,res)=>{
         try{
-            res.render('user/wallet')
+            res.render('user/wallet',{user:req.session.user})
         }catch(err){
             res.render('/error')
         }

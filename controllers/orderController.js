@@ -80,7 +80,10 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             let orders = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
                 {
-                    $match: { userId: ObjectId(req.session.user._id) }
+                    $match: { 
+                        userId: ObjectId(req.session.user._id),
+                        orderStatus:'placed'
+                    }
                 },
                 {
                     $lookup:
@@ -95,7 +98,6 @@ module.exports = {
                     $sort: { date: -1 }
                 }
             ]).toArray();
-            console.log(orders);
             res.render('user/orders', { orders, user: req.session.user, cartCount: res.cartCount });
         })
     },
@@ -152,7 +154,7 @@ module.exports = {
     //admin
     getAllOrder: () => {
         return new Promise((resolve, reject) => {
-            db.get().collection(collection.ORDER_COLLECTION).find().sort({ date: -1 }).toArray().then((response) => {
+            db.get().collection(collection.ORDER_COLLECTION).find({ orderStatus: 'placed' }).sort({ date: -1 }).toArray().then((response) => {
                 resolve(response);
             })
         })

@@ -133,9 +133,9 @@ module.exports = {
     },
     getOrderDetailsCount: () => {
         return new Promise(async (resolve, reject) => {
-            let orderPlaced = await db.get().collection(collection.ORDER_COLLECTION).find({ "shipmentStatus.ordrePlaced.status": true }).count();
-            let orderDelivered = await db.get().collection(collection.ORDER_COLLECTION).find({ "shipmentStatus.delivered.status": true }).count();
-            let orderShipped = await db.get().collection(collection.ORDER_COLLECTION).find({ "shipmentStatus.shipped.status": true }).count();
+            let orderPlaced = await db.get().collection(collection.ORDER_COLLECTION).find({$and:[{ "shipmentStatus.ordrePlaced.status": true }, { orderStatus: 'placed' }]}).count();
+            let orderDelivered = await db.get().collection(collection.ORDER_COLLECTION).find({ $and: [{ "shipmentStatus.delivered.status": true }, { orderStatus: 'placed' }]}).count();
+            let orderShipped = await db.get().collection(collection.ORDER_COLLECTION).find({ $and: [{ "shipmentStatus.shipped.status": true }, { orderStatus: 'placed' }]}).count();
             let total = orderPlaced + orderDelivered + orderShipped;
             orderPlaced = (orderPlaced / total) * 100;
             orderDelivered = (orderDelivered / total) * 100;
@@ -175,7 +175,7 @@ module.exports = {
     },
     getOrdreCount: () => {
         return new Promise((resolve, reject) => {
-            db.get().collection(collection.ORDER_COLLECTION).find().count().then((response) => {
+            db.get().collection(collection.ORDER_COLLECTION).find({ orderStatus: 'placed' }).count().then((response) => {
                 resolve(response)
             })
         })

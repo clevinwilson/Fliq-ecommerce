@@ -22,7 +22,7 @@
                         <span class="font-12 weight-300 white-color-2">Expense</span>
                     </div>
                 </div>
-                <div class="d-flex  mt-4">
+                <div class="d-none  mt-4">
                     <button
                         class="flex-grow-1 me-1 py-2 text-uppercase font-12 weight-700 purple-color-2 grey-bg-color">Receive</button>
                     <button
@@ -30,7 +30,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-7 px-md-5 mt-5">
+        <div class="col-md-7 px-md-5 mt-5 mt-md-1">
             <div>
                 <table class="table table-borderless">
                     <thead>
@@ -45,7 +45,7 @@
                             <td>
                                 <div class="d-flex ">
                                     <div
-                                        class="d-flex  justify-content-center align-items-center orange-color square round-corner-small light-orange-bg-color font-14">
+                                        class="d-flex  justify-content-center align-items-center blue-color square round-corner-small light-blue-bg-color font-14">
                                         <i class="fas fa-long-arrow-alt-up"></i>
                                     </div>
                                     <div class="d-flex flex-column ps-2">
@@ -56,7 +56,7 @@
                             </td>
                             <td>
                                 <div class="d-flex flex-column align-items-end">
-                                    <span class=" font-16 weight-700 orange-color ">-$1,289.00</span>
+                                    <span class=" font-16 weight-600 black-color ">-₹1,289.00</span>
                                 </div>
                             </td>
                         </tr>
@@ -64,7 +64,7 @@
                             <td>
                                 <div class="d-flex  ">
                                     <div
-                                        class="d-flex  justify-content-center align-items-center square round-corner-small light-purple-bg-color purple-color-2 font-14 ">
+                                        class="d-flex  justify-content-center align-items-center square round-corner-small light-white-bg-color green-color font-14 ">
                                         <i class="fas fa-long-arrow-alt-down "></i>
                                     </div>
                                     <div class="d-flex flex-column ps-2 ">
@@ -76,7 +76,7 @@
                             </td>
                             <td>
                                 <div class="d-flex flex-column align-items-end ">
-                                    <span class="font-16 weight-700 purple-color-2 ">-$1,289.00</span>
+                                    <span class="font-16 weight-600 text-color-green ">+₹1,289.00</span>
                                 </div>
                             </td>
                         </tr>
@@ -84,7 +84,7 @@
                             <td>
                                 <div class="d-flex  ">
                                     <div
-                                        class="d-flex  justify-content-center align-items-center square round-corner-small light-orange-bg-color orange-color font-14 ">
+                                        class="d-flex  justify-content-center align-items-center square round-corner-small blue-color  light-blue-bg-color font-14 ">
                                         <i class="fas fa-long-arrow-alt-up "></i>
                                     </div>
                                     <div class="d-flex flex-column ps-2 ">
@@ -95,7 +95,7 @@
                             </td>
                             <td>
                                 <div class="d-flex flex-column align-items-end ">
-                                    <span class="font-16 weight-700 orange-color ">-$1,289.00</span>
+                                    <span class="font-16 weight-600 orange-color ">-$1,289.00</span>
                                 </div>
                             </td>
                         </tr>
@@ -109,16 +109,27 @@
 
 <style>
 
-
-
-
-
-
-
-
     button {
         border: none;
         border-radius: 5px;
+    }
+    .black-color{
+        color: #2f2f2f;
+    }
+    .green-color{
+        color: #4fc354;
+    }
+    .text-color-green{
+        color: #3ba53f;
+    }
+    .light-blue-bg-color{
+        background: #ecf4fa;
+    }
+    .light-white-bg-color{
+        background: #f3f3f3;
+    }
+    .blue-color{
+        color: #32a6fb;
     }
 
     .square {
@@ -208,10 +219,6 @@
         color: #43B8D5;
     }
 
-    .green-color {
-        color: #43D5AE;
-    }
-
     .grey-color {
         color: #DBE3E5;
     }
@@ -225,7 +232,7 @@
     }
 
     .purple-bg-color {
-        background: #5D4E7B;
+               background-image: linear-gradient(172deg, #0c92e1, #0d3b6f);
     }
 
     .orange-bg-color {
