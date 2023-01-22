@@ -4,40 +4,41 @@ const bcrypt = require('bcrypt');
 const verify = require('../helpers/otp_verification');
 const { ObjectId } = require('mongodb');
 const { razorpay } = require('../helpers/razorpay');
+const { response } = require('express');
 
 
 
 
 module.exports = {
 
-    doSignup:async function (req,res) {
-          try{
-              req.body.phone = req.session.userPhone.phone;
-              req.body.joined_date = new Date();
-              req.body.address = [];
-              req.body.status = true;
-              req.body.wishlist = [];
-              req.body.orders = [];
-              req.body.cart = { products: [] };
+    doSignup: async function (req, res) {
+        try {
+            req.body.phone = req.session.userPhone.phone;
+            req.body.joined_date = new Date();
+            req.body.address = [];
+            req.body.status = true;
+            req.body.wishlist = [];
+            req.body.orders = [];
+            req.body.cart = { products: [] };
 
-              const user = await db.get().collection(collection.USER_COLLECTION).findOne({ email: req.body.email })
-              if (user) {
-                  req.session.signupError = "Email already exists ";
-                  res.redirect('/signup')
-              } else {
-                  bcrypt.hash(req.body.password, 10, function (err, hash) {
-                      req.body.password = hash;
-                      db.get().collection(collection.USER_COLLECTION).insertOne(req.body).then((response) => {
-                          res.redirect('/login');
-                          req.session.otp = false;
-                      })
-                  });
-              }
-          }catch(err){
+            const user = await db.get().collection(collection.USER_COLLECTION).findOne({ email: req.body.email })
+            if (user) {
+                req.session.signupError = "Email already exists ";
+                res.redirect('/signup')
+            } else {
+                bcrypt.hash(req.body.password, 10, function (err, hash) {
+                    req.body.password = hash;
+                    db.get().collection(collection.USER_COLLECTION).insertOne(req.body).then((response) => {
+                        res.redirect('/login');
+                        req.session.otp = false;
+                    })
+                });
+            }
+        } catch (err) {
             res.render('/error');
-          }
+        }
     },
-    signupUsingPhone: (req,res) => {
+    signupUsingPhone: (req, res) => {
         try {
             if (req.session.loggedIn) {
                 res.redirect('/')
@@ -108,20 +109,20 @@ module.exports = {
             req.session.signupError = false
         }
     },
-    login:(req,res)=>{
-        try{
+    login: (req, res) => {
+        try {
             if (req.session.loggedIn) {
                 res.redirect('/');
             } else {
                 res.render('user/login', { LoginError: req.session.LoginError });
                 req.session.LoginError = false
             }
-        }catch(err){
+        } catch (err) {
             res.render('/error');
         }
     },
-    doLogin: async(req,res) => {
-        try{
+    doLogin: async (req, res) => {
+        try {
             let user = await db.get().collection(collection.USER_COLLECTION).findOne({ email: req.body.email });
             if (user) {
 
@@ -144,25 +145,25 @@ module.exports = {
                 req.session.LoginError = "User not exists";
                 res.redirect('/login')
             }
-        }catch(err){
+        } catch (err) {
             res.render('/error');
         }
     },
-    logout:(req,res)=>{
-        try{
+    logout: (req, res) => {
+        try {
             req.session.destroy();
             res.redirect('/');
-        }catch(err){
+        } catch (err) {
             res.render('/error');
         }
     },
-    assoutSuspended:(req,res)=>{
+    assoutSuspended: (req, res) => {
         res.render('user/account-suspended')
     },
-    account:(req,res)=>{
-        try{
+    account: (req, res) => {
+        try {
             res.render('user/account', { user: req.session.user, cartCount: res.cartCount });
-        }catch(err){
+        } catch (err) {
             res.render('/error');
 
         }
@@ -280,14 +281,14 @@ module.exports = {
             }
         })
     },
-    deleteCartProduct: (req,res) => {
-        try{
+    deleteCartProduct: (req, res) => {
+        try {
             db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(req.session.user._id) }, {
                 $pull: { 'cart.products': { product: ObjectId(req.params.productId) } }
             }).then((response) => {
                 res.redirect('/cart')
             })
-        }catch(err){
+        } catch (err) {
             res.render('/error');
         }
     },
@@ -331,8 +332,8 @@ module.exports = {
             }
         })
     },
-    addNewAddress: (req,res) => {
-        try{
+    addNewAddress: (req, res) => {
+        try {
             req.body.default = false;
             req.body.id = Date.now() + '-' + Math.round(Math.random() * 1E9)
 
@@ -341,7 +342,7 @@ module.exports = {
             }).then((response) => {
                 res.redirect(req.headers.referer);
             })
-        }catch(err){
+        } catch (err) {
             res.render('/error');
         }
     },
@@ -446,11 +447,11 @@ module.exports = {
             })
         })
     },
-    categorListing:(req,res)=>{
-        try{
+    categorListing: (req, res) => {
+        try {
             res.render('user/product-listing', { results: res.paginatedResults, user: req.session.user, cartCount: res.cartCount });
 
-        }catch(err){
+        } catch (err) {
             res.render('/error')
         }
     },
@@ -471,8 +472,8 @@ module.exports = {
             })
         })
     },
-    addToWishlist:async (req,res) => {
-        try{
+    addToWishlist: async (req, res) => {
+        try {
             let isProductExits = await db.get().collection(collection.USER_COLLECTION).findOne({ $and: [{ _id: ObjectId(req.session.user._id) }, { wishlist: ObjectId(req.params.productId) }] });
 
             if (isProductExits) {
@@ -486,7 +487,7 @@ module.exports = {
                     res.json({ status: false })
                 })
             }
-        }catch(err){
+        } catch (err) {
             res.render('/error')
         }
     },
@@ -504,8 +505,8 @@ module.exports = {
             }
         })
     },
-    getWishList:async (req,res) => {
-        try{
+    getWishList: async (req, res) => {
+        try {
             let wishList = await db.get().collection(collection.USER_COLLECTION).aggregate([
                 {
                     $match: { _id: ObjectId(req.session.user._id) }
@@ -525,12 +526,12 @@ module.exports = {
             ]).toArray();
             res.render('user/wishlist', { user: req.session.user, wishList: wishList[0].products, cartCount: res.cartCount });
 
-        }catch(err){
+        } catch (err) {
             res.render('/error')
         }
     },
-    deleteFromWishList: (req,res) => {
-        try{
+    deleteFromWishList: (req, res) => {
+        try {
             db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(req.session.user._id) },
                 {
                     $pull: { wishlist: ObjectId(req.params.productId) }
@@ -538,12 +539,12 @@ module.exports = {
             ).then((response) => {
                 res.redirect('/wishlist');
             })
-        }catch(err){
+        } catch (err) {
             res.render('/error');
         }
     },
-    moveToWishlist: (req,res) => {
-        try{
+    moveToWishlist: (req, res) => {
+        try {
             db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(req.session.user._id) },
                 { $pull: { 'cart.products': { product: ObjectId(req.params.productId) } } }
             ).then((response) => {
@@ -552,7 +553,7 @@ module.exports = {
                         res.redirect('/wishList')
                     })
             })
-        }catch(err){
+        } catch (err) {
             res.render('/error');
         }
     },
@@ -566,18 +567,18 @@ module.exports = {
             }
         })
     },
-    getUserDetails: (req,res) => {
-        try{
+    getUserDetails: (req, res) => {
+        try {
             db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(req.session.user._id) }).then((response) => {
                 res.render('user/profile', { user: response, cartCount: res.cartCount, csrfToken: req.csrfToken() })
 
             })
-        }catch(err){
+        } catch (err) {
             res.render('/error');
         }
     },
-    updateUserProfile: (req,res) => {
-        try{
+    updateUserProfile: (req, res) => {
+        try {
             db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(req.body.userId) }, {
                 $set: {
                     fname: req.body.fname,
@@ -589,14 +590,14 @@ module.exports = {
                 //     phone: userDetails.phone,
                 res.json({ status: true });
             })
-        }catch(err){
+        } catch (err) {
             res.render('/error');
         }
     },
     applyCoupon: (coupon, cartTotal, userId) => {
         return new Promise((resolve, reject) => {
             db.get().collection(collection.COUPON_COLLECTION).findOne({ couponCode: coupon }).then((couponDetails) => {
-                if (couponDetails && cartTotal >= parseInt(couponDetails.minimumPurchase) && cartTotal <= parseInt(couponDetails.maximumPurchase) && new Date() <=couponDetails.ExpiryDate) {
+                if (couponDetails && cartTotal >= parseInt(couponDetails.minimumPurchase) && cartTotal <= parseInt(couponDetails.maximumPurchase) && new Date() <= couponDetails.ExpiryDate) {
                     let savingPrice = Math.floor((cartTotal * (parseInt(couponDetails.couponDiscount) / 100)));
                     let discountedPrice = Math.floor(cartTotal - savingPrice);
                     db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(userId) }, {
@@ -616,8 +617,8 @@ module.exports = {
             })
         })
     },
-    removeCoupon: (req,res) => {
-        try{
+    removeCoupon: (req, res) => {
+        try {
             db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(req.session.user._id) }, {
                 $unset: { 'cart.discountedPrice': "", 'cart.savingPrice': "", 'cart.coupon': "" }
             }).then((response) => {
@@ -625,11 +626,11 @@ module.exports = {
             }).catch(() => {
                 res.json({ status: false })
             })
-        }catch(err){
+        } catch (err) {
             res.render('/error');
 
-        }    
-},
+        }
+    },
     getOrderForInvoice: (orderId, userId) => {
         return new Promise((resolve, reject) => {
             db.get().collection(collection.ORDER_COLLECTION).findOne({ _id: ObjectId(orderId), userId: ObjectId(userId) }).then((response) => {
@@ -639,12 +640,12 @@ module.exports = {
             })
         })
     },
-    getAllCoupon: (req,res) => {
-        try{
+    getAllCoupon: (req, res) => {
+        try {
             db.get().collection(collection.COUPON_COLLECTION).find().toArray().then((coupons) => {
                 res.render('user/coupons', { coupons, user: req.session.user })
             })
-        }catch(err){
+        } catch (err) {
             res.render('/error');
         }
     },
@@ -856,10 +857,15 @@ module.exports = {
             res.render('/error');
         }
     },
-    userWallet:(req,res)=>{
-        try{
-            res.render('user/wallet',{user:req.session.user})
-        }catch(err){
+    userWallet: (req, res) => {
+        try {
+            db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(req.session.user._id) }).then((userDetails) => {
+                userDetails.wallet.transactions.sort((a, b) => new Date(b.date) - new Date(a.date))
+                res.render('user/wallet', { user: req.session.user, wallet: userDetails.wallet })
+
+            })
+
+        } catch (err) {
             res.render('/error')
         }
     }

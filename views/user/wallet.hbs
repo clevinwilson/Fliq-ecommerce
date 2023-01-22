@@ -10,15 +10,15 @@
         <div class="col-md-5 px-3 px-md-1  px-lg-5 ">
             <div class="p-4 d-flex flex-column purple-bg-color round-corner">
                 <span class="text-uppercase font-10 weight-600 white-color-2">Balance Details</span>
-                <span class="font-28 weight-700 white-color mt-4">$4,563,234</span>
-                <span class="font-12 weight-300 white-color-2">3.235323 BTC</span>
+                <span class="font-28 weight-700 white-color mt-4">₹ {{#if wallet}}{{wallet.total}}{{else}}0{{/if}}</span>
+                <span class="font-12 weight-300 white-color-2">Total Amount</span>
                 <div class="d-flex  justify-content-between mt-4">
                     <div class="d-flex flex-column">
-                        <span class="font-16 weight-600 white-color">$3,742.00</span>
-                        <span class="font-12 weight-300 white-color-2">Income</span>
+                        <span class="font-16 weight-600 white-color">₹{{#if wallet}}{{wallet.total}}{{else}}0{{/if}}</span>
+                        <span class="font-12 weight-300 white-color-2">Received</span>
                     </div>
                     <div class="d-flex flex-column">
-                        <span class="font-16 weight-600 white-color">$6,987.00</span>
+                        <span class="font-16 weight-600 white-color">₹0</span>
                         <span class="font-12 weight-300 white-color-2">Expense</span>
                     </div>
                 </div>
@@ -36,69 +36,57 @@
                     <thead>
                         <tr>
                             <th class="text-uppercase font-10 weight-600 grey-color-2">Transactions</th>
-                            <th class="text-uppercase font-10 weight-600 purple-color-2 text-end">View All
+                            
                             </th>
                         </tr>
                     </thead>
                     <tbody>
+                        {{#if wallet}}
+                        {{#each wallet.transactions}}
                         <tr>
                             <td>
                                 <div class="d-flex ">
+                                    {{#if (eq this.type "sent")}}
                                     <div
                                         class="d-flex  justify-content-center align-items-center blue-color square round-corner-small light-blue-bg-color font-14">
                                         <i class="fas fa-long-arrow-alt-up"></i>
                                     </div>
                                     <div class="d-flex flex-column ps-2">
-                                        <span class="font-14 weight-700 purple-color-2">Sent BTE</span>
-                                        <span class="font-10 weight-400 purple-color-2">12 Nov, 2020</span>
+                                        <span class="font-14 weight-700 purple-color-2">{{this.type}}</span>
+                                        <span class="font-10 weight-400 purple-color-2">{{this.dateString}}</span>
                                     </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="d-flex flex-column align-items-end">
-                                    <span class=" font-16 weight-600 black-color ">-₹1,289.00</span>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="d-flex  ">
+                                    {{else if (eq this.type "Received")}}
                                     <div
                                         class="d-flex  justify-content-center align-items-center square round-corner-small light-white-bg-color green-color font-14 ">
                                         <i class="fas fa-long-arrow-alt-down "></i>
                                     </div>
                                     <div class="d-flex flex-column ps-2 ">
-                                        <span class="font-14 weight-700 purple-color-2 ">Received
-                                            USDT</span>
-                                        <span class="font-10 weight-400 purple-color-2 ">12 Nov, 2020</span>
+                                        <span class="font-14 weight-700 purple-color-2 ">{{this.type}}</span>
+                                        <span class="font-10 weight-400 purple-color-2 ">{{this.dateString}}</span>
                                     </div>
+                                    {{/if}}
                                 </div>
                             </td>
                             <td>
-                                <div class="d-flex flex-column align-items-end ">
-                                    <span class="font-16 weight-600 text-color-green ">+₹1,289.00</span>
+                                {{#if (eq this.type "sent")}}
+                                <div class="d-flex flex-column align-items-end">
+                                    <span class=" font-16 weight-600 black-color ">-₹{{this.amount}}</span>
                                 </div>
+                                {{else if (eq this.type "Received")}}
+                                <div class="d-flex flex-column align-items-end ">
+                                    <span class="font-16 weight-600 text-color-green ">+₹{{this.amount}}</span>
+                                </div>
+                                {{/if}}
                             </td>
                         </tr>
+                        {{/each}}
+                        {{else}}
                         <tr>
                             <td>
-                                <div class="d-flex  ">
-                                    <div
-                                        class="d-flex  justify-content-center align-items-center square round-corner-small blue-color  light-blue-bg-color font-14 ">
-                                        <i class="fas fa-long-arrow-alt-up "></i>
-                                    </div>
-                                    <div class="d-flex flex-column ps-2 ">
-                                        <span class="font-14 weight-700 purple-color-2 ">Sent XRP</span>
-                                        <span class="font-10 weight-400 purple-color-2 ">12 Nov, 2020</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="d-flex flex-column align-items-end ">
-                                    <span class="font-16 weight-600 orange-color ">-$1,289.00</span>
-                                </div>
+                                <p class="text-center">No Transactions</p>
                             </td>
                         </tr>
+                        {{/if}}
                     </tbody>
                 </table>
             </div>

@@ -8,7 +8,6 @@ const { response } = require('express');
 
 module.exports = {
     doLogin: (data) => {
-        console.log(data);
         return new Promise(async (resolve, reject) => {
             const admin = await db.get().collection(collection.ADMIN_COLLECTION).findOne({ username: data.name });
             console.log(admin);
@@ -311,10 +310,15 @@ module.exports = {
                         return: 'confirmed'
                     }
                 }).then((response) => {
-                    res.json({ status: true })
+                    db.get().collection(collection.USER_COLLECTION).updateOne({_id:ObjectId(order.userId)},
+                    {
+                        $inc:{'wallet.total':order.totalAmount},
+                        $push: { 'wallet.transactions': { type: "Received", dateString: new Date().toString().slice(0, 16), date: new Date() ,amount:order.totalAmount}}
+                    }).then((response)=>{
+                        res.json({ status: true })
+                    })
                 })
             }
-           
         }catch(err){
             res.render('/error')
         }
