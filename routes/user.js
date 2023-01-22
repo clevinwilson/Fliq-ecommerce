@@ -24,29 +24,22 @@ router.get('/', getCartCount, async function (req, res) {
 });
 
 
-//user signup using phone no
+//user signup using phone no //phone and otp
 router.get('/signup-phone', userControllers.signupUsingPhone);
 router.post('/signup-phone', userControllers.generateOtp);
-
-//phone and otp
 router.get('/otp-verification', userControllers.otpVerification);
 router.post('/otp-verification', userControllers.verifyOtp);
 
 
-//signup
+//signup//login
 router.get('/signup', userControllers.signup);
 router.post('/signup', userControllers.doSignup);
-
-
-//login
-router.get('/login', userControllers.login)
-router.post('/login', userControllers.doLogin)
-//logout
-router.get('/logout', userControllers.logout)
+router.get('/login', userControllers.login);
+router.post('/login', userControllers.doLogin);
+router.get('/logout', userControllers.logout);
 
 //account-suspended
 router.get('/account-suspended', userControllers.assoutSuspended)
-
 //account page
 router.get('/account', verifyLogin, getCartCount, userControllers.account)
 
