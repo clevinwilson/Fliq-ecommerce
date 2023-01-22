@@ -860,8 +860,10 @@ module.exports = {
     userWallet: (req, res) => {
         try {
             db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(req.session.user._id) }).then((userDetails) => {
-                userDetails.wallet.transactions.sort((a, b) => new Date(b.date) - new Date(a.date))
-                res.render('user/wallet', { user: req.session.user, wallet: userDetails.wallet })
+                if(userDetails.wallet){
+                    userDetails.wallet.transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+                }
+                res.render('user/wallet', { user: req.session.user, wallet: userDetails.wallet ?? 0 })
 
             })
 
