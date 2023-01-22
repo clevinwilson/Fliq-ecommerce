@@ -16,7 +16,13 @@ module.exports={
             })
         })
     },
-    getProducts:()=>{
+    getProducts: () => {
+        return new Promise(async (resolve, reject) => {
+            let products = await db.get().collection(collection.PRODUCT_COLLECTION).find({ status: true }).limit(12).toArray();
+            resolve(products)
+        })
+    },
+    getAllProducts:()=>{
         return new Promise(async(resolve,reject)=>{
             let products = await db.get().collection(collection.PRODUCT_COLLECTION).find({status:true}).toArray();
            resolve(products)

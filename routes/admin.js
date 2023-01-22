@@ -260,7 +260,7 @@ router.post('/add-product', verifyLogin, uploadProduct, async (req, res) => {
 })
 
 router.get('/view-products', verifyLogin, async (req, res) => {
-    productControllers.getProducts().then((response) => {
+    productControllers.getAllProducts().then((response) => {
         res.render('admin/view-products', { admin: req.session.adminLogin, products: response });
     })
 })
