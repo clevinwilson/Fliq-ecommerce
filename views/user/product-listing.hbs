@@ -12,16 +12,11 @@
         {{>user-header}}
 
         <main class="main">
-            <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
-                <div class="container">
-                    <h1 class="page-title">List<span>Shop</span></h1>
-                </div><!-- End .container -->
-            </div><!-- End .page-header -->
+            
             <nav aria-label="breadcrumb" class="breadcrumb-nav mb-2">
                 <div class="container">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                        <li class="breadcrumb-item"><a href="#">Shop</a></li>
                         <li class="breadcrumb-item active" aria-current="page">List</li>
                     </ol>
                 </div><!-- End .container -->
@@ -31,7 +26,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-9">
-                            <div class="toolbox direction-row">
+                            <div class="toolbox d-flex flex-row direction-row">
                                 <div class="toolbox-left">
                                     <div class="toolbox-left 	d-block d-lg-none">
                                         <a href="#" class="sidebar-toggler"><i class="icon-bars"></i>Filters</a>
@@ -45,7 +40,7 @@
 
                                 <div class="toolbox-right">
                                     <div class="toolbox-sort">
-                                        <label for="sortby">Sort by:</label>
+                                        <label for="sortby" class="me-0">Sort by:</label>
                                         <div class="select-custom">
                                             <select name="sortby" id="sortby" class="form-control">
                                                 <option value="popularity" selected="selected">Most Popular</option>
@@ -68,7 +63,7 @@
                                                 {{!-- <span class="product-label label-new">New</span> --}}
                                                 <a class="d-flex justify-content-center align-items-center bg-white"
                                                     href="/product-details/{{this._id}}">
-                                                    <img style="object-fit: contain; width: 203px;"
+                                                    <img style="object-fit: contain; width: 95px;"
                                                         src="/images/product-images/{{this.images.[0].filename}}"
                                                         alt="Product image" class="product-image bg-white">
                                                 </a>
@@ -84,7 +79,7 @@
                                                 <div class="product-cat">
                                                     <a href="#">{{this.type}}</a>
                                                 </div><!-- End .product-cat -->
-                                                <h2 class="product-title" style="font-size: 20px;font-weight: 500;"><a
+                                                <h2 class="product-title text-dark" style="font-size: 20px;font-weight: 500;"><a
                                                         href="/product-details/{{this._id}}">{{this.name}}
                                                         ({{this.storage}} GB, {{this.color}})</a></h2>
                                                 <!-- End .product-title -->
@@ -104,19 +99,20 @@
 
                                                 <div class="ratings-container mt-2 mb-2">
                                                     <div class="ratings">
-                                                        <div class="ratings-val" style="width: 20%;"></div>
+                                                        <div class="ratings-val" style="width: 100%;"></div>
                                                         <!-- End .ratings-val -->
                                                     </div><!-- End .ratings -->
-                                                    <span class="ratings-text">( 2 Reviews )</span>
+                                                    <span class="ratings-text">( {{../reviewCount}} Reviews )</span>
                                                 </div><!-- End .rating-container -->
+                                                {{#if ../user.address.[0]}}
                                                 <div class="m-0 p-0">
                                                     <span>
-                                                        <span style="font-size: 18px;" class="me-2"><i
-                                                                class="fa-solid fa-location-dot"></i></span>
+                                                        <span style="font-size: 18px;" class="me-2"><i class="fa-solid fa-location-dot"></i></span>
                                                         <span style="font-size: 12px;" class="text-dark">Delivery at:
-                                                            <span style="color: #0088d9;">Kannur, 670142</span></span>
+                                                            <span style="color: #0088d9;">{{../user.address.[0].street}}, {{../user.address.[0].postalCode}}</span></span>
                                                     </span>
                                                 </div>
+                                                {{/if}}
                                               
                                             </div>
                                         </div><!-- End .col-lg-6 -->
