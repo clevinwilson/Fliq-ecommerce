@@ -104,5 +104,20 @@ module.exports={
             })
         })
     },
+    getHighLights:()=>{
+        return new Promise(async(resolve,reject)=>{
+            const highlight = await db.get().collection(collection.HIGHLIGHTS_COLLECTION).aggregate([
+                {
+                    $lookup: {
+                        from: collection.PRODUCT_COLLECTION,
+                        localField: 'productId',
+                        foreignField: '_id',
+                        as: 'product'
+                    }
+                }
+            ]).toArray();
+            resolve(highlight)
+        })
+    }
    
 }

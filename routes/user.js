@@ -20,7 +20,8 @@ router.get('/', getCartCount, async function (req, res) {
   let categoryList = await categoryControllers.getCategory();
   let banner = await bannerControllers.getBanner();
   const products = await productControllers.getProducts();
-  res.render('user/index', { user: req.session.user, cartCount: res.cartCount, categoryList, banner, products })
+  const hightlight=await productControllers.getHighLights();
+  res.render('user/index', { user: req.session.user, cartCount: res.cartCount, categoryList, banner, products, hightlight })
 });
 
 

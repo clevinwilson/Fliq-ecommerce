@@ -1,0 +1,137 @@
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    {{>admin-header}}
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+
+
+                <div class="row">
+
+                    <div class="col-lg-12">
+
+                        <!-- Circle Buttons -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Highlights</h6>
+                            </div>
+                            <form action="/admin/add-highlight" method="post" class="p-5">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+
+                                            <div class="col-md-12">
+                                                <div class="form-group mt-3 ">
+                                                    <label for="">Select Product</label>
+                                                    <select name="productId" class="form-select mt-2"
+                                                        style=" border-color: #b4e3eb;"
+                                                        aria-label="Default select example">
+                                                        <option selected>Select</option>
+
+                                                        {{#each products}}
+                                                        <option name="productId" class="m-4" value="{{this._id}}">
+                                                            {{this.name}}</option>
+                                                        {{/each}}
+                                                    </select>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12  bottom-0 mb-4">
+                                                <center class="mt-1">
+                                                    <a href="/admin/dashboard"
+                                                        class="btn btn-black  mt-3 mr-4 ">Back</a>
+                                                    <button type="submit" id="submit"
+                                                        class="btn btn-success  mt-3">Submit</button>
+
+                                                </center>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8 position-relative">
+                                            <div class="card-body">
+                                                {{#if categoryUpdate}}
+                                                <div class="alert alert-success" role="alert">
+                                                    {{categoryUpdate}}
+                                                </div>
+                                                {{/if}}
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered" id="dataTable" width="100%"
+                                                        cellspacing="0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>No</th>
+                                                                <th>Product Name</th>
+                                                                <th>Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tfoot>
+                                                            <tr>
+                                                            <tr>
+                                                                <th>No</th>
+                                                                <th>Product Name</th>
+                                                                <th>Action</th>
+                                                            </tr>
+                                                            </tr>
+                                                        </tfoot>
+                                                        <tbody>
+                                                            {{#each highlight}}
+
+                                                            <tr>
+                                                                <td>{{@index}}</td>
+
+                                                                <td>{{this.product.[0].name}}</td>
+
+                                                                <td class="d-flex">
+                                                                    <a title="Delete"
+                                                                        class="table-btn btn btn-danger p-2"
+                                                                        href="/admin/delete-coupon/{{this._id}}"><i
+                                                                            class="fa-solid fa-trash"></i></a>
+                                                                    <a title="Edit"
+                                                                        href="/admin/edit-coupon/{{this._id}}"
+                                                                        class="table-btn ml-2 text-white btn btn-warning p-2"><i
+                                                                            class="fa-solid fa-pen"></i></a>
+
+                                                                </td>
+                                                            </tr>
+                                                            {{/each}}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    function viewImage(event) {
+        document.getElementById('category-image').style = 'display:block'
+        document.getElementById('category-image').src = URL.createObjectURL(event.target.files[0])
+    }
+</script>
+
+<style>
+    #category-image {
+        height: 160px;
+        width: 160px;
+        object-fit: contain;
+
+    }
+</style>

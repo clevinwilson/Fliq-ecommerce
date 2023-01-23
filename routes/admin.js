@@ -403,7 +403,11 @@ router.get('/salesreport',verifyLogin,(req,res)=>{
 
 
 router.post('/generate-salesreport',verifyLogin,adminControllers.gerSalesReportInfo);
-router.get('/confirm-return/:orderId',verifyLogin,adminControllers.confirmReturn)
+router.get('/confirm-return/:orderId',verifyLogin,adminControllers.confirmReturn);
+
+//Highlights
+router.get('/highlight', verifyLogin, adminControllers.highlights);
+router.post('/add-highlight',verifyLogin, adminControllers.addHighlight);
 
 
 

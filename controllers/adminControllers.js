@@ -132,9 +132,9 @@ module.exports = {
     },
     getOrderDetailsCount: () => {
         return new Promise(async (resolve, reject) => {
-            let orderPlaced = await db.get().collection(collection.ORDER_COLLECTION).find({$and:[{ "shipmentStatus.ordrePlaced.status": true }, { orderStatus: 'placed' }]}).count();
-            let orderDelivered = await db.get().collection(collection.ORDER_COLLECTION).find({ $and: [{ "shipmentStatus.delivered.status": true }, { orderStatus: 'placed' }]}).count();
-            let orderShipped = await db.get().collection(collection.ORDER_COLLECTION).find({ $and: [{ "shipmentStatus.shipped.status": true }, { orderStatus: 'placed' }]}).count();
+            let orderPlaced = await db.get().collection(collection.ORDER_COLLECTION).find({ $and: [{ "shipmentStatus.ordrePlaced.status": true }, { orderStatus: 'placed' }] }).count();
+            let orderDelivered = await db.get().collection(collection.ORDER_COLLECTION).find({ $and: [{ "shipmentStatus.delivered.status": true }, { orderStatus: 'placed' }] }).count();
+            let orderShipped = await db.get().collection(collection.ORDER_COLLECTION).find({ $and: [{ "shipmentStatus.shipped.status": true }, { orderStatus: 'placed' }] }).count();
             let total = orderPlaced + orderDelivered + orderShipped;
             orderPlaced = (orderPlaced / total) * 100;
             orderDelivered = (orderDelivered / total) * 100;
@@ -241,7 +241,7 @@ module.exports = {
     gerSalesReportInfo: async (req, res) => {
 
         try {
-            if (new Date(req.body.fromDate) < new Date()){
+            if (new Date(req.body.fromDate) < new Date()) {
                 let data = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
                     {
                         $match: {
@@ -275,7 +275,7 @@ module.exports = {
                 salesReport(data).then(() => {
                     res.json({ status: true })
                 })
-            }else{
+            } else {
                 res.json({ status: false })
             }
         } catch (err) {
@@ -301,25 +301,60 @@ module.exports = {
             resolve(orderDetails[0])
         })
     },
-    confirmReturn:async(req,res)=>{
-        try{
-            let order=await db.get().collection(collection.ORDER_COLLECTION).findOne({_id:ObjectId(req.params.orderId)});
-            if(order){
+    confirmReturn: async (req, res) => {
+        try {
+            let order = await db.get().collection(collection.ORDER_COLLECTION).findOne({ _id: ObjectId(req.params.orderId) });
+            if (order) {
                 db.get().collection(collection.ORDER_COLLECTION).updateOne({ _id: ObjectId(req.params.orderId) }, {
                     $set: {
                         return: 'confirmed'
                     }
                 }).then((response) => {
-                    db.get().collection(collection.USER_COLLECTION).updateOne({_id:ObjectId(order.userId)},
-                    {
-                        $inc:{'wallet.total':order.totalAmount},
-                        $push: { 'wallet.transactions': { type: "Received", dateString: new Date().toString().slice(0, 16), date: new Date() ,amount:order.totalAmount}}
-                    }).then((response)=>{
-                        res.json({ status: true })
-                    })
+                    db.get().collection(collection.USER_COLLECTION).updateOne({ _id: ObjectId(order.userId) },
+                        {
+                            $inc: { 'wallet.total': order.totalAmount },
+                            $push: { 'wallet.transactions': { type: "Received", dateString: new Date().toString().slice(0, 16), date: new Date(), amount: order.totalAmount } }
+                        }).then((response) => {
+                            res.json({ status: true })
+                        })
                 })
             }
-        }catch(err){
+        } catch (err) {
+            res.render('/error')
+        }
+
+    },
+    highlights: async (req, res) => {
+        try {
+            const highlight = await db.get().collection(collection.HIGHLIGHTS_COLLECTION).aggregate([
+                {
+                    $lookup: {
+                        from: collection.PRODUCT_COLLECTION,
+                        localField: 'productId',
+                        foreignField: '_id',
+                        as: 'product'
+                    }
+                }
+            ]).toArray();
+            db.get().collection(collection.PRODUCT_COLLECTION).find().toArray().then((products)=>{
+                res.render('admin/highlight', { products, admin: req.session.adminLogin, highlight });
+            })
+
+        } catch (err) {
+            res.render('/error')
+        }
+    },
+    addHighlight: async (req, res) => {
+        try {
+            const highlight = await db.get().collection(collection.HIGHLIGHTS_COLLECTION).findOne({ productId: ObjectId(req.body.productId) })
+            if (!highlight) {
+                db.get().collection(collection.HIGHLIGHTS_COLLECTION).insertOne({productId:ObjectId(req.body.productId)}).then((response) => {
+                    res.redirect('/admin/highlight');
+                })
+            } else {
+                res.redirect('/admin/highlight')
+            }
+        } catch (err) {
             res.render('/error')
         }
     }

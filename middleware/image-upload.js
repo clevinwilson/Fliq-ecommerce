@@ -1,5 +1,25 @@
 const multer = require('multer');
 
+//image filter 
+const fileFilter = (req, file, cb) => {
+    if (
+        file.mimetype == 'image/jpeg' ||
+        file.mimetype == 'image/jpg' ||
+        file.mimetype == 'image/png' ||
+        file.mimetype == 'image/gif' ||
+        file.mimetype == 'image/webp'||
+        file.mimetype == 'image/avif'
+
+    ) 
+    {
+        cb(null, true)
+    }
+    else {
+        cb(null, false);
+        cb(new Error('Only jpeg,  jpg , png, avif and gif Image allow'))
+    }
+};
+
 //uploads product img
 const ProductStorage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -23,7 +43,7 @@ const multerStorageCategory = multer.diskStorage({
         cb(null, Date.now() + '-' + file.originalname)
     }
 })
-const uploadCategoryImage= multer({ storage: multerStorageCategory }).fields([{ name: 'image', maxCount: 1 }])
+const uploadCategoryImage = multer({ storage: multerStorageCategory }).fields([{ name: 'image', maxCount: 1 }])
 
 
 //uploads banner img

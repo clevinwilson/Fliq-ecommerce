@@ -112,16 +112,17 @@
         <div class="container-fluid mt-5">
             <h2 class="section-tilte ms-3">Highlights</h2>
             <div class="row p-3">
+                {{#each hightlight}}
                 <div class="col-md-6 col-lg-4 col-sm-6 p-2 ">
                     <div class="highlight-box  justify-content-center align-items-center position-relative">
                         <div class="hilight-info p-2">
-                            <h3>Surface Pro 9 </h3>
-                            <h3>Windows Tablets</h3>
-                            <span>Intel EVO processor</span>
-                            <h3 class="mt-2">Start at ₹ 1,13,990</h3>
+                            <h3>{{this.product.[0].name}}</h3>
+                            <h3>{{this.product.[0].Type}}</h3>
+                            <span>{{this.product.[0].feature.[0]}}</span>
+                            <h3 class="mt-2">Start at ₹ {{this.product.[0].price}}</h3>
                         </div>
                         <div class="highlight-image-wrap">
-                            <img class="w-100" src="/images/product-images/sony.png" alt="">
+                            <img class="w-100" src="/images/product-images/{{this.product.[0].images.[0].filename}}" alt="">
                         </div>
 
                         <div class="product-status">
@@ -129,40 +130,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 col-lg-4 col-sm-6 p-2 ">
-                    <div class="highlight-box  justify-content-center align-items-center position-relative">
-                        <div class="hilight-info p-2">
-                            <h3>Surface Pro 9 </h3>
-                            <h3>Windows Tablets</h3>
-                            <span>Intel EVO processor</span>
-                            <h3 class="mt-2">Start at ₹ 1,13,990</h3>
-                        </div>
-                        <div class="highlight-image-wrap">
-                            <img class="w-100" src="/images/product-images/macm1.png" alt="">
-                        </div>
-
-                        <div class="product-status">
-                            <span>New</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4 col-sm-6 p-2 ">
-                    <div class="highlight-box  justify-content-center align-items-center position-relative">
-                        <div class="hilight-info p-2">
-                            <h3>Surface Pro 9 </h3>
-                            <h3>Windows Tablets</h3>
-                            <span>Intel EVO processor</span>
-                            <h3 class="mt-2">Start at ₹ 1,13,990</h3>
-                        </div>
-                        <div class="highlight-image-wrap">
-                            <img class="w-100" src="/images/product-images/macpro.png" alt="">
-                        </div>
-
-                        <div class="product-status">
-                            <span>New</span>
-                        </div>
-                    </div>
-                </div>
+                {{/each}}
             </div>
         </div>
     </section>

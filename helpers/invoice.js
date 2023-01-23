@@ -1,6 +1,7 @@
 const fs = require("fs");
 function getInvoice(order, cartTotal) {
     console.log(order);
+    
     return new Promise((resolve,reject)=>{
         const data = {
             images: {

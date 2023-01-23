@@ -6,6 +6,7 @@ module.exports = {
     BANNER_COLLECTION:'banner',
     ORDER_COLLECTION:'order',
     COUPON_COLLECTION:'coupon',
-    REVIEW_COLLECTION:'review'
+    REVIEW_COLLECTION:'review',
+    HIGHLIGHTS_COLLECTION:"highlights"
 
 }
