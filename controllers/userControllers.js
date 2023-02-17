@@ -870,6 +870,13 @@ module.exports = {
         } catch (err) {
             res.render('/error')
         }
+    },
+    getUser:(userId)=>{
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.USER_COLLECTION).findOne({_id:ObjectId(userId)}).then((response)=>{
+                resolve(response)
+            })
+        })
     }
 
 

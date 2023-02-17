@@ -34,7 +34,7 @@
                                     <h3  class="mt-2 cart-product-name">{{this.product.name}}</h3>
                                     <h5 class="mt-2 cart-price">₹ {{this.product.price}}</h5>
                                     <p class="cart-tax-info">(incl. all Taxes)</p>
-                                    <h6 class="mt-2 cart-delivery-info">Standard Delivery by Wed, 4th Jan</h6>
+                                    <h6 class="mt-2 cart-delivery-info">Standard Delivery by {{../ExpectedDeliveryDate}}</h6>
 
                                 </div>
                                 <div class="mt-2 box-card-btn-wrap d-none d-lg-flex">
@@ -61,9 +61,10 @@
             </div>
             <div class="col-lg-4 col-md-12 p-3 order-right-section">
                 <div class="delivery-address-box mt-2">
-                    <p>Delivery options for 670142</p>
-                    <span><span class="me-2"><i class="bi bi-archive"></i></span> Standard Delivery by Wed, 4th
-                        Jan</span>
+                    {{#if address.address.[0].postalCode}}
+                    <p>Delivery options for {{address.address.[0].postalCode}}</p>
+                    {{/if}}
+                    <span><span class="me-2"><i class="bi bi-archive"></i></span> Standard Delivery by {{ExpectedDeliveryDate}}</span>
                 </div>
 
                 <div class="order-summary-wrap mt-3">

@@ -284,7 +284,7 @@ router.post('/edit-product', uploadProduct,verifyLogin, async (req, res) => {
     } else {
         existImage1 = await productControllers.fetchProductImage(req.body.productId, 0)
         image1 = req.files.image1[0];
-        deleteImages(existImage1.path);
+        // deleteImages(existImage1.path);
     }
 
     if (req.files.image2 == null) {
@@ -292,7 +292,7 @@ router.post('/edit-product', uploadProduct,verifyLogin, async (req, res) => {
     } else {
         existImage2 = await productControllers.fetchProductImage(req.body.productId, 1)
         image2 = req.files.image2[0];
-        deleteImages(existImage2.path);
+        // deleteImages(existImage2.path);
     }
 
     if (req.files.image3 == null) {
@@ -300,7 +300,7 @@ router.post('/edit-product', uploadProduct,verifyLogin, async (req, res) => {
     } else {
         existImage3 = await productControllers.fetchProductImage(req.body.productId, 2)
         image3 = req.files.image3[0];
-        deleteImages(existImage3.path);
+        // deleteImages(existImage3.path);
     }
 
     if (req.files.image4 == null) {
@@ -308,7 +308,7 @@ router.post('/edit-product', uploadProduct,verifyLogin, async (req, res) => {
     } else {
         existImage4 = await productControllers.fetchProductImage(req.body.productId, 3)
         image4 = req.files.image4[0];
-        deleteImages(existImage4.path);
+        // deleteImages(existImage4.path);
     }
 
     req.body.images = [image1, image2, image3, image4];

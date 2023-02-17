@@ -13,6 +13,7 @@ const getInvoice = require('../helpers/invoice');
 const csrf = require('csurf')
 const csrfProtection = csrf({ cookie: true });
 const getCartCount = require('../middleware/cartCount');
+const { getUserAddress } = require('../controllers/userControllers');
 
 
 
@@ -87,8 +88,13 @@ router.get('/add-to-cat/:productId', verifyLogin, (req, res) => {
 
 router.get('/cart', verifyLogin, getCartCount, async (req, res) => {
   let cartTotal = await userControllers.getCartTotal(req.session.user._id);
+  let userDetails =await userControllers.getUser(req.session.user._id);
+  let date = new Date();
+  date.setDate(date.getDate() + 6);
+  let ExpectedDeliveryDate = date.toString().slice(0, 10)
+
   userControllers.getCartProducts(req.session.user._id).then((response) => {
-    res.render('user/cart', { cartItems: response, user: req.session.user, cartCount: res.cartCount, cartTotal })
+    res.render('user/cart', { cartItems: response, user: req.session.user, cartCount: res.cartCount, cartTotal, ExpectedDeliveryDate, address: userDetails })
   })
 })
 
