@@ -1,4 +1,4 @@
-# Learning Platforms
+# Fliq ecommerce
 
 The e-commerce project is a full-stack web application built with Node.js and MongoDB, integrating payment gateways such as Razorpay and Stripe. The platform allows users to browse and purchase products from various categories, securely make payments using their preferred payment method, and provides a seamless return and refund process.
 
